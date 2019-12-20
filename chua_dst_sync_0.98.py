@@ -1421,6 +1421,7 @@ if __name__ == '__main__':
                 plt.show()            
         
         if False:
+            from mpl_toolkits.mplot3d import Axes3D
             fig = plt.figure(figsize=(10,10))
             ax = fig.gca(projection='3d')
             ax.plot(CPG[300:,0],CPG[300:,1],CPG[300:,2],'-k')
