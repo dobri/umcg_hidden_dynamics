@@ -520,6 +520,8 @@ if __name__ == '__main__':
     VIS_MODALITY = False
     SOUND_FLAG = True
     cpg_mode='null'
+    ForceAdded = .00
+    phi_smoothed = [0.,0.]
     
     """
     ε=1.00 works with Chua1, maybe the task becomes too easy.
@@ -540,7 +542,7 @@ if __name__ == '__main__':
 
     for opt, arg in opts:
         if opt in ("-h","--help"):
-            print'chua_dst_sync_0.95.py --duration=<trial duration> --epsilon=<ε, i.e. .7> --task=<{0:6}> --mov_logging=<1 or 0> --mov_plotting=<1 or 0> --sound_export=<1 or 0> --append_to_file_name=<chars> --input=<mouse (default) or wii or arduino or camera> --aud_feedback=<1 or 0>  --vis_feedback=<1 or 0> --performance_feedback=<1 or 0> --visual_modality=<0 OR 1>'
+            print'chua_dst_sync_0.95.py --duration=<trial duration> --epsilon=<ε, i.e. .7> --task=<{0:11}> --mov_logging=<1 or 0> --mov_plotting=<1 or 0> --sound_export=<1 or 0> --append_to_file_name=<chars> --input=<mouse (default) or wii or arduino or camera> --aud_feedback=<1 or 0>  --vis_feedback=<1 or 0> --performance_feedback=<1 or 0> --visual_modality=<0 OR 1>'
             print '\n'
             print 'where the tasks are:'
             print ' 0. Simulation, no wiimote necessary.'
@@ -625,15 +627,13 @@ if __name__ == '__main__':
         cam_gain = 1
         X_integrated = 0
 
+
     task_num = 1*task
     # Set task=0 to run simulations.
     if task==0:
         task='SIMULATION'
         wii_status=False
         mouse_status=False
-        input_status='OFF'
-        #SensorGain = .00
-        ForceAdded = .00
         cpg_mode = 'Chua'
         if 1:
             DRIVER_IN_SIMULATION = 'chua'
@@ -645,39 +645,24 @@ if __name__ == '__main__':
     # Sonify only. No CPG.
     elif task==1:
         task='SONIFY_ONLY'
-        input_status='ON'
-        #SensorGain = .00
-        ForceAdded = .00
         FADEIN_R = 0
-        #cpg_mode = 'Cart' # (unstable system), 
     
     # Stimulus sound and coupling to the stimulus, but no mov sonification.
     elif task==2:
         task='CPG_AND_ACC'
-        input_status='ON'
-        #SensorGain = .00
         ForceAdded = .00
         cpg_mode = 'Chua'
     
     # That's the interactive, unison task. Stimulus sound, control coupling, and mov sonification.
     elif task==3:
         task='CPG_AND_ACC_AND_SONIFY'
-        input_status='ON'
-        #SensorGain = .00
         EPSILON = .7
-        ForceAdded = .00
-        #cpg_mode = 'Cart' # (unstable system), 
         cpg_mode = 'Chua'
-    
+
     # Simplified Chua stimulus. Mov sonification but w/out control. This sets \eps=0.
     elif task==4:
         task='CPG_AND_ACC_AND_SONIFY'
-        input_status='ON'
-        #SensorGain = .00
-        ForceAdded = .00
         EPSILON = .0
-        #cpg_mode = 'Chua'
-        #cpg_mode = 'Sine'
         cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
         EPSILON_driven = 1.
         tempo_block_duration = np.Inf
@@ -686,11 +671,8 @@ if __name__ == '__main__':
     # Sine stimulus. Mov sonification but w/out control. This sets \eps=0.
     elif task==5:
         task='CPG_AND_ACC_AND_SONIFY'
-        input_status='ON'
-        #SensorGain = .00
-        ForceAdded = .00
         EPSILON = .0
-        cpg_mode = 'Sine'
+        cpg_mode = 'Kuramoto'
         tempo_block_duration = np.Inf
         tempo_block_dur_range = [0,0]
         
@@ -698,18 +680,14 @@ if __name__ == '__main__':
     # Mov sonification but w/out control. This sets \eps=0.
     elif task==6:
         task='CPG_AND_ACC_AND_SONIFY'
-        input_status='ON'
-        ForceAdded = .00
         EPSILON = .0
-        cpg_mode = 'Sine'
+        cpg_mode = 'Kuramoto'
         tempo_block_duration = 1
         tempo_block_dur_range = [1,2]
 
     # Like 4, but with perturbation.
     elif task==7:
         task='CPG_AND_ACC_AND_SONIFY'
-        input_status='ON'
-        ForceAdded = .00
         EPSILON = .0
         cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
         EPSILON_driven = 1.
@@ -718,30 +696,40 @@ if __name__ == '__main__':
 
     elif task==8:
         task='CPG_AND_ACC_AND_SONIFY'
-        input_status='ON'
         EPSILON = .0
-        ForceAdded = .00
         cpg_mode = 'Chua'
     
     elif task==9:
         task='CPG_AND_ACC_AND_SONIFY'
-        input_status='ON'
         EPSILON = .0
-        ForceAdded = .00
         cpg_mode = 'Lorenz'
         RHO = 28
     
     elif task==10:
         task='CPG_AND_ACC_AND_SONIFY'
-        input_status='ON'
-        ForceAdded = .0
         EPSILON = .0
-        cpg_mode = 'Sine'
+        cpg_mode = 'Kuramoto'
         tempo_block_duration = np.Inf
         tempo_block_dur_range = [0,0]
         FADEOUT_L = 1
         FADEIN_R = 0
 
+    # Sine stimulus. Mov sonification w/ control. [Stimulus is a Kuramoto]
+    elif task==11:
+        task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .1
+        cpg_mode = 'Kuramoto'
+        tempo_block_duration = np.Inf
+        tempo_block_dur_range = [0,0]
+        
+    # That's an interactive task. Stimulus sound, control coupling of an unstable cart system, and mov sonification.
+    elif task==12:
+        task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .7
+        ForceAdded = .00
+        cpg_mode = 'Cart' # (unstable system), 
+        
+        
     print '\n'
     print 'TRIAL DURATION', '\t\t', DURATION, 's'
     print 'ε', '\t\t\t', EPSILON
@@ -780,7 +768,7 @@ if __name__ == '__main__':
         OMEGA_DRIVER = OMEGA_DRIVER/2
         DS_SPEEDUP = 4
 
-    PHI = [.00]
+    PHI = [.00]*2
     if cpg_mode == 'Lorenz':
         rand = np.random.uniform(2,10,3).astype(float)
     else:
@@ -808,12 +796,13 @@ if __name__ == '__main__':
     SAMPLE_COUNTER = 0
     
     OFFSETS = np.zeros((2,3,2))
-    # The white one!
+    # The white wii controller!
     OFFSETS[:,:,1] = [[-3.,-5.,-1.],[-107.,99.,100.]]
-    # The red one!
+    # The red wii controller!
     OFFSETS[:,:,0] = [[-24.,-27.,-26.],[-122.,70.,71.]]
     #OFFSETS[:,:,0] = [[-25.,-30.,-25.],[-121.,68.,70.]]
     
+    # The arduino.
     OFFSETS_ARD = np.zeros((2,3))
     OFFSETS_ARD[:,:] = [[338.006,341.311,328.020],[371.615,355.539,308.014]]
 
@@ -1234,10 +1223,19 @@ if __name__ == '__main__':
                             XDST_L[1]=CartPole(dt_ceil,ForceAdded,XDST_L[1])
                         #
                         
-                        if cpg_mode=='Sine':
+                        if cpg_mode=='Kuramoto':
+                            if SAMPLE_COUNTER>49:
+                                if arduino_status:
+                                    phi_smoothed[0] = np.mean(SENSOR[(SAMPLE_COUNTER-49):(SAMPLE_COUNTER-1)])
+                                    phi_smoothed[1] = np.mean(SENSOR[(SAMPLE_COUNTER-50):(SAMPLE_COUNTER-2)])
+                                else:
+                                    phi_smoothed[0] = np.mean(SENSOR[(SAMPLE_COUNTER-9):(SAMPLE_COUNTER-1)])
+                                    phi_smoothed[1] = np.mean(SENSOR[(SAMPLE_COUNTER-10):(SAMPLE_COUNTER-2)])
+
                             #XDST_L[1]=artificial_SensorGain_sine( OMEGA_DRIVER, TIME[SAMPLE_COUNTER-1] )
-                            ForceAdded = 0
-                            PHI[0]=dt*OMEGA_DRIVER+PHI[0]
+                            PHI[1] = np.arctan2(np.diff(phi_smoothed)/dt_ceil,SENSOR[SAMPLE_COUNTER-1])
+                            ForceAdded = EPSILON/2*(np.sin(PHI[1]-PHI[0]))
+                            PHI[0] = PHI[0] + dt*OMEGA_DRIVER + ForceAdded
                             XDST_L[1] = (np.sin(PHI[0])+1)/2
                             # Randomly change the stimulus tempo.
                             if (time.time() - last_tempo_change_time)>tempo_block_duration:
@@ -1407,19 +1405,21 @@ if __name__ == '__main__':
                 plt.legend(loc='upper right', shadow=False, fontsize='small')    
                 plt.show()
 
-        if False:
-                plt.plot(TIME,ACC[:,0,0],'-',label='Participant X')
-                plt.plot(TIME,ACC[:,1,0],'-',label='Participant Y')
-                plt.plot(TIME,ACC[:,2,0],'-',label='Participant Z')
-                plt.plot(TIME,SENSOR,'-',label='Transformed Motor Output (inclination, x-dim, etc.)')
-                plt.plot(TIME,CPG[:,0],'-',label='Stim X')
-                plt.plot(TIME,CPG[:,1],'-',label='Stim Y')
-                plt.plot(TIME,CPG[:,2],'-',label='Stim Z')
-                plt.xlabel('Time, s')
-                plt.ylabel('X')
-                plt.legend(loc='upper right', shadow=False, fontsize='small')    
-                plt.show()            
-        
+        # Visualize the raw data of the stimulus and the sensors.
+        if True:
+            plt.plot(TIME,ACC[:,0,0],'-',label='Participant X')
+            plt.plot(TIME,ACC[:,1,0],'-',label='Participant Y')
+            plt.plot(TIME,ACC[:,2,0],'-',label='Participant Z')
+            plt.plot(TIME,SENSOR,'-',label='Transformed Motor Output (inclination, x-dim, etc.)')
+            plt.plot(TIME,FORCEADDED,'-',label='The coupling function from participant to stimulus')
+            plt.plot(TIME,CPG[:,0],'-',label='Stim X')
+            plt.plot(TIME,CPG[:,1],'-',label='Stim Y')
+            plt.plot(TIME,CPG[:,2],'-',label='Stim Z')
+            plt.xlabel('Time, s')
+            plt.ylabel('X')
+            plt.legend(loc='upper right', shadow=False, fontsize='small')    
+            plt.show()            
+    
         if False:
             from mpl_toolkits.mplot3d import Axes3D
             fig = plt.figure(figsize=(10,10))
