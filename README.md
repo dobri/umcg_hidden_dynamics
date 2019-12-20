@@ -4,7 +4,5 @@ the ther files here are supportive. wcc.. computes the performance value for the
 calibrate... is to calibrate the accelerometers used as apparatus in the study.
 
 Test!
-
 Test2!
-
 TEst3!
