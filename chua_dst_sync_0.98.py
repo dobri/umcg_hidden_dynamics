@@ -804,7 +804,7 @@ if __name__ == '__main__':
     
     # The arduino.
     OFFSETS_ARD = np.zeros((2,3))
-    OFFSETS_ARD[:,:] = [[338.006,341.311,328.020],[371.615,355.539,308.014]]
+    OFFSETS_ARD[:,:] = [[336.,339.,333.],[277.,393.,288.]]
 
     MOVT_BUFFER_SIZE = 12
     X_STATE_BUFFER = [.00] * MOVT_BUFFER_SIZE
@@ -1169,7 +1169,7 @@ if __name__ == '__main__':
                     if arduino_status:
                         # Check that calibration is right!!! Why are the x and y values so different in amp?
                         # The inclination range is compressed for some reason?
-                        SENSOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(Y_STATE_BUFFER[ index_in_buffer ])/10
+                        SENSOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(Y_STATE_BUFFER[ index_in_buffer ])
                         #SENSOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(X_STATE_BUFFER[ index_in_buffer ])
                     if cam_status:
                         SENSOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[ index_in_buffer ]
@@ -1198,7 +1198,7 @@ if __name__ == '__main__':
                     else:
                         x_smoothed = SENSOR[SAMPLE_COUNTER-1]
                         
-                    PIXELS[SAMPLE_COUNTER-1,:] = map_x_to_pixel([(XDST_L[1]-.5)*1.5,(float(x_smoothed)-.5)*1.5])
+                    PIXELS[SAMPLE_COUNTER-1,:] = map_x_to_pixel([(XDST_L[1]-.5)*1.,(float(x_smoothed)-.5)*1.])
                     #PIXELS[SAMPLE_COUNTER-1,0] = (XDST_L[1]-.3)*2.5*vis_mod_center[0]
                     #PIXELS[SAMPLE_COUNTER-1,1] = (x_smoothed-.5)*1.*vis_mod_center[0]
 
