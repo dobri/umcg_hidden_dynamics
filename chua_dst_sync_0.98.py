@@ -12,6 +12,30 @@ import sys, getopt
 from pymouse import PyMouse
 
 
+def convert_to_angle(s,k):
+    # The participant input as angle.
+    phi = s[k-1]+PI
+    if phi>PI:
+        phi=PI
+    if phi<0:
+        phi=0
+    return phi
+
+        
+def convert_to_angle_2(s,k):
+    if k>19:
+        if arduino_status:
+            phi_smoothed[0] = np.mean(s[(k-19):(k-1)])
+            phi_smoothed[1] = np.mean(s[(k-20):(k-2)])
+        else:
+            phi_smoothed[0] = np.mean(s[(k-3):(k-1)])
+            phi_smoothed[1] = np.mean(s[(k-4):(k-2)])
+    phi = np.arctan2(np.diff(phi_smoothed)/dt_ceil,s[k-1])
+    if phi<0:
+        phi = (2*PI)-phi
+    return phi
+
+
 def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
     from wcc_by_rmse import wcc_by_rmse
     import pandas as pd
@@ -229,7 +253,6 @@ def osc():
             VR=vr
         
     set_FREQL0(FREQL1)
-    
     set_FREQR0(FREQR1)
 
     if NUM_CHANS>2:
@@ -448,11 +471,18 @@ def get_angles(flow,frame1,mag,ang):
     return (mag0,mag1,ang0,ang1,ang2,X0,Y0,X1,Y1)
 
 
-def visual_modality_draw(x_targets):
+def visual_modality_draw_circles(x_targets):
+    # Circles moving on the x-axis.
     cv2.circle(vis_mod_bg, (int(vis_mod_center[0]+x_targets[0]),int(vis_mod_center[1]-3)), 30, (250,1,50,1), thickness = 4)
     cv2.circle(vis_mod_bg, (int(vis_mod_center[0]+x_targets[1]),int(vis_mod_center[1]+3)), 20, (200,250,1,1), thickness = 4)
     cv2.imshow('Visual Task', vis_mod_bg)
 
+def visual_modality_draw_lines(phi,radius=200.,total_angle_prop=.7):
+    # Lines+tilt.
+    # phi[0]=total_angle_prop*phi[0]
+    cv2.line(vis_mod_bg, (int(vis_mod_center[0]-radius*np.cos(phi[0])),int(vis_mod_center[1]+radius*np.sin(phi[0]))), (int(vis_mod_center[0]+radius*np.cos(phi[0])),int(vis_mod_center[1]-radius*np.sin(phi[0]))), color=(250,111,150,1), thickness = 7)
+    cv2.line(vis_mod_bg, (int(vis_mod_center[0]-radius*np.cos(phi[1])),int(vis_mod_center[1]+radius*np.sin(phi[1]))), (int(vis_mod_center[0]+radius*np.cos(phi[1])),int(vis_mod_center[1]-radius*np.sin(phi[1]))), color=(100,  5,  1,1), thickness = 7)
+    cv2.imshow('Visual Task', vis_mod_bg)
 
 def visual_feedback(X0,Y0,X1,Y1,mag):
     # Experiment with the scaling and thresholding to map motion b/w 0 and 255.
@@ -506,11 +536,11 @@ if __name__ == '__main__':
     wii_status=False
     arduino_status=False
     dt_target=.005 # .005
+    dt_ceil = dt_target*1.
     srbar=int(1/dt_target)
     INPUT_DEVICE='mouse'
-    input_status='OFF'
-    TABLET_GAIN = 1.2
-    RAWAXISLIMIT= 1.2
+    MOUSE_GAIN = 2.
+    RAWAXISLIMIT= 10
     synth_mode = 1
     FADEIN_R = 1
     FADEOUT_L = 0
@@ -521,7 +551,8 @@ if __name__ == '__main__':
     SOUND_FLAG = True
     cpg_mode='null'
     ForceAdded = .00
-    phi_smoothed = [0.,0.]
+    tempo_block_duration = np.Inf
+    tempo_block_dur_range = [0,0]
     
     """
     ε=1.00 works with Chua1, maybe the task becomes too easy.
@@ -650,7 +681,6 @@ if __name__ == '__main__':
     # Stimulus sound and coupling to the stimulus, but no mov sonification.
     elif task==2:
         task='CPG_AND_ACC'
-        ForceAdded = .00
         cpg_mode = 'Chua'
     
     # That's the interactive, unison task. Stimulus sound, control coupling, and mov sonification.
@@ -665,16 +695,12 @@ if __name__ == '__main__':
         EPSILON = .0
         cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
         EPSILON_driven = 1.
-        tempo_block_duration = np.Inf
-        tempo_block_dur_range = [0,0]
 
     # Sine stimulus. Mov sonification but w/out control. This sets \eps=0.
     elif task==5:
         task='CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
-        tempo_block_duration = np.Inf
-        tempo_block_dur_range = [0,0]
         
     # Sine stimulus with perturbation as changing tempo. 
     # Mov sonification but w/out control. This sets \eps=0.
@@ -705,28 +731,23 @@ if __name__ == '__main__':
         cpg_mode = 'Lorenz'
         RHO = 28
     
+    # SCT. Sine stimulus. Mov sonification w/out control.
     elif task==10:
         task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .0
         cpg_mode = 'Kuramoto'
-        tempo_block_duration = np.Inf
-        tempo_block_dur_range = [0,0]
         FADEOUT_L = 1
         FADEIN_R = 0
 
-    # Sine stimulus. Mov sonification w/ control. [Stimulus is a Kuramoto]
+    # Kuramoto stimulus with interaction and sonification.
     elif task==11:
         task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .1
+        #EPSILON = .02
         cpg_mode = 'Kuramoto'
-        tempo_block_duration = np.Inf
-        tempo_block_dur_range = [0,0]
         
     # That's an interactive task. Stimulus sound, control coupling of an unstable cart system, and mov sonification.
     elif task==12:
         task='CPG_AND_ACC_AND_SONIFY'
         EPSILON = .7
-        ForceAdded = .00
         cpg_mode = 'Cart' # (unstable system), 
         
         
@@ -757,6 +778,9 @@ if __name__ == '__main__':
     if cpg_mode=='Lorenz':
         DS_SPEEDUP_0 = 1
         DS_SPEEDUP_0 = DS_SPEEDUP_0*(28/RHO*1)
+        
+    if cpg_mode=='Kuramoto':
+        DS_SPEEDUP_0 = DS_SPEEDUP_0*.8
     DS_SPEEDUP = DS_SPEEDUP_0
     
     OMEGA_DRIVER = 2*math.pi/5*DS_SPEEDUP
@@ -768,6 +792,9 @@ if __name__ == '__main__':
         OMEGA_DRIVER = OMEGA_DRIVER/2
         DS_SPEEDUP = 4
 
+    if VIS_MODALITY & (cpg_mode=='Kuramoto'):
+        MOUSE_GAIN = -5.
+    
     PHI = [.00]*2
     if cpg_mode == 'Lorenz':
         rand = np.random.uniform(2,10,3).astype(float)
@@ -787,6 +814,9 @@ if __name__ == '__main__':
     PI = math.pi
     G = 1.00
     
+    phi_smoothed = [0.,0.]
+    BARPHI = [.0]*2
+
     # Some debugging flags and params
     PRINTING_FLAG        = 0
     PRINT_ACC_FLAG       = 0
@@ -819,7 +849,7 @@ if __name__ == '__main__':
         flip_wii_xaxis_sign = 1
 
 
-    SENSOR = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
+    EFFECTOR = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
     DISCRUPDATE = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float) 
     FORCEADDED = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
     PHIVEC = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
@@ -832,7 +862,7 @@ if __name__ == '__main__':
     # Prepare sound engine
     if SOUND_FLAG:
         RATE = int(48000/8)
-        CHUNK = 8 #8.0 # ms 2**9 #64*6
+        CHUNK = 20 #8.0 # ms 2**9 #64*6
         CHUNK = int(CHUNK/1000.0*RATE) # samples
         WAVEDATAL = [0.00] * CHUNK
         WAVEDATAR = [0.00] * CHUNK
@@ -886,7 +916,10 @@ if __name__ == '__main__':
     # Still testing.
     if VIS_MODALITY==True:
         import cv2
-        window_size = (1200,480)
+        if cpg_mode=='Kuramoto':
+            window_size = (800,800)
+        else:
+            window_size = (1200,400)
         vis_mod_bg = np.zeros((window_size[1],window_size[0],1),dtype='uint8')
         vis_mod_center=(np.int(np.round(window_size[0]/2)),np.int(np.round(window_size[1]/2)))
     
@@ -1027,7 +1060,18 @@ if __name__ == '__main__':
             
             if VIS_MODALITY:
                 if SAMPLE_COUNTER > 1:
-                    visual_modality_draw(PIXELS[SAMPLE_COUNTER-1,:])
+                    vis_mod_bg = np.multiply(vis_mod_bg,0)
+                    BARPHI[0] = PHI[0]
+                    BARPHI[1] = EFFECTOR[SAMPLE_COUNTER-1] #PHI[1]
+                    if BARPHI[0]>PI:
+                        BARPHI[0] = (BARPHI[0] % PI)*-1 + PI
+                    if BARPHI[1]>PI:
+                        BARPHI[1] = (BARPHI[1] % PI)*-1 + PI
+
+                    if cpg_mode=='Kuramoto':
+                        visual_modality_draw_lines(np.add(np.multiply((np.subtract(BARPHI,(PI/2))),.7),(PI/2)))
+                    else:
+                        visual_modality_draw_circles(PIXELS[SAMPLE_COUNTER-1,:])
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
 
@@ -1074,8 +1118,8 @@ if __name__ == '__main__':
                     else:
                         xypos=np.array((np.divide(np.ndarray.astype(np.array(xy),'float'),[x_dim/2,y_dim])-.5)*2)
                         
-                    x=xypos[0]*TABLET_GAIN
-                    y=xypos[1]*TABLET_GAIN
+                    x=xypos[0]*MOUSE_GAIN
+                    y=xypos[1]*MOUSE_GAIN
                     if abs(x)>RAWAXISLIMIT:
                         x=x/abs(x)*RAWAXISLIMIT
                     if abs(y)>RAWAXISLIMIT:
@@ -1095,7 +1139,7 @@ if __name__ == '__main__':
                         if DRIVER_IN_SIMULATION == 'chua':
                             dt = float(time.time()-TIME[SAMPLE_COUNTER-1])
                             
-                            SENSOR[SAMPLE_COUNTER - 1] = XDST_R[1]
+                            EFFECTOR[SAMPLE_COUNTER - 1] = XDST_R[1]
                             XDST_R=Chua1(DS_SPEEDUP*dt,XDST_R,EPSILON2*CPG[SAMPLE_COUNTER-1,1],-1,1,9,5,1) #+ np.random.normal(0,.1,1)
                         x,y,z = XDST_R
             
@@ -1160,45 +1204,53 @@ if __name__ == '__main__':
                 Y_STATE_BUFFER[ index_in_buffer ] = ACC[SAMPLE_COUNTER - 1,1,0] = y
                 Z_STATE_BUFFER[ index_in_buffer ] = ACC[SAMPLE_COUNTER - 1,2,0] = z
                 TIME[SAMPLE_COUNTER - 1] = time.time() #- start_time
-                # Are we rescaling anything differently?
+
+                # Map input devices states to task space variables.
                 if task!='SIMULATION':
                     if mouse_status:
-                        SENSOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[ index_in_buffer ]
+                        EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[ index_in_buffer ]
                     if wii_status:
-                        SENSOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(X_STATE_BUFFER[ index_in_buffer ])
+                        EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(X_STATE_BUFFER[index_in_buffer])
                     if arduino_status:
-                        # Check that calibration is right!!! Why are the x and y values so different in amp?
-                        # The inclination range is compressed for some reason?
-                        SENSOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(Y_STATE_BUFFER[ index_in_buffer ])
-                        #SENSOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(X_STATE_BUFFER[ index_in_buffer ])
+                        EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(Y_STATE_BUFFER[index_in_buffer])
                     if cam_status:
-                        SENSOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[ index_in_buffer ]
+                        EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[index_in_buffer]
+                    if cpg_mode=='Kuramoto':
+                        if VIS_MODALITY:
+                            #PHI[1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
+                            EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle(EFFECTOR - 1.,SAMPLE_COUNTER)
+                        #else:
+                            # Even if you force it somehow to work with a mouse, this will never work well with accelerometers.
+                            # The noise is nightmare for the phase angle.
+                            # Better build a phase-interpolated coupling as in Dotov et al. 2019.
+                            #print EFFECTOR[SAMPLE_COUNTER-1], float(convert_to_angle_2(EFFECTOR,SAMPLE_COUNTER))
+                            #EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle_2(EFFECTOR,SAMPLE_COUNTER)
                 
                 if SOUND_FLAG:
                     if task=='SIMULATION':
                         MIDINOTER = map_x_to_note(float(ACC[SAMPLE_COUNTER - 1,1,0]))
                     else:
-                        if arduino_status:
-                            MIDINOTER = map_x_to_note(float(SENSOR[SAMPLE_COUNTER - 1]))
-                        else:
-                            MIDINOTER = map_x_to_note(float(SENSOR[SAMPLE_COUNTER - 1]))
+                        MIDINOTER = map_x_to_note(float(EFFECTOR[SAMPLE_COUNTER - 1]))
+                            
                     FREQR1 = midi_key_to_hz(MIDINOTER)
                     FREQR12 = midi_key_to_hz(MIDINOTER)/FREQ_SQUEEZE
                     NOTES  [SAMPLE_COUNTER-1,1] = MIDINOTER
 
                 if VIS_MODALITY:
-                    vis_mod_bg = np.multiply(vis_mod_bg,0)
                     if SAMPLE_COUNTER>49:
                         if arduino_status:
-                            x_smoothed = np.mean(SENSOR[(SAMPLE_COUNTER-50):(SAMPLE_COUNTER-1)])
+                            x_smoothed = np.mean(EFFECTOR[(SAMPLE_COUNTER-50):(SAMPLE_COUNTER-1)])
                             #x_smoothed = np.mean(ACC[(SAMPLE_COUNTER - 50):(SAMPLE_COUNTER - 1),0,0])
                         else:
-                            x_smoothed = np.mean(SENSOR[(SAMPLE_COUNTER-10):(SAMPLE_COUNTER-1)])
+                            x_smoothed = np.mean(EFFECTOR[(SAMPLE_COUNTER-10):(SAMPLE_COUNTER-1)])
                             #x_smoothed = np.mean(ACC[(SAMPLE_COUNTER - 10):(SAMPLE_COUNTER - 1),0,0])
                     else:
-                        x_smoothed = SENSOR[SAMPLE_COUNTER-1]
+                        x_smoothed = EFFECTOR[SAMPLE_COUNTER-1]
                         
-                    PIXELS[SAMPLE_COUNTER-1,:] = map_x_to_pixel([(XDST_L[1]-.5)*1.,(float(x_smoothed)-.5)*1.])
+                    # For the tilting bar?
+                    
+                    # For the x-axis circle displacement, more like a spring on a rail.
+                    PIXELS[SAMPLE_COUNTER-1,:] = map_x_to_pixel([(XDST_L[1]-.5)*1.,(float(x_smoothed)-.0)*1.])
                     #PIXELS[SAMPLE_COUNTER-1,0] = (XDST_L[1]-.3)*2.5*vis_mod_center[0]
                     #PIXELS[SAMPLE_COUNTER-1,1] = (x_smoothed-.5)*1.*vis_mod_center[0]
 
@@ -1207,36 +1259,37 @@ if __name__ == '__main__':
                         dt=float(time.time()-TIME[SAMPLE_COUNTER-2])
                         dt_ceil = float(min((.05,dt)))
                         if cpg_mode=='Chua':
-                            ForceAdded=EPSILON*float(SENSOR[SAMPLE_COUNTER-1])
-                            XDST_L=Chua1(DS_SPEEDUP*dt_ceil,XDST_L,ForceAdded,-1,1,9,5,1)
+                            FORCEADDED[SAMPLE_COUNTER - 1]=EPSILON*float(EFFECTOR[SAMPLE_COUNTER-1])
+                            XDST_L=Chua1(DS_SPEEDUP*dt_ceil,XDST_L,FORCEADDED[SAMPLE_COUNTER - 1],-1,1,9,5,1)
                                 
                         if cpg_mode=='Lorenz':
-                            ForceAdded=EPSILON*float(SENSOR[SAMPLE_COUNTER-1])
-                            XDST_L=Lorenz(DS_SPEEDUP*dt_ceil,XDST_L,ForceAdded,RHO)
+                            FORCEADDED[SAMPLE_COUNTER - 1]=EPSILON*float(EFFECTOR[SAMPLE_COUNTER-1])
+                            XDST_L=Lorenz(DS_SPEEDUP*dt_ceil,XDST_L,FORCEADDED[SAMPLE_COUNTER - 1],RHO)
                             
                         if cpg_mode=='ChuaDriven':
-                            ForceAdded=EPSILON_driven*artificial_SensorGain_sine( OMEGA_DRIVER, float(TIME[SAMPLE_COUNTER-1]))
-                            XDST_L=Chua1(DS_SPEEDUP*dt_ceil,XDST_L,ForceAdded,-1,1,9,5,1)
+                            FORCEADDED[SAMPLE_COUNTER - 1]=EPSILON_driven*artificial_SensorGain_sine( OMEGA_DRIVER, float(TIME[SAMPLE_COUNTER-1]))
+                            XDST_L=Chua1(DS_SPEEDUP*dt_ceil,XDST_L,FORCEADDED[SAMPLE_COUNTER - 1],-1,1,9,5,1)
 
                         if cpg_mode=='Cart':
-                            ForceAdded=float(SENSOR[SAMPLE_COUNTER-1])
-                            XDST_L[1]=CartPole(dt_ceil,ForceAdded,XDST_L[1])
+                            FORCEADDED[SAMPLE_COUNTER - 1]=float(EFFECTOR[SAMPLE_COUNTER-1])
+                            XDST_L[1]=CartPole(dt_ceil,FORCEADDED[SAMPLE_COUNTER - 1],XDST_L[1])
                         #
                         
                         if cpg_mode=='Kuramoto':
-                            if SAMPLE_COUNTER>49:
-                                if arduino_status:
-                                    phi_smoothed[0] = np.mean(SENSOR[(SAMPLE_COUNTER-49):(SAMPLE_COUNTER-1)])
-                                    phi_smoothed[1] = np.mean(SENSOR[(SAMPLE_COUNTER-50):(SAMPLE_COUNTER-2)])
-                                else:
-                                    phi_smoothed[0] = np.mean(SENSOR[(SAMPLE_COUNTER-9):(SAMPLE_COUNTER-1)])
-                                    phi_smoothed[1] = np.mean(SENSOR[(SAMPLE_COUNTER-10):(SAMPLE_COUNTER-2)])
-
                             #XDST_L[1]=artificial_SensorGain_sine( OMEGA_DRIVER, TIME[SAMPLE_COUNTER-1] )
-                            PHI[1] = np.arctan2(np.diff(phi_smoothed)/dt_ceil,SENSOR[SAMPLE_COUNTER-1])
-                            ForceAdded = EPSILON/2*(np.sin(PHI[1]-PHI[0]))
-                            PHI[0] = PHI[0] + dt*OMEGA_DRIVER + ForceAdded
+                            #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(PHI[1]-PHI[0]))
+                            #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(EFFECTOR[SAMPLE_COUNTER-1]-PHI[0]))
+                            if VIS_MODALITY:
+                                FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(EFFECTOR[SAMPLE_COUNTER-1]-PHI[0]))
+                            else:
+                                FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(MIDINOTER-MIDINOTEL)
+                            PHI[0] = (PHI[0] + dt*OMEGA_DRIVER + FORCEADDED[SAMPLE_COUNTER - 1]) % (PI*2)
+                            
+                            XDST_L[0] = PHI[0]
                             XDST_L[1] = (np.sin(PHI[0])+1)/2
+                            #XDST_L[2] = PHI[1]
+
+                        if (cpg_mode=='Kuramoto') & (tempo_block_duration<np.inf):
                             # Randomly change the stimulus tempo.
                             if (time.time() - last_tempo_change_time)>tempo_block_duration:
                                 change_tempo = np.asscalar(np.random.uniform(omega_range[0],omega_range[1],1))
@@ -1252,19 +1305,20 @@ if __name__ == '__main__':
                                 if tempo_block_duration < .5:
                                     tempo_block_duration -= grand
                                 
-                        if cpg_mode=='Lorenz':    
+                        if cpg_mode=='Lorenz':
                             if np.linalg.norm(XDST_L)>np.Inf:
                                 print str(XDST_L)
                                 print 'Numerical singularity!'
-                                if SAMPLE_COUNTER>20:
-                                    XDST_L[0] = float(CPG[SAMPLE_COUNTER-20,0])
-                                    XDST_L[1] = float(CPG[SAMPLE_COUNTER-20,1])
-                                    XDST_L[2] = float(CPG[SAMPLE_COUNTER-20,2])
-                                else:
-                                    XDST_L[0] = float(rand[0])
-                                    XDST_L[1] = float(rand[1])
-                                    XDST_L[2] = float(rand[2])
-                        else:
+                                #if SAMPLE_COUNTER>20:
+                                #    XDST_L[0] = float(CPG[SAMPLE_COUNTER-20,0])
+                                #    XDST_L[1] = float(CPG[SAMPLE_COUNTER-20,1])
+                                #    XDST_L[2] = float(CPG[SAMPLE_COUNTER-20,2])
+                                #else:
+                                XDST_L[0] = float(rand[0])
+                                XDST_L[1] = float(rand[1])
+                                XDST_L[2] = float(rand[2])
+                                
+                        if cpg_mode=='Chua':
                             if np.linalg.norm(XDST_L)>2:
                                 print str(XDST_L)
                                 print 'Numerical singularity!'
@@ -1286,7 +1340,7 @@ if __name__ == '__main__':
                                 MIDINOTEL = map_x_to_note(XDST_L[1])
                                 
                             # Consolidate into the vars that control the sound, and log
-                            FORCEADDED[SAMPLE_COUNTER - 1] = ForceAdded
+                            #FORCEADDED[SAMPLE_COUNTER - 1] = ForceAdded
                             FREQL1 = midi_key_to_hz(MIDINOTEL)
                             FREQL12 = FREQL1/FREQ_SQUEEZE
                             NOTES[SAMPLE_COUNTER-1,0] = MIDINOTEL
@@ -1334,6 +1388,10 @@ if __name__ == '__main__':
         cap.release()
         time.sleep(.1)
 
+    if VIS_MODALITY:
+        cv2.destroyAllWindows()
+        time.sleep(.1)
+
     if SOUND_FLAG:
         p.terminate()
     
@@ -1349,7 +1407,7 @@ if __name__ == '__main__':
     TIME = TIME[1:SAMPLE_COUNTER-1]
     TIME = TIME-min(TIME)
     ACC = ACC[1:SAMPLE_COUNTER-1,:,:]
-    SENSOR = SENSOR[1:SAMPLE_COUNTER-1]
+    EFFECTOR = EFFECTOR[1:SAMPLE_COUNTER-1]
     CPG = CPG[1:SAMPLE_COUNTER-1,:]
     NOTES = NOTES[1:SAMPLE_COUNTER-1,:]
     PIXELS= PIXELS[1:SAMPLE_COUNTER-1,:]
@@ -1361,9 +1419,9 @@ if __name__ == '__main__':
         EPSILON = int(EPSILON*1e2)
         log_file_name = 'trial_log-' + time.strftime("%y%m%d-%H%M%S") + '_task' + "%02.0f" % task_num + '_aud' + "%1d" % SOUND_FLAG + '_vis' + "%1d" % VIS_MODALITY + '_eps' + "%03d" % EPSILON + APPEND_TO_FILENAME
         f = open(log_file_name,'w')
-        f.write("%10s," % 'Time'+"%10s," % 'Acc1X'+"%10s," % 'Acc1Y'+"%10s," % 'Acc1Z' + "%10s," % 'AbsAcc'+"%8s," % 'Sensor'+"%10s," % 'CPG'+"%10s," % 'CPGY'+"%10s," % 'CPGZ'+"%10s," % 'Force'+"%8s," % 'NoteL'+"%8s," % 'NoteR'+"%10s," % 'Acc2X'+"%10s," % 'Acc2Y' + "%10s," % 'Acc2Z' + "%10s," % 'XPixStim' + "%10s," % 'XPixPart' + "%12s\n" % 'DiscrUpdate')
+        f.write("%10s," % 'Time'+"%10s," % 'Acc1X'+"%10s," % 'Acc1Y'+"%10s," % 'Acc1Z' + "%10s," % 'AbsAcc'+"%8s," % 'EFFECTOR'+"%10s," % 'CPG'+"%10s," % 'CPGY'+"%10s," % 'CPGZ'+"%10s," % 'Force'+"%8s," % 'NoteL'+"%8s," % 'NoteR'+"%10s," % 'Acc2X'+"%10s," % 'Acc2Y' + "%10s," % 'Acc2Z' + "%10s," % 'XPixStim' + "%10s," % 'XPixPart' + "%12s\n" % 'DiscrUpdate')
         for n in range(0, len(ACC), 1):
-            f.write("%10.3f," % TIME[n]+"%10.4f," % ACC[n,0,0]+"%10.4f," % ACC[n,1,0] + "%10.4f," % ACC[n,2,0] + "%10.4f," % 0 +"%8.3f," % SENSOR[n]+"%10.3f," % CPG[n,0]+"%10.3f," % CPG[n,1]+"%10.3f," % CPG[n,2]+"%10.3f," % FORCEADDED[n]+"%8.2f," % NOTES[n,0]+"%8.2f," % NOTES[n,1] +"%10.4f," % ACC[n,0,1] + "%10.4f," % ACC[n,1,1] + "%10.4f," % ACC[n,2,1] + "%10.4f," % PIXELS[n,0] + "%10.4f," % PIXELS[n,1] + "%12.2f\n" % DISCRUPDATE[n])
+            f.write("%10.3f," % TIME[n]+"%10.4f," % ACC[n,0,0]+"%10.4f," % ACC[n,1,0] + "%10.4f," % ACC[n,2,0] + "%10.4f," % 0 +"%8.3f," % EFFECTOR[n]+"%10.3f," % CPG[n,0]+"%10.3f," % CPG[n,1]+"%10.3f," % CPG[n,2]+"%10.3f," % FORCEADDED[n]+"%8.2f," % NOTES[n,0]+"%8.2f," % NOTES[n,1] +"%10.4f," % ACC[n,0,1] + "%10.4f," % ACC[n,1,1] + "%10.4f," % ACC[n,2,1] + "%10.4f," % PIXELS[n,0] + "%10.4f," % PIXELS[n,1] + "%12.2f\n" % DISCRUPDATE[n])
         f.close()
     
     if SCORE_FEEDBACK:
@@ -1405,13 +1463,13 @@ if __name__ == '__main__':
                 plt.legend(loc='upper right', shadow=False, fontsize='small')    
                 plt.show()
 
-        # Visualize the raw data of the stimulus and the sensors.
+        # Visualize the raw data of the stimulus and the EFFECTORs.
         if True:
             plt.plot(TIME,ACC[:,0,0],'-',label='Participant X')
             plt.plot(TIME,ACC[:,1,0],'-',label='Participant Y')
             plt.plot(TIME,ACC[:,2,0],'-',label='Participant Z')
-            plt.plot(TIME,SENSOR,'-',label='Transformed Motor Output (inclination, x-dim, etc.)')
-            plt.plot(TIME,FORCEADDED,'-',label='The coupling function from participant to stimulus')
+            plt.plot(TIME,EFFECTOR,'-',label='Transformed Motor Output (inclination, x-dim, etc.)')
+            plt.plot(TIME,np.multiply(FORCEADDED,10),'-',label='The coupling function from participant to stimulus')
             plt.plot(TIME,CPG[:,0],'-',label='Stim X')
             plt.plot(TIME,CPG[:,1],'-',label='Stim Y')
             plt.plot(TIME,CPG[:,2],'-',label='Stim Z')
