@@ -539,13 +539,17 @@ if __name__ == '__main__':
     dt_ceil = dt_target*1.
     srbar=int(1/dt_target)
     INPUT_DEVICE='mouse'
-    MOUSE_GAIN = 2.
     RAWAXISLIMIT= 10
+    MOUSE_GAIN = 2.
     synth_mode = 1
     FADEIN_R = 1
     FADEOUT_L = 0
     FADEOUT_L_DUR = 10
     EPSILON=.0
+    FADEIN_R_TIME = 5
+    AMPLIFY_OSC2 = 0
+    AMPLIFY_OSC_0 = 20
+    AMPLIFY_OSC_0_R = 18
     SCORE_FEEDBACK = bool(0)
     VIS_MODALITY = False
     SOUND_FLAG = True
@@ -574,7 +578,6 @@ if __name__ == '__main__':
     for opt, arg in opts:
         if opt in ("-h","--help"):
             print'chua_dst_sync_0.95.py --duration=<trial duration> --epsilon=<ε, i.e. .7> --task=<{0:11}> --mov_logging=<1 or 0> --mov_plotting=<1 or 0> --sound_export=<1 or 0> --append_to_file_name=<chars> --input=<mouse (default) or wii or arduino or camera> --aud_feedback=<1 or 0>  --vis_feedback=<1 or 0> --performance_feedback=<1 or 0> --visual_modality=<0 OR 1>'
-            print '\n'
             print 'where the tasks are:'
             print ' 0. Simulation, no wiimote necessary.'
             print ' 1. Sonification only, Stimulus OFF.'
@@ -583,10 +586,12 @@ if __name__ == '__main__':
             print ' 4. Relatively periodic stimulus, movement sonification ON, no interaction.'
             print ' 5. Simple sine stimulus ON, movement sonification ON, no interaction.'
             print ' 6. Simple sine stimulus ON with changing tempo, movement sonification ON, no interaction.'
-            print ' 7. Like 6, but using the complex stim. Not tested yet.'
+            print ' 7. Like #6, but using the complex stim. Not tested yet.'
             print ' 8. Like #3, but with no interaction, coupling ε=0.'
             print ' 9. Like #8, but with Lorenz as stimulus.'
             print '10. Like #5, but stimulus fades out, SCT.'
+            print '11. Like #5, but phase-coupled Kuramoto.'
+            print '12. [Not tested] Driven cart-pole system.'            
             sys.exit()
         if opt in ("-d", "--duration"):
             DURATION = float(arg)
@@ -645,18 +650,21 @@ if __name__ == '__main__':
         srbar = 500
 
     if INPUT_DEVICE=='mouse':
-        wii_status=False
+        #wii_status=False
         mouse_status=True
         m = PyMouse()
         x_dim, y_dim = m.screen_size()
         CAM_VIS_FEEDBACK = bool(0)
 
     if INPUT_DEVICE=='camera':
+        RAWAXISLIMIT= 2
         cam_status=True
         mouse_status=False
         wii_status=False
         cam_gain = 1
         X_integrated = 0
+        if VIS_MODALITY:
+            cam_gain = cam_gain*-1
 
 
     task_num = 1*task
@@ -681,7 +689,9 @@ if __name__ == '__main__':
     # Stimulus sound and coupling to the stimulus, but no mov sonification.
     elif task==2:
         task='CPG_AND_ACC'
+        EPSILON = .7
         cpg_mode = 'Chua'
+        AMPLIFY_OSC_0_R = 0
     
     # That's the interactive, unison task. Stimulus sound, control coupling, and mov sonification.
     elif task==3:
@@ -783,10 +793,10 @@ if __name__ == '__main__':
         DS_SPEEDUP_0 = DS_SPEEDUP_0*.8
     DS_SPEEDUP = DS_SPEEDUP_0
     
-    OMEGA_DRIVER = 2*math.pi/5*DS_SPEEDUP
+    OMEGA_DRIVER = 1*math.pi/5*DS_SPEEDUP
     
     # To set the range of stimulus tempo in task 6.
-    omega_range = [OMEGA_DRIVER/2,OMEGA_DRIVER*1.]
+    omega_range = [OMEGA_DRIVER/2,OMEGA_DRIVER*2.]
     
     if task=='SIMULATION':
         OMEGA_DRIVER = OMEGA_DRIVER/2
@@ -886,15 +896,12 @@ if __name__ == '__main__':
         VR2 = 10.00**(-4)
         FREQ_SQUEEZE = 10
     
-        FADEIN_R_TIME = 5
-        AMPLIFY_OSC2 = 0
-        AMPLIFY_OSC_0 = 20
         if task=='SONIFY_ONLY':
             AMPLIFY_OSC_L = 0
         else:
             AMPLIFY_OSC_L = 1.*AMPLIFY_OSC_0    
         if AUD_FEEDBACK & ~FADEIN_R:
-            AMPLIFY_OSC_R = 1.*AMPLIFY_OSC_0
+            AMPLIFY_OSC_R = 1.*AMPLIFY_OSC_0_R
         else:
             AMPLIFY_OSC_R = 0
         
@@ -1190,6 +1197,7 @@ if __name__ == '__main__':
                 if abs(X_integrated)>RAWAXISLIMIT:
                     X_integrated=X_integrated/abs(X_integrated)*RAWAXISLIMIT
                 x = X_integrated
+                #print x
 
                 frame0 = frame1
                 if GPU_FLAG:
@@ -1232,6 +1240,7 @@ if __name__ == '__main__':
                     else:
                         MIDINOTER = map_x_to_note(float(EFFECTOR[SAMPLE_COUNTER - 1]))
                             
+                    #print MIDINOTER
                     FREQR1 = midi_key_to_hz(MIDINOTER)
                     FREQR12 = midi_key_to_hz(MIDINOTER)/FREQ_SQUEEZE
                     NOTES  [SAMPLE_COUNTER-1,1] = MIDINOTER
@@ -1273,7 +1282,6 @@ if __name__ == '__main__':
                         if cpg_mode=='Cart':
                             FORCEADDED[SAMPLE_COUNTER - 1]=float(EFFECTOR[SAMPLE_COUNTER-1])
                             XDST_L[1]=CartPole(dt_ceil,FORCEADDED[SAMPLE_COUNTER - 1],XDST_L[1])
-                        #
                         
                         if cpg_mode=='Kuramoto':
                             #XDST_L[1]=artificial_SensorGain_sine( OMEGA_DRIVER, TIME[SAMPLE_COUNTER-1] )
@@ -1291,19 +1299,28 @@ if __name__ == '__main__':
 
                         if (cpg_mode=='Kuramoto') & (tempo_block_duration<np.inf):
                             # Randomly change the stimulus tempo.
-                            if (time.time() - last_tempo_change_time)>tempo_block_duration:
-                                change_tempo = np.asscalar(np.random.uniform(omega_range[0],omega_range[1],1))
-                                DS_SPEEDUP = DS_SPEEDUP_0*(OMEGA_DRIVER/change_tempo)
-                                OMEGA_DRIVER = change_tempo
-                                #print(OMEGA_DRIVER )
-                                last_tempo_change_time = time.time()
-                                # Uniform:
-                                #tempo_block_duration = np.asscalar(np.random.uniform(tempo_block_dur_range[0],tempo_block_dur_range[1],1))
-                                # Add Gaussian to make Brownian
-                                grand = np.random.normal(scale=.2)
-                                tempo_block_duration += grand
-                                if tempo_block_duration < .5:
-                                    tempo_block_duration -= grand
+                            if 1: # Change at cycle beginning.
+                                if SAMPLE_COUNTER>3:
+                                    if (np.diff(CPG[(SAMPLE_COUNTER-4):(SAMPLE_COUNTER-2),1])<0) & (np.diff(CPG[(SAMPLE_COUNTER-3):(SAMPLE_COUNTER-1),1])>0):
+                                        change_tempo = np.asscalar(np.random.uniform(omega_range[0],omega_range[1],1))
+                                        DS_SPEEDUP = DS_SPEEDUP_0*(OMEGA_DRIVER/change_tempo)
+                                        OMEGA_DRIVER = change_tempo
+                                        #print OMEGA_DRIVER, DS_SPEEDUP
+                            else: # Change at given time intervals.
+                                if (time.time() - last_tempo_change_time)>tempo_block_duration:
+                                    change_tempo = np.asscalar(np.random.uniform(omega_range[0],omega_range[1],1))
+                                    DS_SPEEDUP = DS_SPEEDUP_0*(OMEGA_DRIVER/change_tempo)
+                                    OMEGA_DRIVER = change_tempo
+                                    print OMEGA_DRIVER, DS_SPEEDUP
+                                    #print(OMEGA_DRIVER )
+                                    last_tempo_change_time = time.time()
+                                    # Uniform:
+                                    #tempo_block_duration = np.asscalar(np.random.uniform(tempo_block_dur_range[0],tempo_block_dur_range[1],1))
+                                    # Add Gaussian to make Brownian
+                                    grand = np.random.normal(scale=.2)
+                                    tempo_block_duration += grand
+                                    if tempo_block_duration < .5:
+                                        tempo_block_duration -= grand
                                 
                         if cpg_mode=='Lorenz':
                             if np.linalg.norm(XDST_L)>np.Inf:
@@ -1352,8 +1369,8 @@ if __name__ == '__main__':
             # Fade-in R
             if SOUND_FLAG:
                 if FADEIN_R & AUD_FEEDBACK & ((time.time() - start_time) > FADEIN_R_TIME):
-                    AMPLIFY_OSC_R = AMPLIFY_OSC_R + .005*(AMPLIFY_OSC_0-AMPLIFY_OSC_R)
-                    if AMPLIFY_OSC_R == AMPLIFY_OSC_0:
+                    AMPLIFY_OSC_R = AMPLIFY_OSC_R + .005*(AMPLIFY_OSC_0_R-AMPLIFY_OSC_R)
+                    if AMPLIFY_OSC_R == AMPLIFY_OSC_0_R:
                         FADEIN_R = 0
             
             if SOUND_FLAG:
@@ -1464,7 +1481,7 @@ if __name__ == '__main__':
                 plt.show()
 
         # Visualize the raw data of the stimulus and the EFFECTORs.
-        if True:
+        if False:
             plt.plot(TIME,ACC[:,0,0],'-',label='Participant X')
             plt.plot(TIME,ACC[:,1,0],'-',label='Participant Y')
             plt.plot(TIME,ACC[:,2,0],'-',label='Participant Z')
