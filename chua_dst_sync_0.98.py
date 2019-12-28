@@ -14,38 +14,38 @@ import os
 
 
 def map_eff_states_to_screen_bars(x0,x1):
-    BARPHI[0] = x0
-    BARPHI[1] = x1 #(x1-(PI/2))*1+(PI/2)
-    if BARPHI[0]>PI:
-        BARPHI[0] = (BARPHI[0] % PI)*-1 + PI
-    BARPHI[0] = (BARPHI[0]-PI/2)*SCALE_KUR_AMP+(PI/2)
-    #if BARPHI[1]>PI:
-    #    BARPHI[1] = (BARPHI[1] % PI)*-1 + PI
-    return BARPHI
+    BARTHETA[0] = x0
+    BARTHETA[1] = x1 #(x1-(PI/2))*1+(PI/2)
+    if BARTHETA[0]>PI:
+        BARTHETA[0] = (BARTHETA[0] % PI)*-1 + PI
+    BARTHETA[0] = (BARTHETA[0]-PI/2)*SCALE_KUR_AMP+(PI/2)
+    #if BARTHETA[1]>PI:
+    #    BARTHETA[1] = (BARTHETA[1] % PI)*-1 + PI
+    return BARTHETA
 
 
 def convert_to_angle(s,k):
     # The participant input as angle.
-    phi = s[k-1]+PI
-    if phi>PI:
-        phi=PI
-    if phi<0:
-        phi=0
-    return phi
+    theta = s[k-1]+PI
+    if theta>PI:
+        theta=PI
+    if theta<0:
+        theta=0
+    return theta
 
         
 def convert_to_angle_2(s,k):
     if k>19:
         if arduino_status:
-            phi_smoothed[0] = np.mean(s[(k-19):(k-1)])
-            phi_smoothed[1] = np.mean(s[(k-20):(k-2)])
+            theta_smoothed[0] = np.mean(s[(k-19):(k-1)])
+            theta_smoothed[1] = np.mean(s[(k-20):(k-2)])
         else:
-            phi_smoothed[0] = np.mean(s[(k-3):(k-1)])
-            phi_smoothed[1] = np.mean(s[(k-4):(k-2)])
-    phi = np.arctan2(np.diff(phi_smoothed)/dt_ceil,s[k-1])
-    if phi<0:
-        phi = (2*PI)-phi
-    return phi
+            theta_smoothed[0] = np.mean(s[(k-3):(k-1)])
+            theta_smoothed[1] = np.mean(s[(k-4):(k-2)])
+    theta = np.arctan2(np.diff(theta_smoothed)/dt_ceil,s[k-1])
+    if theta<0:
+        theta = (2*PI)-theta
+    return theta
 
 
 def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
@@ -489,11 +489,11 @@ def visual_modality_draw_circles(x_targets):
     cv2.circle(vis_mod_bg, (int(vis_mod_center[0]+x_targets[1]),int(vis_mod_center[1]+3)), 20, (200,250,1,1), thickness = 4)
     cv2.imshow('Visual Task', vis_mod_bg)
 
-def visual_modality_draw_lines(phi,radius=100.,total_angle_prop=.7):
+def visual_modality_draw_lines(theta,radius=100.,total_angle_prop=.7):
     # Lines+tilt.
-    # phi[0]=total_angle_prop*phi[0]
-    cv2.line(vis_mod_bg, (int(vis_mod_center[0]-radius*np.cos(phi[0])),int(vis_mod_center[1]+radius*np.sin(phi[0]))), (int(vis_mod_center[0]+radius*np.cos(phi[0])),int(vis_mod_center[1]-radius*np.sin(phi[0]))), color=(250,111,150,1), thickness = 7)
-    cv2.line(vis_mod_bg, (int(vis_mod_center[0]-radius*np.cos(phi[1])),int(vis_mod_center[1]+radius*np.sin(phi[1]))), (int(vis_mod_center[0]+radius*np.cos(phi[1])),int(vis_mod_center[1]-radius*np.sin(phi[1]))), color=(100,  5,  1,1), thickness = 7)
+    # theta[0]=total_angle_prop*theta[0]
+    cv2.line(vis_mod_bg, (int(vis_mod_center[0]-radius*np.cos(theta[0])),int(vis_mod_center[1]+radius*np.sin(theta[0]))), (int(vis_mod_center[0]+radius*np.cos(theta[0])),int(vis_mod_center[1]-radius*np.sin(theta[0]))), color=(250,111,150,1), thickness = 7)
+    cv2.line(vis_mod_bg, (int(vis_mod_center[0]-radius*np.cos(theta[1])),int(vis_mod_center[1]+radius*np.sin(theta[1]))), (int(vis_mod_center[0]+radius*np.cos(theta[1])),int(vis_mod_center[1]-radius*np.sin(theta[1]))), color=(100,  5,  1,1), thickness = 7)
     cv2.imshow('Visual Task', vis_mod_bg)
 
 def visual_feedback(X0,Y0,X1,Y1,mag):
@@ -775,7 +775,7 @@ if __name__ == '__main__':
     elif task==12:
         task='CPG_AND_ACC_AND_SONIFY'
         cpg_mode = 'Kuramoto'
-        EPSILON = .02
+        EPSILON = .01
         
     # That's an interactive task. Stimulus sound, control coupling of an unstable cart system, and mov sonification.
     elif task==13:
@@ -830,7 +830,7 @@ if __name__ == '__main__':
     if VIS_MODALITY & (cpg_mode=='Kuramoto'):
         MOUSE_GAIN = -5.
     
-    PHI = [.00]*2
+    THETA = [.00]*2
     if cpg_mode == 'Lorenz':
         rand = np.random.uniform(2,10,3).astype(float)
     else:
@@ -849,8 +849,8 @@ if __name__ == '__main__':
     PI = math.pi
     G = 1.00
     
-    phi_smoothed = [0.,0.]
-    BARPHI = [.0]*2
+    theta_smoothed = [0.,0.]
+    BARTHETA = [.0]*2
 
     # Some debugging flags and params
     PRINTING_FLAG        = 0
@@ -896,7 +896,7 @@ if __name__ == '__main__':
     EFFECTOR = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
     DISCRUPDATE = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float) 
     FORCEADDED = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
-    PHIVEC = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
+    THETAVEC = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
     TIME = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
     PIXELS = np.zeros(((srbar * (int(DURATION) + 30)),2),dtype=float)
     NOTES = np.zeros(((srbar * (int(DURATION) + 30)),2),dtype=float)
@@ -1103,7 +1103,7 @@ if __name__ == '__main__':
                 if SAMPLE_COUNTER > 1:
                     vis_mod_bg = np.multiply(vis_mod_bg,0)
                     if cpg_mode=='Kuramoto':
-                        visual_modality_draw_lines(BARPHI)
+                        visual_modality_draw_lines(BARTHETA)
                     else:
                         PIXELS[SAMPLE_COUNTER-1,:] = map_x_to_pixel([XDST_L[1]-.5,EFFECTOR[SAMPLE_COUNTER - 1]])
                         visual_modality_draw_circles(PIXELS[SAMPLE_COUNTER-1,:])
@@ -1258,7 +1258,7 @@ if __name__ == '__main__':
                         EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[ index_in_buffer ]
                         if (cpg_mode=='Kuramoto') & VIS_MODALITY:
                             EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle(EFFECTOR - 1.,SAMPLE_COUNTER)
-                            #PHI[1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
+                            #THETA[1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
                         #else:
                             # Even if you force it somehow to work with a mouse, this will never work well with accelerometers.
                             # The noise is nightmare for the phase angle.
@@ -1266,8 +1266,8 @@ if __name__ == '__main__':
                             #print EFFECTOR[SAMPLE_COUNTER-1], float(convert_to_angle_2(EFFECTOR,SAMPLE_COUNTER))
                             #EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle_2(EFFECTOR,SAMPLE_COUNTER)
                     if wii_status:
-                        if VIS_MODALITY & (SAMPLE_COUNTER>4):
-                            xsmoothed = float(np.mean(ACC[(SAMPLE_COUNTER-5):(SAMPLE_COUNTER-1),0,0]))
+                        if VIS_MODALITY & (SAMPLE_COUNTER>9):
+                            xsmoothed = float(np.mean(ACC[(SAMPLE_COUNTER-10):(SAMPLE_COUNTER-1),0,0]))
                         else:
                             xsmoothed = ACC[SAMPLE_COUNTER-1,0,0]
                         EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed)
@@ -1313,24 +1313,27 @@ if __name__ == '__main__':
                         
                         if cpg_mode=='Kuramoto':
                             #XDST_L[1]=artificial_SensorGain_sine( OMEGA_DRIVER, TIME[SAMPLE_COUNTER-1] )
-                            #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(PHI[1]-PHI[0]))
-                            #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(EFFECTOR[SAMPLE_COUNTER-1]-PHI[0]))
+                            #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(THETA[1]-THETA[0]))
+                            #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(EFFECTOR[SAMPLE_COUNTER-1]-THETA[0]))
                             if VIS_MODALITY:
-                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(EFFECTOR[SAMPLE_COUNTER-2]-PHI[0]))
-                                FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(BARPHI[1]-PHI[0]-0*PI/2))
-                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(BARPHI[1]-BARPHI[0])
-                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(BARPHI[1]-BARPHI[0]))
-                                #print BARPHI, FORCEADDED[SAMPLE_COUNTER - 1]
+                                FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.cos(THETA[0])-np.cos(BARTHETA[1]))*np.sign(np.sin(THETA[0]))
+                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(BARTHETA[1]-BARTHETA[0])*np.sign(EFFECTOR[SAMPLE_COUNTER-1]-EFFECTOR[SAMPLE_COUNTER-2])
+                                # This needs either a different task space, not Kuramoto but some kind of spring on a rail, or very smooth sensor.
+                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(EFFECTOR[SAMPLE_COUNTER-2]-THETA[0]))
+                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(BARTHETA[1]-THETA[0]-0*PI/2))
+                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(BARTHETA[1]-BARTHETA[0])
+                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(BARTHETA[1]-BARTHETA[0]))
+                                #print BARTHETA, FORCEADDED[SAMPLE_COUNTER - 1]
                             else:
                                 FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(MIDINOTER-MIDINOTEL)
-                            PHI[0] = (PHI[0] + dt*OMEGA_DRIVER + FORCEADDED[SAMPLE_COUNTER - 1]) % (PI*2)
-                            BARPHI = map_eff_states_to_screen_bars(PHI[0],EFFECTOR[SAMPLE_COUNTER-1])
+                            THETA[0] = (THETA[0] + dt*OMEGA_DRIVER + FORCEADDED[SAMPLE_COUNTER - 1]) % (PI*2)
+                            BARTHETA = map_eff_states_to_screen_bars(THETA[0],EFFECTOR[SAMPLE_COUNTER-1])
                             
-                            XDST_L[0] = PHI[0]
-                            XDST_L[1] = BARPHI[0]
-                            XDST_L[2] = BARPHI[1]
-                            #XDST_L[1] = (np.sin(PHI[0])+1)/2
-                            #XDST_L[2] = PHI[1]
+                            XDST_L[0] = THETA[0]
+                            XDST_L[1] = BARTHETA[0]
+                            XDST_L[2] = BARTHETA[1]
+                            #XDST_L[1] = (np.sin(THETA[0])+1)/2
+                            #XDST_L[2] = THETA[1]
 
                         if (cpg_mode=='Kuramoto') & (tempo_block_duration<np.inf):
                             # Randomly change the stimulus tempo.
