@@ -1283,7 +1283,10 @@ if __name__ == '__main__':
                             xsmoothed = float(np.mean(ACC[(SAMPLE_COUNTER-10):(SAMPLE_COUNTER-1),0,0]))
                         else:
                             xsmoothed = ACC[SAMPLE_COUNTER-1,0,0]
-                        EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed)+shift_wii_x_in_aud
+
+                        if ~VIS_MODALITY:
+                            EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed)+shift_wii_x_in_aud
+
                         if (cpg_mode=='Kuramoto') & VIS_MODALITY:
                             EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
                         #    EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
