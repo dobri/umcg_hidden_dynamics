@@ -321,9 +321,9 @@ def callback4(in_data, frame_count, time_info, status):
     return (chunk, pyaudio.paContinue)
 
 
-def CartPole(dt,XvecCart,XvecCOM,force_gain=1.,limitlow=-.9,limitup=.9):
+def CartPole(dt,XvecCart,XvecCOM,force_gain=1.,limitlow=-.5,limitup=.5,lambda_gain=.1):
     #print(XvecCOM,XvecCart)
-    XvecCOM = XvecCOM + dt*(XvecCOM-XvecCart)*force_gain
+    XvecCOM = XvecCOM + dt*(lambda_gain*XvecCOM - force_gain*XvecCart)
     # Contain the x-axis range
     XvecCOM = max(limitlow,XvecCOM)
     XvecCOM = min(limitup,XvecCOM)
@@ -542,7 +542,7 @@ if __name__ == '__main__':
     MOVT_PLOTTING = bool(1)
     SOUND_EXPORT_FLAG = bool(0)
     AUD_FEEDBACK = bool(1)
-    task=1
+    task=0
     APPEND_TO_FILENAME = ''
     mouse_status=True
     wii_status=False
@@ -716,6 +716,7 @@ if __name__ == '__main__':
     # SCT. Sine stimulus. Mov sonification w/out control.
     elif task==11:
         task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .0
         cpg_mode = 'Kuramoto'
         FADEOUT_L = 1
         FADEIN_R = 0
@@ -787,7 +788,7 @@ if __name__ == '__main__':
     # That's an interactive task. Stimulus sound, control coupling of an unstable cart system, and mov sonification.
     elif task==45:
         task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .7
+        EPSILON = .5
         cpg_mode = 'Cart' # (unstable system), 
         
         
@@ -864,13 +865,11 @@ if __name__ == '__main__':
     PRINT_ACC_FLAG       = 0
     RESCALE_WITH_SIGMOID = 0
     
-    # Prepare Wiimote
-    SAMPLE_COUNTER = 0
     
+    # Prepare Wiimote
     OFFSETS = np.zeros((2,3,2))
-
     comp = os.uname()
-    if comp[1]=='pop-os':
+    if (comp[1]=='pop-os') | (comp[1]=='ideapad720s'):
         # The white wii controller!
         OFFSETS[:,:,0] = [[-3.,-5.,-1.],[-107.,99.,100.]]
         # The red wii controller!
@@ -894,10 +893,6 @@ if __name__ == '__main__':
     D_ACC_BUFFER = [.00] * MOVT_BUFFER_SIZE
     x2 = y2 = z2 = 0
     x = y = z = 0
-    if 1:
-        flip_wii_xaxis_sign = -1
-    else:
-        flip_wii_xaxis_sign = 1
 
 
     EFFECTOR = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
@@ -912,8 +907,8 @@ if __name__ == '__main__':
     
     # Prepare sound engine
     if SOUND_FLAG:
-        RATE = int(48000/8)
-        CHUNK = 8. #8.0 or 20 # ms
+        RATE = int(48000/6)
+        CHUNK = 20. #8.0 or 20 # ms
         CHUNK = int(CHUNK/1000.0*RATE) # samples
         WAVEDATAL = [0.00] * CHUNK
         WAVEDATAR = [0.00] * CHUNK
@@ -1061,15 +1056,24 @@ if __name__ == '__main__':
             pwiimote.register(devs[d].get_fd(), POLLIN)
             
         revt = xwiimote.event()
+        
+        if VIS_MODALITY:
+            flip_wii_xaxis_sign = 1
+            shift_wii_x_in_aud  = .0
+        else:
+            flip_wii_xaxis_sign = -1
+            shift_wii_x_in_aud  = .5
+
 
     # Start the sound engine
     if SOUND_FLAG:
         p = pyaudio.PyAudio()
         devinfo = p.get_device_info_by_index(0)
         NUM_CHANS=devinfo['maxOutputChannels']
-        if 0:
-            print_sound_device_info(p)
-        # print (NUM_CHANS), "channels found."
+        if True:
+            #print_sound_device_info(p)
+            print (NUM_CHANS), "channels found."
+
         if NUM_CHANS<4:
             NUM_CHANS=int(2)
             stream = p.open(format = pyaudio.paFloat32,
@@ -1096,6 +1100,7 @@ if __name__ == '__main__':
         if PRINTING_FLAG:
             print "MIDINOTEL:", MIDINOTEL, " @ ", FREQL1, "Hz", "; MIDINOTER:", MIDINOTER, " @ ", FREQR1, "Hz"
     
+    SAMPLE_COUNTER  = 0
     start_time      = time.time()
     note_start      = start_time
     last_peak_time  = start_time
@@ -1126,11 +1131,12 @@ if __name__ == '__main__':
                             x,y,z = revt.get_abs(0)
                             (x,y,z) = rescale_acc((x,y,z))
                             if cpg_mode=='Kuramoto':
-                                x = x
+                                x = flip_wii_xaxis_sign*x
+                                #x = x+.5
                             else:
                                 x = flip_wii_xaxis_sign*x
                                 # Shift so that the "0" is tilted to the left.
-                                x = x+.5
+                                #x = x+.5
                             update_states = True
                     if len(devs)>1:
                         if fd == fds[1]:
@@ -1139,7 +1145,7 @@ if __name__ == '__main__':
                                 x2,y2,z2 = revt.get_abs(0)
                                 (x2,y2,z2) = rescale_acc((x2,y2,z2),1)
                                 if cpg_mode=='Kuramoto':
-                                    x2 = x2
+                                    x2 = flip_wii_xaxis_sign*x2
                                 else:
                                     x2 = flip_wii_xaxis_sign*x2
                                     # Shift so that the "0" is tilted to the left.
@@ -1277,7 +1283,7 @@ if __name__ == '__main__':
                             xsmoothed = float(np.mean(ACC[(SAMPLE_COUNTER-10):(SAMPLE_COUNTER-1),0,0]))
                         else:
                             xsmoothed = ACC[SAMPLE_COUNTER-1,0,0]
-                        EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed)
+                        EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed)+shift_wii_x_in_aud
                         if (cpg_mode=='Kuramoto') & VIS_MODALITY:
                             EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
                         #    EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
