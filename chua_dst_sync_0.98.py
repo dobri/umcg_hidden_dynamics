@@ -591,22 +591,28 @@ if __name__ == '__main__':
 
     for opt, arg in opts:
         if opt in ("-h","--help"):
-            print'chua_dst_sync_0.95.py --duration=<trial duration> --epsilon=<ε, i.e. .7> --task=<{0:11}> --mov_logging=<1 or 0> --mov_plotting=<1 or 0> --sound_export=<1 or 0> --append_to_file_name=<chars> --input=<mouse (default) or wii or arduino or camera> --aud_feedback=<1 or 0>  --vis_feedback=<1 or 0> --performance_feedback=<1 or 0> --visual_modality=<0 OR 1>'
-            print 'where the tasks are:'
-            print ' 0. Simulation, no wiimote necessary.'
-            print ' 1. Sonification only, Stimulus OFF.'
-            print ' 2. Stimulus and interaction ON but no sonification (This is auditory-motor rather than auditory-auditory synchronization.)'
-            print ' 3. [UNISON] Stimulus, movement sonification, and interaction all ON.'
-            print ' 4. Relatively periodic stimulus, movement sonification ON, no interaction.'
-            print ' 5. Simple sine stimulus ON, movement sonification ON, no interaction.'
-            print ' 6. Simple sine stimulus ON with changing tempo, movement sonification ON, no interaction.'
-            print ' 7. Like #6, but using the complex stim. Not tested yet.'
-            print ' 8. Like #3, but with no interaction, coupling ε=0.'
-            print ' 9. Like #8, but with Lorenz as stimulus.'
-            print '10. Like #5, but stimulus fades out, SCT.'
-            print '11. Like #5, but different amp and duration.'
-            print '12. Like #5, but phase-coupled Kuramoto.'
-            print '13. [Not tested] Driven cart-pole system.'            
+            print'chua_dst_sync_0.95.py --duration=<trial duration> --epsilon=<ε, i.e. .7> --task=<{0:100}> --mov_logging=<1 or 0> --mov_plotting=<1 or 0> --sound_export=<1 or 0> --append_to_file_name=<chars> --input=<mouse (default) or wii or arduino or camera> --aud_feedback=<1 or 0>  --vis_feedback=<1 or 0> --performance_feedback=<1 or 0> --visual_modality=<0 OR 1>'
+            print 'where the tasks are:\n'
+            print 'Movement sonification only, no stimulus:'
+            print '\t  0. _ Sonification only, Stimulus OFF.'
+            print 'Periodic generator [Kuramoto]:'
+            print '\t 10. _ Periodic non-interactive (sine stimulus ON, movement sonification ON, no interaction).'
+            print '\t 11. SCT (like #10, but stimulus fades out, SCT).'
+            print '\t 12. _ Periodic non-interactive, different params (like #10, but different amp and duration).'
+            print '\t 15. _ Periodic interactive (like #10, but phase-coupled).'
+            print '\t 17. Periodic non-interactive, tempo-changing (sine stimulus ON with changing tempo).'
+            print 'Non-linear dynamically unstable generator [Chua]:'
+            print '\t 20. _ Non-periodic non-interactive (like #25, but with no interaction).'
+            print '\t 21. Quasi-periodic non-interactive (driven Chua). [Not finished!]'
+            print '\t 25. _ Non-periodic interactive (stimulus, movement sonification, and interaction all ON).'
+            print '\t 27. Quasi-periodic non-interactive, tempo-changing (like #17 and #21). [Doesn\'t work yet!]'
+            print '\t 29. Non-periodic interactive, w/out mov sonification (like #25).'
+            print 'Non-linear dynamically unstable generator [Lorenz]:'
+            print '\t 30. _ Non-periodic non-interactive (like #20 but with Lorenz).'
+            print 'Dynamically unstable generator [Pole on cart]:'
+            print '\t 45. Driven cart-pole system. [Not tested much!]'
+            print 'Simulations:'
+            print '\t100. Simulations, no wiimote necessary.\n'
             sys.exit()
         if opt in ("-d", "--duration"):
             DURATION = float(arg)
@@ -684,7 +690,7 @@ if __name__ == '__main__':
 
     task_num = 1*task
     # Set task=0 to run simulations.
-    if task==0:
+    if task==100:
         task='SIMULATION'
         wii_status=False
         mouse_status=False
@@ -697,74 +703,25 @@ if __name__ == '__main__':
             EPSILON2=0
         
     # Sonify only. No CPG.
-    elif task==1:
+    elif task==0:
         task='SONIFY_ONLY'
         FADEIN_R = 0
-    
-    # Stimulus sound and coupling to the stimulus, but no mov sonification.
-    elif task==2:
-        task='CPG_AND_ACC'
-        EPSILON = .7
-        cpg_mode = 'Chua'
-        AMPLIFY_OSC_0_R = 0
-    
-    # That's the interactive, unison task. Stimulus sound, control coupling, and mov sonification.
-    elif task==3:
-        task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .7
-        cpg_mode = 'Chua'
-
-    # Simplified Chua stimulus. Mov sonification but w/out control. This sets \eps=0.
-    elif task==4:
-        task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .0
-        cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
-        EPSILON_driven = 1.
 
     # Sine stimulus. Mov sonification but w/out control. This sets \eps=0.
-    elif task==5:
+    elif task==10:
         task='CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
         
-    # Sine stimulus with perturbation as changing tempo. 
-    # Mov sonification but w/out control. This sets \eps=0.
-    elif task==6:
-        task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .0
-        cpg_mode = 'Kuramoto'
-        tempo_block_duration = 1
-        tempo_block_dur_range = [1,2]
-
-    # Like 4, but with perturbation.
-    elif task==7:
-        task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .0
-        cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
-        EPSILON_driven = 1.
-        tempo_block_duration = 5
-        tempo_block_dur_range = [5,15]
-
-    elif task==8:
-        task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .0
-        cpg_mode = 'Chua'
-    
-    elif task==9:
-        task='CPG_AND_ACC_AND_SONIFY'
-        EPSILON = .0
-        cpg_mode = 'Lorenz'
-        RHO = 28
-    
     # SCT. Sine stimulus. Mov sonification w/out control.
-    elif task==10:
+    elif task==11:
         task='CPG_AND_ACC_AND_SONIFY'
         cpg_mode = 'Kuramoto'
         FADEOUT_L = 1
         FADEIN_R = 0
 
     # Sine stimulus. Mov sonification but w/out control. This sets \eps=0.
-    elif task==11:
+    elif task==12:
         task='CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
@@ -772,13 +729,63 @@ if __name__ == '__main__':
         SCALE_KUR_AMP = .6
         
     # Kuramoto stimulus, phase-coupled.
-    elif task==12:
+    elif task==15:
         task='CPG_AND_ACC_AND_SONIFY'
         cpg_mode = 'Kuramoto'
-        EPSILON = .01
+        EPSILON = .005
         
+    # Sine stimulus with perturbation as changing tempo. 
+    # Mov sonification but w/out control. This sets \eps=0.
+    elif task==17:
+        task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .0
+        cpg_mode = 'Kuramoto'
+        tempo_block_duration = 1
+        tempo_block_dur_range = [1,2]
+
+    elif task==20:
+        task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .0
+        cpg_mode = 'Chua'
+    
+    # Simplified Chua stimulus. Mov sonification but w/out control. This sets \eps=0.
+    elif task==21:
+        task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .0
+        cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
+        EPSILON_driven = 1.
+        OMEGA_DRIVER = 2.*math.pi
+
+    # That's the interactive, unison task. Stimulus sound, control coupling, and mov sonification.
+    elif task==25:
+        task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .7
+        cpg_mode = 'Chua'
+
+    # Like 4, but with perturbation.
+    elif task==27:
+        task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .0
+        cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
+        EPSILON_driven = 1.
+        tempo_block_duration = 5
+        tempo_block_dur_range = [5,15]
+
+    # Stimulus sound and coupling to the stimulus, but no mov sonification.
+    elif task==29:
+        task='CPG_AND_ACC'
+        EPSILON = .7
+        cpg_mode = 'Chua'
+        AMPLIFY_OSC_0_R = 0
+    
+    elif task==30:
+        task='CPG_AND_ACC_AND_SONIFY'
+        EPSILON = .0
+        cpg_mode = 'Lorenz'
+        RHO = 28
+    
     # That's an interactive task. Stimulus sound, control coupling of an unstable cart system, and mov sonification.
-    elif task==13:
+    elif task==45:
         task='CPG_AND_ACC_AND_SONIFY'
         EPSILON = .7
         cpg_mode = 'Cart' # (unstable system), 
@@ -786,11 +793,11 @@ if __name__ == '__main__':
         
     print '\n'
     print 'TRIAL DURATION', '\t\t', DURATION, 's'
-    print 'ε', '\t\t\t', EPSILON
     print 'TASK #', '\t\t\t', int(task_num)
     print 'TASK', '\t\t\t', task
     print 'GENERATOR', '\t\t', cpg_mode
     print 'INPUT DEVICE', '\t\t', INPUT_DEVICE
+    print 'ε', '\t\t\t', EPSILON
     print 'MOVT LOGGING', '\t\t', MOVT_LOGGING
     print 'MOVT PLOTTING', '\t\t', MOVT_PLOTTING
     print 'SOUND EXPORT_FLAG', '\t', SOUND_EXPORT_FLAG
@@ -906,7 +913,7 @@ if __name__ == '__main__':
     # Prepare sound engine
     if SOUND_FLAG:
         RATE = int(48000/8)
-        CHUNK = 20 #8.0 # ms 2**9 #64*6
+        CHUNK = 8. #8.0 or 20 # ms
         CHUNK = int(CHUNK/1000.0*RATE) # samples
         WAVEDATAL = [0.00] * CHUNK
         WAVEDATAR = [0.00] * CHUNK
@@ -1392,7 +1399,7 @@ if __name__ == '__main__':
                             if cpg_mode=='Lorenz':
                                 MIDINOTEL = map_x_to_note(XDST_L[2]/40)
                             elif cpg_mode=='Kuramoto':
-                                MIDINOTEL = (np.sin(XDST_L[0])+1)/2*SCALE_KUR_AMP
+                                MIDINOTEL = map_x_to_note((np.sin(XDST_L[0])+1)/2*SCALE_KUR_AMP)
                             else:
                                 MIDINOTEL = map_x_to_note(XDST_L[1])
                                 
@@ -1474,7 +1481,7 @@ if __name__ == '__main__':
     # Export the movement
     if MOVT_LOGGING:
         EPSILON = int(EPSILON*1e2)
-        log_file_name = 'trial_log-' + time.strftime("%y%m%d-%H%M%S") + '_task' + "%02.0f" % task_num + '_aud' + "%1d" % SOUND_FLAG + '_vis' + "%1d" % VIS_MODALITY + '_eps' + "%03d" % EPSILON + APPEND_TO_FILENAME
+        log_file_name = 'trial_log-' + time.strftime("%y%m%d-%H%M%S") + '_task' + "%03.0f" % task_num + '_aud' + "%1d" % SOUND_FLAG + '_vis' + "%1d" % VIS_MODALITY + '_eps' + "%03d" % EPSILON + APPEND_TO_FILENAME
         f = open(log_file_name,'w')
         f.write("%10s," % 'Time'+"%10s," % 'Acc1X'+"%10s," % 'Acc1Y'+"%10s," % 'Acc1Z' + "%10s," % 'AbsAcc'+"%8s," % 'EFFECTOR'+"%10s," % 'CPG'+"%10s," % 'CPGY'+"%10s," % 'CPGZ'+"%10s," % 'Force'+"%8s," % 'NoteL'+"%8s," % 'NoteR'+"%10s," % 'Acc2X'+"%10s," % 'Acc2Y' + "%10s," % 'Acc2Z' + "%10s," % 'XPixStim' + "%10s," % 'XPixPart' + "%12s\n" % 'DiscrUpdate')
         for n in range(0, len(ACC), 1):
