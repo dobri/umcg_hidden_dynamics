@@ -520,8 +520,9 @@ def visual_feedback(X0,Y0,X1,Y1,mag):
     cv2.line(bgr, center, (int(center[0] + (X0) * feedback_circle_r),int(center[1] + (Y0) * feedback_circle_r)), (255,0,255,1), thickness = 2)
     cv2.line(bgr, center, (int(center[0] + (X1) * feedback_circle_r),int(center[1] + (Y1) * feedback_circle_r)), (255,255,0,1), thickness = 2)
 
-    cv2.imshow("Camera", frame1)
-    cv2.imshow('Dense optic flow', bgr)
+    #cv2.imshow("Camera", frame1)
+    #cv2.imshow('Dense optic flow', bgr)
+    cv2.imshow('Camera, flow field, vector', np.concatenate((cv2.cvtColor(frame1, cv2.COLOR_GRAY2BGR), bgr), axis=1))
 
 ##
 if __name__ == '__main__':
@@ -554,7 +555,7 @@ if __name__ == '__main__':
     RAWAXISLIMIT= 10
     MOUSE_GAIN = 2.
     synth_mode = 1
-    FADEIN_R = 1
+    FADEIN_R = 0 # Set this to 0 for demos and 1 for exp trials where it's important to focus on the stimulus first.
     FADEOUT_L = 0
     FADEOUT_L_DUR = 10
     EPSILON=.0
@@ -1293,8 +1294,15 @@ if __name__ == '__main__':
                     if arduino_status:
                         EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(Y_STATE_BUFFER[index_in_buffer])
                     if cam_status:
-                        EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[index_in_buffer]
-                    
+                        """
+                        Force-center the effector for a second b/c the unstable, unbounded 
+                        nature of the velocity vector input method can quickly throw the 
+                        effector far from target.
+                        """
+                        if (time.time()-start_time)<1:
+                            X_integrated = 0.
+                        else:
+                            EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[index_in_buffer]
                 
                 if SOUND_FLAG:
                     if task=='SIMULATION':
