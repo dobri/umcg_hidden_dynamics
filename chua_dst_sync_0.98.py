@@ -393,6 +393,7 @@ def first_camera_frame(cap):
     cap.set(3,320*1) # 1920 1280
 
     ret,frame0 = cap.read()
+    #cv2.imshow('First raw frame',frame0)
     s = np.shape(frame0)
     hsv = np.zeros_like(frame0)
     hsv[...,1] = 255
@@ -683,7 +684,7 @@ if __name__ == '__main__':
         cam_status=True
         mouse_status=False
         wii_status=False
-        cam_gain = .75
+        cam_gain = .85
         X_integrated = 0
         if VIS_MODALITY:
             cam_gain = cam_gain*-1
@@ -971,7 +972,12 @@ if __name__ == '__main__':
     if cam_status:
         import cv2
         import datetime
-        cap = cv2.VideoCapture(0)
+        import glob
+        
+        if len(glob.glob('/dev/video?'))>2:
+            cap = cv2.VideoCapture(2)
+        else:
+            cap = cv2.VideoCapture(0)
         flow,frame0 = first_camera_frame(cap)
         
         # Why download the gpu-ed flow into a var already-processed w/ cpu? Replace w/ if/else?
