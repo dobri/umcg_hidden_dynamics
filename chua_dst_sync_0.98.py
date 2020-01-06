@@ -522,7 +522,7 @@ def visual_feedback(X0,Y0,X1,Y1,mag):
 
     #cv2.imshow("Camera", frame1)
     #cv2.imshow('Dense optic flow', bgr)
-    cv2.imshow('Camera, flow field, vector', np.concatenate((cv2.cvtColor(frame1, cv2.COLOR_GRAY2BGR), bgr), axis=1))
+    cv2.imshow('Camera; Flow field + vector', np.concatenate((cv2.cvtColor(frame1, cv2.COLOR_GRAY2BGR), bgr), axis=1))
 
 ##
 if __name__ == '__main__':
@@ -683,7 +683,7 @@ if __name__ == '__main__':
         cam_status=True
         mouse_status=False
         wii_status=False
-        cam_gain = 1
+        cam_gain = .75
         X_integrated = 0
         if VIS_MODALITY:
             cam_gain = cam_gain*-1
@@ -1116,7 +1116,10 @@ if __name__ == '__main__':
                 if SAMPLE_COUNTER > 1:
                     vis_mod_bg = np.multiply(vis_mod_bg,0)
                     if cpg_mode=='Kuramoto':
+                        PIXELS[SAMPLE_COUNTER-1,:] = BARTHETA
                         visual_modality_draw_lines(BARTHETA)
+                        if SAMPLE_COUNTER==2:
+                            cv2.moveWindow('Visual Task', 800,30)
                     else:
                         PIXELS[SAMPLE_COUNTER-1,:] = map_x_to_pixel([XDST_L[1]-.5,EFFECTOR[SAMPLE_COUNTER - 1]])
                         visual_modality_draw_circles(PIXELS[SAMPLE_COUNTER-1,:])
@@ -1239,6 +1242,8 @@ if __name__ == '__main__':
                 
                 if CAM_VIS_FEEDBACK:
                     visual_feedback(x0,y0,x1,y1,mag)
+                    if SAMPLE_COUNTER==2:
+                        cv2.moveWindow('Camera; Flow field + vector',10,30)
                 
                 XYmag[SAMPLE_COUNTER,0] = mag0
                 XYmag[SAMPLE_COUNTER,1] = mag1 
@@ -1301,9 +1306,12 @@ if __name__ == '__main__':
                         """
                         if (time.time()-start_time)<1:
                             X_integrated = 0.
+
+                        if VIS_MODALITY:
+                            EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[index_in_buffer]+(PI/2)
                         else:
                             EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[index_in_buffer]
-                
+                    
                 if SOUND_FLAG:
                     if task=='SIMULATION':
                         MIDINOTER = map_x_to_note(float(ACC[SAMPLE_COUNTER - 1,1,0]))
