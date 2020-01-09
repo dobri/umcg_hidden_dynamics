@@ -78,7 +78,7 @@ def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
     plt.rc('font', **font)
     plt.rc('axes', labelsize=30)
 
-    fig  = plt.figure(figsize=(10,10))
+    fig  = plt.figure(figsize=(20,15))
     axes = fig.add_axes([.15,.15,.75,.75])
     if len(contents)>0:
         axes.plot(contents,'-o',linewidth=2,markersize=15,label='Previous Trials')
@@ -702,31 +702,31 @@ if __name__ == '__main__':
     task_num = 1*task
     # Set task=0 to run simulations.
     if task==100:
-        task='SIMULATION'
-        wii_status=False
-        mouse_status=False
+        task = 'SIMULATION'
+        wii_status = False
+        mouse_status = False
         cpg_mode = 'Chua'
         if 1:
             DRIVER_IN_SIMULATION = 'chua'
-            EPSILON2=EPSILON
+            EPSILON2 = EPSILON
         else:
             DRIVER_IN_SIMULATION = 'sine'
-            EPSILON2=0
+            EPSILON2 = 0
         
     # Sonify only. No CPG.
     elif task==0:
-        task='SONIFY_ONLY'
+        task = 'SONIFY_ONLY'
         FADEIN_R = 0
 
     # Sine stimulus. Mov sonification but w/out control. This sets \eps=0.
     elif task==10:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
         
     # SCT. Sine stimulus. Mov sonification w/out control.
     elif task==11:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
         FADEOUT_L = 1
@@ -734,7 +734,7 @@ if __name__ == '__main__':
 
     # Sine stimulus. Mov sonification but w/out control. This sets \eps=0.
     elif task==12:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
         OMEGA_DRIVER = .75*math.pi
@@ -742,27 +742,27 @@ if __name__ == '__main__':
         
     # Kuramoto stimulus, phase-coupled.
     elif task==15:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         cpg_mode = 'Kuramoto'
         EPSILON = .005
         
     # Sine stimulus with perturbation as changing tempo. 
     # Mov sonification but w/out control. This sets \eps=0.
     elif task==17:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
         tempo_block_duration = 1
         tempo_block_dur_range = [1,2]
 
     elif task==20:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Chua'
     
     # Simplified Chua stimulus. Mov sonification but w/out control. This sets \eps=0.
     elif task==21:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
         EPSILON_driven = 1.
@@ -770,13 +770,13 @@ if __name__ == '__main__':
 
     # That's the interactive, unison task. Stimulus sound, control coupling, and mov sonification.
     elif task==25:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .7
         cpg_mode = 'Chua'
 
     # Like 4, but with perturbation.
     elif task==27:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
         EPSILON_driven = 1.
@@ -785,20 +785,20 @@ if __name__ == '__main__':
 
     # Stimulus sound and coupling to the stimulus, but no mov sonification.
     elif task==29:
-        task='CPG_AND_ACC'
+        task = 'CPG_AND_ACC'
         EPSILON = .7
         cpg_mode = 'Chua'
         AMPLIFY_OSC_0_R = 0
     
     elif task==30:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Lorenz'
         RHO = 28
     
     # That's an interactive task. Stimulus sound, control coupling of an unstable cart system, and mov sonification.
     elif task==45:
-        task='CPG_AND_ACC_AND_SONIFY'
+        task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .5
         cpg_mode = 'Cart' # (unstable system), 
         
@@ -1003,7 +1003,7 @@ if __name__ == '__main__':
 
     if arduino_status:
         import serial
-        print 'Important! Using the Arduino for input assumes a specific program has been uploaded.'
+        #print 'Important! Using the Arduino for input assumes a specific program has been uploaded.'
         no_serial=True
         if no_serial:
             try:
@@ -1027,7 +1027,7 @@ if __name__ == '__main__':
         
     if arduino2_status:
         import serial
-        print 'Important! Using the Arduino for input assumes a specific program has been uploaded.'
+        #print 'Important! Using the Arduino for input assumes a specific program has been uploaded.'
         no_serial=True
         if no_serial:
             try:
@@ -1049,10 +1049,10 @@ if __name__ == '__main__':
         #print data
         
         if VIS_MODALITY:
-            #flip_wii_xaxis_sign = 1
+            flip_xaxis_sign = -1
             shift_ard_y_in_aud = .0
         else:
-            #flip_wii_xaxis_sign = -1
+            flip_xaxis_sign = 1
             shift_ard_y_in_aud = .5
 
         
@@ -1199,7 +1199,7 @@ if __name__ == '__main__':
                                 else:
                                     x2 = flip_wii_xaxis_sign*x2
                                     # Shift so that the "0" is tilted to the left.
-                                    x2 = x2+.5
+                                    #x2 = x2+.5
             
             if arduino2_status:
                 data = ser.readline()
@@ -1210,7 +1210,8 @@ if __name__ == '__main__':
                         x = float(data[2])
                         y = float(data[3])
                         z = float(data[4])
-                        
+                        y = flip_xaxis_sign*y
+
                         x2 = int(data[6])
                         y2 = int(data[7])
                         z2 = int(data[8])
@@ -1368,10 +1369,11 @@ if __name__ == '__main__':
                     if arduino2_status:
                         if ~VIS_MODALITY:
                             EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
+                        
                         if (cpg_mode=='Kuramoto') & VIS_MODALITY:
                             EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
                         else:
-                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90
+                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
 
                     if cam_status:
                         """
@@ -1600,41 +1602,58 @@ if __name__ == '__main__':
     # Plot
     if MOVT_PLOTTING:
         import matplotlib.pyplot as plt
-        fig = plt.figure(figsize=(10,10))
 
         if SOUND_FLAG:
+            fig = plt.figure(figsize=(20,10))
             plt.plot(TIME,NOTES[:,0],'-',label='Note Stim')
             plt.plot(TIME,NOTES[:,1],'-',label='Note Participant')
             plt.ylabel('MIDI Note')
             plt.xlabel('Time, s')
             plt.legend(loc='upper right', shadow=False, fontsize='small')    
-            plt.show()
+            #plt.show()
+            plt.draw()
+            plt.pause(0.001)
             
         if VIS_MODALITY:
+            fig = plt.figure(figsize=(20,10))
             plt.plot(TIME,PIXELS[:,0],'-',label='X Stim')
             plt.plot(TIME,PIXELS[:,1],'-',label='X Participant')
             plt.ylabel('X')
             plt.xlabel('Time, s')
             plt.legend(loc='upper right', shadow=False, fontsize='small')    
-            plt.show()
+            #plt.show()
+            plt.draw()
+            plt.pause(0.001)
             
         if wii_status:
             if len(devs)>1:
+                fig = plt.figure(figsize=(20,10))
                 plt.plot(TIME,ACC[:,0,0],'-',label='Wii-1, X')
                 plt.plot(TIME,ACC[:,0,1],'-',label='Wii-2, X')
                 plt.xlabel('Time, s')
                 plt.ylabel('MIDI Note')
                 plt.legend(loc='upper right', shadow=False, fontsize='small')    
-                plt.show()
+                #plt.show()
+                plt.draw()
+                plt.pause(0.001)
 
         # Visualize the raw data of the stimulus and the EFFECTORs.
         if True:
+            fig = plt.figure(figsize=(20,10))
             plt.plot(TIME,ACC[:,0,0],'-',label='Participant X')
             plt.plot(TIME,ACC[:,1,0],'-',label='Participant Y')
             plt.plot(TIME,ACC[:,2,0],'-',label='Participant Z')
             plt.plot(TIME,ACC[:,0,1],'-',label='Participant-2 X')
             plt.plot(TIME,ACC[:,1,1],'-',label='Participant-2 Y')
             plt.plot(TIME,ACC[:,2,1],'-',label='Participant-2 Z')
+            plt.xlabel('Time, s')
+            plt.ylabel('X')
+            plt.legend(loc='upper right', shadow=False, fontsize='small')    
+            #plt.show()
+            plt.draw()
+            plt.pause(0.001)
+
+            fig = plt.figure(figsize=(20,10))
             plt.plot(TIME,EFFECTOR,'-',label='Motor Output in task space (inclination, x-dim, etc.)')
             plt.plot(TIME,np.multiply(FORCEADDED,10),'-',label='The coupling function from participant to stimulus')
             plt.plot(TIME,CPG[:,0],'-',label='Stim X')
@@ -1643,18 +1662,25 @@ if __name__ == '__main__':
             plt.xlabel('Time, s')
             plt.ylabel('X')
             plt.legend(loc='upper right', shadow=False, fontsize='small')    
-            plt.show()            
-    
+            #plt.show()
+            plt.draw()
+            plt.pause(0.001)
+
         if False:
             from mpl_toolkits.mplot3d import Axes3D
-            fig = plt.figure(figsize=(10,10))
+            fig = plt.figure(figsize=(15,15))
             ax = fig.gca(projection='3d')
             ax.plot(CPG[300:,0],CPG[300:,1],CPG[300:,2],'-k')
             ax.set_xlabel("X")
             ax.set_ylabel("Y")
             ax.set_zlabel("Z")
             ax.set_title("Driven Chua Attractor")
-            plt.show()
+            #plt.show()
+            plt.draw()
+            plt.pause(0.001)
+            
+        #input("Press enter to continue...")
+        plt.show()
 
     # Export the sound
     if SOUND_EXPORT_FLAG:
