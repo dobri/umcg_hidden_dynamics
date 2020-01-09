@@ -549,6 +549,7 @@ if __name__ == '__main__':
     mouse_status=True
     wii_status=False
     arduino_status=False
+    arduino2_status=False
     dt_target=.005 # .005
     dt_ceil = dt_target*1.
     srbar=int(1/dt_target)
@@ -669,6 +670,14 @@ if __name__ == '__main__':
         wii_status=False
         mouse_status=False
         arduino_status=True
+        CAM_VIS_FEEDBACK = bool(0)
+        srbar = 500
+
+    if INPUT_DEVICE=='arduino2':
+        wii_status=False
+        mouse_status=False
+        arduino_status=False
+        arduino2_status=True
         CAM_VIS_FEEDBACK = bool(0)
         srbar = 500
 
@@ -909,7 +918,7 @@ if __name__ == '__main__':
     
     # Prepare sound engine
     if SOUND_FLAG:
-        RATE = int(48000/6)
+        RATE = int(48000/8)
         CHUNK = 20. #8.0 or 20 # ms
         CHUNK = int(CHUNK/1000.0*RATE) # samples
         WAVEDATAL = [0.00] * CHUNK
@@ -1014,6 +1023,37 @@ if __name__ == '__main__':
         for i in range(0,100):
             data = ser.readline()
         print data
+
+        
+    if arduino2_status:
+        import serial
+        print 'Important! Using the Arduino for input assumes a specific program has been uploaded.'
+        no_serial=True
+        if no_serial:
+            try:
+                ser = serial.Serial('/dev/ttyUSB0',baudrate=57600)
+                no_serial=False
+            except:
+                print 'No Arduino on /dev/ttyUSB0'
+        if no_serial:
+            try:
+                ser = serial.Serial('/dev/ttyUSB1',baudrate=57600)
+                no_serial=False
+            except:
+                print 'No Arduino on /dev/ttyUSB1'
+        ser.close()
+        ser.open()
+        #print 'Print some sample data from the Arduino board:'
+        for i in range(0,100):
+            data = ser.readline()
+        #print data
+        
+        if VIS_MODALITY:
+            #flip_wii_xaxis_sign = 1
+            shift_ard_y_in_aud = .0
+        else:
+            #flip_wii_xaxis_sign = -1
+            shift_ard_y_in_aud = .5
 
         
     if wii_status:
@@ -1161,8 +1201,27 @@ if __name__ == '__main__':
                                     # Shift so that the "0" is tilted to the left.
                                     x2 = x2+.5
             
+            if arduino2_status:
+                data = ser.readline()
+                data = data.split('\t')
+                if len(data)==9:
+                    try:
+
+                        x = float(data[2])
+                        y = float(data[3])
+                        z = float(data[4])
+                        
+                        x2 = int(data[6])
+                        y2 = int(data[7])
+                        z2 = int(data[8])
+                        #x,y,z = rescale_ard_acc((x,y,z))
+
+                        update_states = True
+                    except:
+                        print 'Failed to read from Arduino ' + float(np.random.uniform(.01,.1,1))
+                        update_states = False
+
             if arduino_status:
-                #if (time.time()-TIME[SAMPLE_COUNTER-1])>dt_target:
                 data = ser.readline()
                 data=data.split(',')
                 if len(data)==4:
@@ -1302,8 +1361,18 @@ if __name__ == '__main__':
                         if (cpg_mode=='Kuramoto') & VIS_MODALITY:
                             EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
                         #    EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
+                        #else:
+                        
                     if arduino_status:
                         EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(Y_STATE_BUFFER[index_in_buffer])
+                    if arduino2_status:
+                        if ~VIS_MODALITY:
+                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
+                        if (cpg_mode=='Kuramoto') & VIS_MODALITY:
+                            EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
+                        else:
+                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90
+
                     if cam_status:
                         """
                         Force-center the effector for a second b/c the unstable, unbounded 
@@ -1563,6 +1632,9 @@ if __name__ == '__main__':
             plt.plot(TIME,ACC[:,0,0],'-',label='Participant X')
             plt.plot(TIME,ACC[:,1,0],'-',label='Participant Y')
             plt.plot(TIME,ACC[:,2,0],'-',label='Participant Z')
+            plt.plot(TIME,ACC[:,0,1],'-',label='Participant-2 X')
+            plt.plot(TIME,ACC[:,1,1],'-',label='Participant-2 Y')
+            plt.plot(TIME,ACC[:,2,1],'-',label='Participant-2 Z')
             plt.plot(TIME,EFFECTOR,'-',label='Motor Output in task space (inclination, x-dim, etc.)')
             plt.plot(TIME,np.multiply(FORCEADDED,10),'-',label='The coupling function from participant to stimulus')
             plt.plot(TIME,CPG[:,0],'-',label='Stim X')
