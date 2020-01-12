@@ -17,9 +17,16 @@ import os
 def open_arduinos():
     import glob
     
+    """
+    By some miracle the problem of buffered lag got solved by simply switching 
+    the order of ACM and USB devices. No clue why is that. Just in case, 
+    consider reducing the FIFO buffer size to decrease the max lag possible.
+    http://www.hobbytronics.co.uk/arduino-serial-buffer-size
+    Nope.
+    """
     devs2 = list()
-    devs2.append(glob.glob('/dev/ttyUSB?'))
     devs2.append(glob.glob('/dev/ttyACM?'))
+    devs2.append(glob.glob('/dev/ttyUSB?'))
     
     sers=list()
     for devs in devs2:
@@ -29,9 +36,9 @@ def open_arduinos():
                 ser.close()
                 ser.open()
                 #print 'Print some sample data from the Arduino board:'
-                for i in range(0,10):
+                for i in range(0,1):
                     data = ser.readline()
-                    print data
+                    #print data
                 sers.append(ser)
             except:
                 print 'No Arduino here'
@@ -48,41 +55,20 @@ def open_arduinos():
         
     return (ser0,ser1)
 
-#    if no_serial0:
-#        try:
-#            ser0 = serial.Serial('/dev/ttyUSB0',baudrate=57600)
-#            #ser1 = serial.Serial('/dev/ttyACM0',baudrate=57600)
-#            no_serial0=False
-#        except:
-#            print 'No Arduino on /dev/ttyUSB0'
-#    if no_serial0:
-#        try:
-#            ser0 = serial.Serial('/dev/ttyUSB1',baudrate=57600)
-#            #ser1 = serial.Serial('/dev/ttyACM1',baudrate=57600)
-#            no_serial0=False
-#        except:
-#            print 'No Arduino on /dev/ttyUSB1'
-#    ser0.close()
-#    ser0.open()
-#    #print 'Print some sample data from the Arduino board:'
-#    for i in range(0,100):
-#        data = ser0.readline()
-#    #print data
-    
 
-def parse_ard_serial(data):
+def parse_ard_serial(data,out_vec=[0.]*6):
     data = data.split('\t')
-    out_vec = [0]*6
-    success = False
     if len(data)==9:
         try:
-            out_vec = [float(data[2]),float(data[3]),float(data[4]),int(data[6]),int(data[7]),int(data[8])]
+            out_vec = [float(data[2]),float(data[3]),float(data[4]),float(data[6]),float(data[7]),float(data[8])]
             success = True
         except:
+            success = False
             # If you never get this error, you might as well remove this cumbersom try.
-            print 'Failed to read right data', data
+            #print 'Failed to read right data', data
     else:
-        print 'Failed to read any data', data
+        success = False
+        # print 'Failed to read any data', data
     return(success,out_vec)
 
 
@@ -563,12 +549,14 @@ def visual_modality_draw_circles(x_targets):
     cv2.circle(vis_mod_bg, (int(vis_mod_center[0]+x_targets[1]),int(vis_mod_center[1]+3)), 20, (200,250,1,1), thickness = 4)
     cv2.imshow('Visual Task', vis_mod_bg)
 
+
 def visual_modality_draw_lines(theta,radius=100.,total_angle_prop=.7):
     # Lines+tilt.
     # theta[0]=total_angle_prop*theta[0]
     cv2.line(vis_mod_bg, (int(vis_mod_center[0]-radius*np.cos(theta[0])),int(vis_mod_center[1]+radius*np.sin(theta[0]))), (int(vis_mod_center[0]+radius*np.cos(theta[0])),int(vis_mod_center[1]-radius*np.sin(theta[0]))), color=(250,111,150,1), thickness = 7)
     cv2.line(vis_mod_bg, (int(vis_mod_center[0]-radius*np.cos(theta[1])),int(vis_mod_center[1]+radius*np.sin(theta[1]))), (int(vis_mod_center[0]+radius*np.cos(theta[1])),int(vis_mod_center[1]-radius*np.sin(theta[1]))), color=(100,  5,  1,1), thickness = 7)
     cv2.imshow('Visual Task', vis_mod_bg)
+
 
 def visual_feedback(X0,Y0,X1,Y1,mag):
     # Experiment with the scaling and thresholding to map motion b/w 0 and 255.
@@ -598,7 +586,7 @@ def visual_feedback(X0,Y0,X1,Y1,mag):
     #cv2.imshow('Dense optic flow', bgr)
     cv2.imshow('Camera; Flow field + vector', np.concatenate((cv2.cvtColor(frame1, cv2.COLOR_GRAY2BGR), bgr), axis=1))
 
-##
+
 if __name__ == '__main__':
     prog_start = time.time()
 
@@ -970,6 +958,13 @@ if __name__ == '__main__':
     OFFSETS_ARD = np.zeros((2,3))
     OFFSETS_ARD[:,:] = [[336.,339.,333.],[277.,393.,288.]]
 
+    # The other two arduinos.
+    OFFSETS_ARD2 = np.zeros((2,3,2))
+    # The one that shows up as ttyACM
+    OFFSETS_ARD2[:,:,0] = [[336.,339.,333.],[277.,393.,288.]]
+    # The one that shows up as ttyUSB
+    OFFSETS_ARD2[:,:,1] = [[336.,339.,333.],[277.,393.,288.]]
+
     MOVT_BUFFER_SIZE = 12
     X_STATE_BUFFER = [.00] * MOVT_BUFFER_SIZE
     Y_STATE_BUFFER = [.00] * MOVT_BUFFER_SIZE
@@ -992,7 +987,7 @@ if __name__ == '__main__':
     # Prepare sound engine
     if SOUND_FLAG:
         RATE = int(48000/8)
-        CHUNK = 20. #8.0 or 20 # ms
+        CHUNK = 10. #8.0 or 20 # ms
         CHUNK = int(CHUNK/1000.0*RATE) # samples
         WAVEDATAL = [0.00] * CHUNK
         WAVEDATAR = [0.00] * CHUNK
@@ -1109,6 +1104,12 @@ if __name__ == '__main__':
         else:
             flip_xaxis_sign = 1
             shift_ard_y_in_aud = .5
+
+        # Is this doing anything to flush the buffer?
+        for i in range(0,100):
+            data = ser0.readline()
+            if ser1:
+                data = ser1.readline()
 
         
     if wii_status:
@@ -1260,7 +1261,7 @@ if __name__ == '__main__':
             if arduino2_status:
                 data = ser0.readline()
                 update_states,ard_data_vec = parse_ard_serial(data)
-                #print update_states, np.random.uniform(.01,1,1)
+                # Eventually you need to verify that the sampling time doesn't drift between two devices.
                 if update_states:
                     x=ard_data_vec[0]
                     y=ard_data_vec[1]
@@ -1271,9 +1272,16 @@ if __name__ == '__main__':
                     data = ser1.readline()
                     update_states1,ard_data_vec = parse_ard_serial(data)
                     if update_states1:
-                        x2=ard_data_vec[3]
-                        y2=ard_data_vec[4]
-                        z2=ard_data_vec[5]
+                        if False:
+                            # This is used for testing the delay b/w two arduinos.
+                            x2=ard_data_vec[0]
+                            y2=ard_data_vec[1]
+                            z2=ard_data_vec[2]
+                        else:
+                            x2=ard_data_vec[3]/32767.
+                            y2=ard_data_vec[4]/32767.
+                            z2=ard_data_vec[5]/32767.
+                    # Work on the scaling and calibration of the arduino!
                     #x,y,z = rescale_ard_acc((x,y,z))
 
             if arduino_status:
@@ -1423,8 +1431,8 @@ if __name__ == '__main__':
                     
                     if arduino2_status:
                         if VIS_MODALITY:
-                            #EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
-                            EFFECTOR[SAMPLE_COUNTER - 1] = y/90+shift_ard_y_in_aud
+                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
+                            #EFFECTOR[SAMPLE_COUNTER - 1] = y/90+shift_ard_y_in_aud
                             if cpg_mode=='Kuramoto':
                                 EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
                         else:
@@ -1696,12 +1704,12 @@ if __name__ == '__main__':
         # Visualize the raw data of the stimulus and the EFFECTORs.
         if True:
             fig = plt.figure(figsize=(20,10))
-            plt.plot(TIME,ACC[:,0,0],'-',label='Participant X')
-            plt.plot(TIME,ACC[:,1,0],'-',label='Participant Y')
-            plt.plot(TIME,ACC[:,2,0],'-',label='Participant Z')
-            plt.plot(TIME,ACC[:,0,1],'-',label='Participant-2 X')
-            plt.plot(TIME,ACC[:,1,1],'-',label='Participant-2 Y')
-            plt.plot(TIME,ACC[:,2,1],'-',label='Participant-2 Z')
+            plt.plot(TIME,ACC[:,0,0],'-',label='Participant X',linewidth=3)
+            plt.plot(TIME,ACC[:,1,0],'-',label='Participant Y',linewidth=3)
+            plt.plot(TIME,ACC[:,2,0],'-',label='Participant Z',linewidth=3)
+            plt.plot(TIME,ACC[:,0,1],'-',label='Participant-2 X',linewidth=3)
+            plt.plot(TIME,ACC[:,1,1],'-',label='Participant-2 Y',linewidth=3)
+            plt.plot(TIME,ACC[:,2,1],'-',label='Participant-2 Z',linewidth=3)
             plt.xlabel('Time, s')
             plt.ylabel('X')
             plt.legend(loc='upper right', shadow=False, fontsize='small')    
