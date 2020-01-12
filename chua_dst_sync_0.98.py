@@ -13,6 +13,79 @@ from pymouse import PyMouse
 import os
 
 
+# This searches for devices at expected locations, opens, samples for a short time, and populates a list.
+def open_arduinos():
+    import glob
+    
+    devs2 = list()
+    devs2.append(glob.glob('/dev/ttyUSB?'))
+    devs2.append(glob.glob('/dev/ttyACM?'))
+    
+    sers=list()
+    for devs in devs2:
+        for dev in devs:
+            try:
+                ser = serial.Serial(dev,baudrate=57600) #
+                ser.close()
+                ser.open()
+                #print 'Print some sample data from the Arduino board:'
+                for i in range(0,10):
+                    data = ser.readline()
+                    print data
+                sers.append(ser)
+            except:
+                print 'No Arduino here'
+    
+    if len(sers)<2:
+        ser1=False
+    else:
+        ser1=sers[1]
+    
+    if len(sers)<1:
+        ser0=False
+    else:
+        ser0=sers[0]
+        
+    return (ser0,ser1)
+
+#    if no_serial0:
+#        try:
+#            ser0 = serial.Serial('/dev/ttyUSB0',baudrate=57600)
+#            #ser1 = serial.Serial('/dev/ttyACM0',baudrate=57600)
+#            no_serial0=False
+#        except:
+#            print 'No Arduino on /dev/ttyUSB0'
+#    if no_serial0:
+#        try:
+#            ser0 = serial.Serial('/dev/ttyUSB1',baudrate=57600)
+#            #ser1 = serial.Serial('/dev/ttyACM1',baudrate=57600)
+#            no_serial0=False
+#        except:
+#            print 'No Arduino on /dev/ttyUSB1'
+#    ser0.close()
+#    ser0.open()
+#    #print 'Print some sample data from the Arduino board:'
+#    for i in range(0,100):
+#        data = ser0.readline()
+#    #print data
+    
+
+def parse_ard_serial(data):
+    data = data.split('\t')
+    out_vec = [0]*6
+    success = False
+    if len(data)==9:
+        try:
+            out_vec = [float(data[2]),float(data[3]),float(data[4]),int(data[6]),int(data[7]),int(data[8])]
+            success = True
+        except:
+            # If you never get this error, you might as well remove this cumbersom try.
+            print 'Failed to read right data', data
+    else:
+        print 'Failed to read any data', data
+    return(success,out_vec)
+
+
 def map_eff_states_to_screen_bars(x0,x1):
     BARTHETA[0] = x0
     BARTHETA[1] = x1 #(x1-(PI/2))*1+(PI/2)
@@ -1028,25 +1101,7 @@ if __name__ == '__main__':
     if arduino2_status:
         import serial
         #print 'Important! Using the Arduino for input assumes a specific program has been uploaded.'
-        no_serial=True
-        if no_serial:
-            try:
-                ser = serial.Serial('/dev/ttyUSB0',baudrate=57600)
-                no_serial=False
-            except:
-                print 'No Arduino on /dev/ttyUSB0'
-        if no_serial:
-            try:
-                ser = serial.Serial('/dev/ttyUSB1',baudrate=57600)
-                no_serial=False
-            except:
-                print 'No Arduino on /dev/ttyUSB1'
-        ser.close()
-        ser.open()
-        #print 'Print some sample data from the Arduino board:'
-        for i in range(0,100):
-            data = ser.readline()
-        #print data
+        ser0,ser1 = open_arduinos()
         
         if VIS_MODALITY:
             flip_xaxis_sign = -1
@@ -1157,6 +1212,7 @@ if __name__ == '__main__':
     try:
         while True:
             update_states = False
+            #update_states = True
             
             if VIS_MODALITY:
                 if SAMPLE_COUNTER > 1:
@@ -1202,25 +1258,23 @@ if __name__ == '__main__':
                                     #x2 = x2+.5
             
             if arduino2_status:
-                data = ser.readline()
-                data = data.split('\t')
-                if len(data)==9:
-                    try:
-
-                        x = float(data[2])
-                        y = float(data[3])
-                        z = float(data[4])
-                        y = flip_xaxis_sign*y
-
-                        x2 = int(data[6])
-                        y2 = int(data[7])
-                        z2 = int(data[8])
-                        #x,y,z = rescale_ard_acc((x,y,z))
-
-                        update_states = True
-                    except:
-                        print 'Failed to read from Arduino ' + float(np.random.uniform(.01,.1,1))
-                        update_states = False
+                data = ser0.readline()
+                update_states,ard_data_vec = parse_ard_serial(data)
+                #print update_states, np.random.uniform(.01,1,1)
+                if update_states:
+                    x=ard_data_vec[0]
+                    y=ard_data_vec[1]
+                    z=ard_data_vec[2]
+                    y = flip_xaxis_sign*y
+                
+                if ser1:
+                    data = ser1.readline()
+                    update_states1,ard_data_vec = parse_ard_serial(data)
+                    if update_states1:
+                        x2=ard_data_vec[3]
+                        y2=ard_data_vec[4]
+                        z2=ard_data_vec[5]
+                    #x,y,z = rescale_ard_acc((x,y,z))
 
             if arduino_status:
                 data = ser.readline()
@@ -1366,14 +1420,16 @@ if __name__ == '__main__':
                         
                     if arduino_status:
                         EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(Y_STATE_BUFFER[index_in_buffer])
+                    
                     if arduino2_status:
-                        if ~VIS_MODALITY:
-                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
-                        
-                        if (cpg_mode=='Kuramoto') & VIS_MODALITY:
-                            EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
+                        if VIS_MODALITY:
+                            #EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
+                            EFFECTOR[SAMPLE_COUNTER - 1] = y/90+shift_ard_y_in_aud
+                            if cpg_mode=='Kuramoto':
+                                EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
                         else:
                             EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
+                            #EFFECTOR[SAMPLE_COUNTER - 1] = y/90+shift_ard_y_in_aud
 
                     if cam_status:
                         """
