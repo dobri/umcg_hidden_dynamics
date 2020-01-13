@@ -611,7 +611,7 @@ if __name__ == '__main__':
     wii_status=False
     arduino_status=False
     arduino2_status=False
-    dt_target=.005 # .005
+    dt_target=.001 # .005
     dt_ceil = dt_target*1.
     srbar=int(1/dt_target)
     INPUT_DEVICE='mouse'
@@ -713,7 +713,8 @@ if __name__ == '__main__':
     if synth_mode==0:
         Fs_RATIOS = np.array([[1.],[1.]],dtype=float)
     if synth_mode==1:
-        Fs_RATIOS = np.array([[1.,2.,3],[1.,2.,3.]],dtype=float)
+        #Fs_RATIOS = np.array([[1.,2.,3.],[1.,2.,3.]],dtype=float)
+        Fs_RATIOS = np.array([[1.,2.,3.],[1.,2.,3.]],dtype=float)
     if synth_mode==2:
         Fs_RATIOS = np.array([[1.,1*1.33,3.*1.2],[1,1.875,3.75]],dtype=float)
     if synth_mode==3:
@@ -987,7 +988,7 @@ if __name__ == '__main__':
     # Prepare sound engine
     if SOUND_FLAG:
         RATE = int(48000/8)
-        CHUNK = 10. #8.0 or 20 # ms
+        CHUNK = 18. #8.0 or 20 # ms
         CHUNK = int(CHUNK/1000.0*RATE) # samples
         WAVEDATAL = [0.00] * CHUNK
         WAVEDATAR = [0.00] * CHUNK
@@ -1103,7 +1104,10 @@ if __name__ == '__main__':
             shift_ard_y_in_aud = .0
         else:
             flip_xaxis_sign = 1
-            shift_ard_y_in_aud = .5
+            if cpg_mode=='Kuramoto':
+                shift_ard_y_in_aud = .0
+            else:
+                shift_ard_y_in_aud = .5
 
         # Is this doing anything to flush the buffer?
         for i in range(0,100):
@@ -1430,13 +1434,18 @@ if __name__ == '__main__':
                         EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(Y_STATE_BUFFER[index_in_buffer])
                     
                     if arduino2_status:
-                        if VIS_MODALITY:
+#                        if VIS_MODALITY:
                             EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
-                            #EFFECTOR[SAMPLE_COUNTER - 1] = y/90+shift_ard_y_in_aud
                             if cpg_mode=='Kuramoto':
-                                EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
-                        else:
-                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
+                                EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
+#                        else:
+#                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90
+#                            #EFFECTOR[SAMPLE_COUNTER - 1] = (Y_STATE_BUFFER[index_in_buffer]+90)/180*PI
+#                            if cpg_mode=='Kuramoto':
+#                                EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1] + 1 + .5) % 2
+#                                EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1])/2*PI
+                        #else:
+                        #    EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
                             #EFFECTOR[SAMPLE_COUNTER - 1] = y/90+shift_ard_y_in_aud
 
                     if cam_status:
@@ -1457,7 +1466,12 @@ if __name__ == '__main__':
                     if task=='SIMULATION':
                         MIDINOTER = map_x_to_note(float(ACC[SAMPLE_COUNTER - 1,1,0]))
                     else:
-                        MIDINOTER = map_x_to_note(float(EFFECTOR[SAMPLE_COUNTER - 1]))
+                        #map_x_to_note((np.sin(XDST_L[0])+1)/2*SCALE_KUR_AMP)
+                        if cpg_mode=='Kuramoto':
+                            #MIDINOTER = map_x_to_note(EFFECTOR[SAMPLE_COUNTER-1]/PI)
+                            MIDINOTER = map_x_to_note(BARTHETA[1]/PI)
+                        else:
+                            MIDINOTER = map_x_to_note(float(EFFECTOR[SAMPLE_COUNTER - 1]))
                             
                     #print MIDINOTER
                     FREQR1 = midi_key_to_hz(MIDINOTER)
@@ -1498,7 +1512,8 @@ if __name__ == '__main__':
                                 #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.sin(BARTHETA[1]-BARTHETA[0]))
                                 #print BARTHETA, FORCEADDED[SAMPLE_COUNTER - 1]
                             else:
-                                FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(MIDINOTER-MIDINOTEL)
+                                FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(np.cos(THETA[0])-np.cos(EFFECTOR[SAMPLE_COUNTER-1]))*np.sign(np.sin(THETA[0]))
+                                #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(MIDINOTER-MIDINOTEL)
                             THETA[0] = (THETA[0] + dt*OMEGA_DRIVER + FORCEADDED[SAMPLE_COUNTER - 1]) % (PI*2)
                             BARTHETA = map_eff_states_to_screen_bars(THETA[0],EFFECTOR[SAMPLE_COUNTER-1])
                             
@@ -1565,7 +1580,9 @@ if __name__ == '__main__':
                             if cpg_mode=='Lorenz':
                                 MIDINOTEL = map_x_to_note(XDST_L[2]/40)
                             elif cpg_mode=='Kuramoto':
-                                MIDINOTEL = map_x_to_note((np.sin(XDST_L[0])+1)/2*SCALE_KUR_AMP)
+                                MIDINOTEL = map_x_to_note(float(BARTHETA[0]/PI))
+                                #MIDINOTEL = map_x_to_note((np.sin(XDST_L[0])+1)/2*SCALE_KUR_AMP)
+                                #print np.sin(XDST_L[0])
                             else:
                                 MIDINOTEL = map_x_to_note(XDST_L[1])
                                 
@@ -1719,7 +1736,7 @@ if __name__ == '__main__':
 
             fig = plt.figure(figsize=(20,10))
             plt.plot(TIME,EFFECTOR,'-',label='Motor Output in task space (inclination, x-dim, etc.)')
-            plt.plot(TIME,np.multiply(FORCEADDED,10),'-',label='The coupling function from participant to stimulus')
+            plt.plot(TIME,np.multiply(FORCEADDED,100),'-',label='The coupling function from participant to stimulus')
             plt.plot(TIME,CPG[:,0],'-',label='Stim X')
             plt.plot(TIME,CPG[:,1],'-',label='Stim Y')
             plt.plot(TIME,CPG[:,2],'-',label='Stim Z')
