@@ -440,6 +440,7 @@ def map_x_to_pixel(x):
 
 def map_x_to_note(xtonote):
     return xtonote*5 + 60
+    #return xtonote*10 + 55
 
 
 def first_camera_frame(cap):
@@ -976,7 +977,7 @@ if __name__ == '__main__':
 
 
     EFFECTOR = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
-    DISCRUPDATE = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float) 
+    DISCRUPDATE = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
     FORCEADDED = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
     THETAVEC = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
     TIME = np.zeros(((srbar * (int(DURATION) + 30)),1),dtype=float)
@@ -988,7 +989,7 @@ if __name__ == '__main__':
     # Prepare sound engine
     if SOUND_FLAG:
         RATE = int(48000/8)
-        CHUNK = 18. #8.0 or 20 # ms
+        CHUNK = 16. #8.0 or 20 # ms
         CHUNK = int(CHUNK/1000.0*RATE) # samples
         WAVEDATAL = [0.00] * CHUNK
         WAVEDATAR = [0.00] * CHUNK
@@ -1471,9 +1472,10 @@ if __name__ == '__main__':
                             #MIDINOTER = map_x_to_note(EFFECTOR[SAMPLE_COUNTER-1]/PI)
                             MIDINOTER = map_x_to_note(BARTHETA[1]/PI)
                         else:
+                            #AMPLIFY_OSC_R = AMPLIFY_OSC_0_R*((z/90+1)/1)
+                            #EFFECTOR[SAMPLE_COUNTER - 1] = EFFECTOR[SAMPLE_COUNTER - 1]*2-.5
                             MIDINOTER = map_x_to_note(float(EFFECTOR[SAMPLE_COUNTER - 1]))
                             
-                    #print MIDINOTER
                     FREQR1 = midi_key_to_hz(MIDINOTER)
                     FREQR12 = midi_key_to_hz(MIDINOTER)/FREQ_SQUEEZE
                     NOTES  [SAMPLE_COUNTER-1,1] = MIDINOTER
