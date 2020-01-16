@@ -593,7 +593,7 @@ if __name__ == '__main__':
 
     argv = sys.argv[1:]
     try:
-        opts, args = getopt.getopt(argv,"hd:e:t:l:p:x:a:i:a:v:s:f:z:",["help","duration=","epsilon=","task=","mov_logging=","mov_plotting=","sound_export=","append_to_file_name=","input=","aud_feedback=","vis_feedback=","synth=","performance_feedback=","visual_modality="])
+        opts, args = getopt.getopt(argv,"hd:e:t:l:p:x:a:i:a:v:s:f:z:m:",["help","duration=","epsilon=","task=","mov_logging=","mov_plotting=","sound_export=","append_to_file_name=","input=","aud_feedback=","vis_feedback=","synth=","performance_feedback=","visual_modality=","mute="])
     except getopt.GetoptError:
         print '\n'
         print 'Some options are not typed correctly. Check with chua_dst_sync_0.97.py -h'
@@ -619,7 +619,7 @@ if __name__ == '__main__':
     RAWAXISLIMIT= 10
     MOUSE_GAIN = 2.
     synth_mode = 1
-    FADEIN_R = 0 # Set this to 0 for demos and 1 for exp trials where it's important to focus on the stimulus first.
+    FADEIN_R = 1 # Set this to 0 for demos and 1 for exp trials where it's important to focus on the stimulus first.
     FADEOUT_L = 0
     FADEOUT_L_DUR = 10
     EPSILON=.0
@@ -627,6 +627,7 @@ if __name__ == '__main__':
     AMPLIFY_OSC2 = 0
     AMPLIFY_OSC_0 = 20
     AMPLIFY_OSC_0_R = 18
+    MUTE = False
     SCORE_FEEDBACK = bool(0)
     VIS_MODALITY = False
     SOUND_FLAG = True
@@ -634,7 +635,7 @@ if __name__ == '__main__':
     ForceAdded = .00
     tempo_block_duration = np.Inf
     tempo_block_dur_range = [0,0]
-    OMEGA_DRIVER = .5*math.pi
+    OMEGA_DRIVER = 1.*math.pi
     SCALE_KUR_AMP = .8
     
     """
@@ -709,6 +710,11 @@ if __name__ == '__main__':
             VIS_MODALITY = bool(float(arg))
             if VIS_MODALITY:
                 SOUND_FLAG = False
+        if opt in ("-m", "--mute"):
+            MUTE = bool(float(arg))
+            if MUTE:
+                AMPLIFY_OSC_0 = 0
+                AMPLIFY_OSC_0_R=0
                 
             
     if synth_mode==0:
