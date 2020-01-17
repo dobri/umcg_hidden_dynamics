@@ -112,23 +112,40 @@ def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
     import pandas as pd
     X = pd.read_csv(log_file_name,skipinitialspace=True)
     fps=1/np.mean(np.diff(X['Time']))
-    score = 1e2*wcc_by_rmse(X[col1name][int(fps*5):(len(X)-1)],X[col2name][int(fps*5):(len(X)-1)],X['Time'][int(fps*5):(len(X)-1)],1,5,False)
+    
+    x = X[col1name][int(fps*5):(len(X)-1)]
+    y = X[col2name][int(fps*5):(len(X)-1)]
+    if (np.var(x)>.0001) & (np.var(y)>.0001):
+        score,cmax,tau,err = wcc_by_rmse(x,y,
+                                     X['Time'][int(fps*5):(len(X)-1)],
+                                     1,
+                                     5,
+                                     False)
+    else:
+        score,cmax,tau,err = np.nan,np.nan,np.nan,np.nan
+
     try:
         contents=pd.read_csv('scores',header=None,na_values='   nan')
     except:
         contents=[]
+
     f = open('scores','a+')
-    f.write("%6.3f\n" % score) # "%s," % log_file_name, 
+    f.write("%50s," % log_file_name)
+    f.write("%6.3f," % score)
+    f.write("%6.3f," % cmax)
+    f.write("%6.3f," % (tau/1e3))
+    f.write("%6.3f\n" % err)
     f.close()
+
     if len(contents)>0:
         print "%s\n" % 'Your scores from previous trials:'
-        for c in contents.values:
+        for c in contents[1].values:
             try:
-                print "%6.3f" % c
+                print "%6.3f" % (c*1e2)
             except:
-                print "%6s" % c
+                print "%6s" % (c*1e2)
     print "%s\n" % 'Your score from the last trial:'
-    print "%6.3f" % score
+    print "%6.3f" % (score*1e2)
 
     import matplotlib.pyplot as plt
     font = {'family' : 'DejaVu Sans',
@@ -140,14 +157,15 @@ def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
     fig  = plt.figure(figsize=(20,15))
     axes = fig.add_axes([.15,.15,.75,.75])
     if len(contents)>0:
-        axes.plot(contents,'-o',linewidth=2,markersize=15,label='Previous Trials')
-    axes.plot(len(contents),np.array(score),'-o',linewidth=2,markersize=15,color='r',label='Last Trial')
+        if len(contents[1])>0:
+            axes.plot(contents[1]*1e2,'-o',linewidth=2,markersize=15,label='Previous Trials')
+    axes.plot(len(contents),np.array(score*1e2),'-o',linewidth=2,markersize=15,color='r',label='Last Trial')
     axes.set_xlabel('Trial')
     axes.set_xticks(range(0,len(contents)+1,1))
     axes.set_xticklabels(range(1,len(contents)+2,1))
     axes.set_ylabel('Score')
-    #axes.set_yticks(range(np.floor(contents.min()),np.ceil(contents.max())+1,10))
-    #axes.set_ylim(np.floor(contents.min())-10,np.ceil(contents.max())+10)
+    #axes.set_yticks(range(np.floor(contents[1].min()),np.ceil(contents[1].max())+1,10))
+    #axes.set_ylim(np.floor(contents[1].min())-10,np.ceil(contents[1].max())+10)
     axes.set_title('Performance (Synchronization and Pitch-matching)')
     axes.legend(loc='upper center', shadow=False, fontsize='medium')
     plt.show()
@@ -679,6 +697,8 @@ if __name__ == '__main__':
             print '\t 45. Driven cart-pole system. [Not tested much!]'
             print 'Simulations:'
             print '\t100. Simulations, no wiimote necessary.\n'
+            print 'VA:'
+            print '\t200. No task, record only.\n'
             sys.exit()
         if opt in ("-d", "--duration"):
             DURATION = float(arg)
@@ -871,6 +891,16 @@ if __name__ == '__main__':
         EPSILON = .5
         cpg_mode = 'Cart' # (unstable system), 
         
+    # That's an interactive task. Stimulus sound, control coupling of an unstable cart system, and mov sonification.
+    elif task==200:
+        task = 'SONIFY_ONLY'
+        EPSILON = .0
+        cpg_mode = 'Kuramoto'
+        MUTE = True
+        VIS_MODALITY = False
+        AMPLIFY_OSC_0 = 0
+        AMPLIFY_OSC_0_R=0
+        SOUND_FLAG = False
         
     print '\n'
     print 'TRIAL DURATION', '\t\t', DURATION, 's'

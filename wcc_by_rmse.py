@@ -64,6 +64,7 @@ def wcc_by_rmse(x,y,t,lag_range_seconds=1,step_seconds=5,PLOTTINGFLAG=True):
         t_end = t_end + step_size
     rss = pd.DataFrame(rss)
     cmax_ave = np.mean(cmax)
+    tau = -np.mean(taus)
     
     if PLOTTINGFLAG==True:
         import matplotlib.pyplot as plt
@@ -88,9 +89,7 @@ def wcc_by_rmse(x,y,t,lag_range_seconds=1,step_seconds=5,PLOTTINGFLAG=True):
         plt.tight_layout()
         plt.show()
     
-    return cmax_ave/er
-
-
+    return (cmax_ave/er,cmax_ave,tau,er)
     
     #filename = 'trial_log-191205-153813_task05'
     #x = np.loadtxt(filename, delimiter=',', skiprows=1)
