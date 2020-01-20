@@ -780,10 +780,8 @@ if __name__ == '__main__':
         cam_status=True
         mouse_status=False
         wii_status=False
-        cam_gain = .85
+        cam_gain = 2.
         X_integrated = 0
-        if VIS_MODALITY:
-            cam_gain = cam_gain*-1
 
 
     task_num = 1*task
@@ -927,7 +925,14 @@ if __name__ == '__main__':
     if cpg_mode=='Lorenz':
         DS_SPEEDUP_0 = 1
         DS_SPEEDUP_0 = DS_SPEEDUP_0*(28/RHO*1)
-        
+
+    if cam_status:         
+        if VIS_MODALITY:
+            if cpg_mode=='Kuramoto':
+                cam_gain = cam_gain*-1
+            else:
+                cam_gain = cam_gain*1                    
+
     #if cpg_mode=='Chua':
     #    DS_SPEEDUP_0 = DS_SPEEDUP_0*1.
     DS_SPEEDUP = DS_SPEEDUP_0
@@ -942,7 +947,7 @@ if __name__ == '__main__':
         OMEGA_DRIVER = OMEGA_DRIVER/2
         DS_SPEEDUP = 4
 
-    if VIS_MODALITY & (cpg_mode=='Kuramoto') & (mouse_status):
+    if VIS_MODALITY & mouse_status:
         MOUSE_GAIN = -5.
     
     THETA = [.00]*2
@@ -1077,7 +1082,8 @@ if __name__ == '__main__':
         if cpg_mode=='Kuramoto':
             window_size = (800,800)
         else:
-            window_size = (1200,400)
+            #window_size = (1200,400)
+            window_size = (800,800)
         vis_mod_bg = np.zeros((window_size[1],window_size[0],1),dtype='uint8')
         vis_mod_center=(np.int(np.round(window_size[0]/2)),np.int(np.round(window_size[1]/2)))
     
@@ -1200,13 +1206,18 @@ if __name__ == '__main__':
         revt = xwiimote.event()
         
         if VIS_MODALITY:
-            flip_wii_xaxis_sign = 1
-            shift_wii_x_in_aud  = .0
-        else:
-            flip_wii_xaxis_sign = -1
             if cpg_mode=='Kuramoto':
+                flip_wii_xaxis_sign = 1
+                shift_wii_x_in_aud = .0
+            else:
+                flip_wii_xaxis_sign = -1
+                shift_wii_x_in_aud = .4
+        else:
+            if cpg_mode=='Kuramoto':
+                flip_wii_xaxis_sign = -1
                 shift_wii_x_in_aud = .5
             else:
+                flip_wii_xaxis_sign = -1
                 shift_wii_x_in_aud = .4
         # print shift_wii_x_in_aud
 
@@ -1260,14 +1271,36 @@ if __name__ == '__main__':
             if VIS_MODALITY:
                 if SAMPLE_COUNTER > 1:
                     vis_mod_bg = np.multiply(vis_mod_bg,0)
+
                     if cpg_mode=='Kuramoto':
                         PIXELS[SAMPLE_COUNTER-1,:] = BARTHETA
                         visual_modality_draw_lines(BARTHETA)
-                        if SAMPLE_COUNTER==2:
-                            cv2.moveWindow('Visual Task', 800,30)
-                    else:
-                        PIXELS[SAMPLE_COUNTER-1,:] = map_x_to_pixel([XDST_L[1]-.5,EFFECTOR[SAMPLE_COUNTER - 1]])
-                        visual_modality_draw_circles(PIXELS[SAMPLE_COUNTER-1,:])
+
+                    if cpg_mode=='Lorenz':
+                        if True:
+                            #BARTHETA = map_eff_states_to_screen_bars((.75-((XDST_L[2]-10)/60))*PI,(.75-(EFFECTOR[SAMPLE_COUNTER-1]/2))*PI)
+                            PIXELS[SAMPLE_COUNTER-1,:] = ((.75-((XDST_L[2]-10)/60))*PI,(.75-(EFFECTOR[SAMPLE_COUNTER-1]/2))*PI)
+                            visual_modality_draw_lines(PIXELS[SAMPLE_COUNTER-1,:])
+                        else:
+                            (sp,ep) = map_x_to_pixel([(XDST_L[2]-10)/30-.5,EFFECTOR[SAMPLE_COUNTER - 1]])
+                            PIXELS[SAMPLE_COUNTER-1,0] = sp
+                            PIXELS[SAMPLE_COUNTER-1,1] = ep
+                            visual_modality_draw_circles(PIXELS[SAMPLE_COUNTER-1,:])
+
+                    if cpg_mode=='Chua':
+                        if True:
+                            #BARTHETA = map_eff_states_to_screen_bars((.75-(XDST_L[1]/2))*PI,(.75-(EFFECTOR[SAMPLE_COUNTER-1]/2))*PI)
+                            PIXELS[SAMPLE_COUNTER-1,:] = ((.75-(XDST_L[1]/2))*PI,(.75-(EFFECTOR[SAMPLE_COUNTER-1]/2))*PI)
+                            visual_modality_draw_lines(PIXELS[SAMPLE_COUNTER-1,:])
+                        else:
+                            (sp,ep) = map_x_to_pixel([XDST_L[1]-.5,EFFECTOR[SAMPLE_COUNTER - 1]])
+                            PIXELS[SAMPLE_COUNTER-1,0] = sp
+                            PIXELS[SAMPLE_COUNTER-1,1] = ep
+                            visual_modality_draw_circles(PIXELS[SAMPLE_COUNTER-1,:])
+
+                    if SAMPLE_COUNTER==2:
+                        cv2.moveWindow('Visual Task', 800,30)
+
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
 
@@ -1444,15 +1477,25 @@ if __name__ == '__main__':
                 if task!='SIMULATION':
                     if mouse_status:
                         EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[ index_in_buffer ]
-                        if (cpg_mode=='Kuramoto') & VIS_MODALITY:
-                            EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle(EFFECTOR - 1.,SAMPLE_COUNTER)
-                            #THETA[1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
-                        #else:
-                            # Even if you force it somehow to work with a mouse, this will never work well with accelerometers.
-                            # The noise is nightmare for the phase angle.
-                            # Better build a phase-interpolated coupling as in Dotov et al. 2019.
-                            #print EFFECTOR[SAMPLE_COUNTER-1], float(convert_to_angle_2(EFFECTOR,SAMPLE_COUNTER))
-                            #EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle_2(EFFECTOR,SAMPLE_COUNTER)
+                        
+                        if VIS_MODALITY:
+                            EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
+                        
+#                        if (cpg_mode=='Chua') & VIS_MODALITY:
+#                            EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
+#
+#                        if (cpg_mode=='Kuramoto') & VIS_MODALITY:
+#                            #print EFFECTOR[SAMPLE_COUNTER - 1]
+#                            #EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle(EFFECTOR - 1.,SAMPLE_COUNTER)
+#                            EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
+#                            #THETA[1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
+#                        #else:
+#                            # Even if you force it somehow to work with a mouse, this will never work well with accelerometers.
+#                            # The noise is nightmare for the phase angle.
+#                            # Better build a phase-interpolated coupling as in Dotov et al. 2019.
+#                            #print EFFECTOR[SAMPLE_COUNTER-1], float(convert_to_angle_2(EFFECTOR,SAMPLE_COUNTER))
+#                            #EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle_2(EFFECTOR,SAMPLE_COUNTER)
+
                     if wii_status:
                         if VIS_MODALITY & (SAMPLE_COUNTER>9):
                             xsmoothed = float(np.mean(ACC[(SAMPLE_COUNTER-10):(SAMPLE_COUNTER-1),0,0]))
@@ -1465,6 +1508,10 @@ if __name__ == '__main__':
                                 EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
                             else:
                                 EFFECTOR[SAMPLE_COUNTER - 1] = EFFECTOR[SAMPLE_COUNTER - 1]*PI
+
+                        #if (cpg_mode=='Chua') & (VIS_MODALITY):
+                        #    #print EFFECTOR[SAMPLE_COUNTER - 1]
+                        #    EFFECTOR[SAMPLE_COUNTER - 1] = -(EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
 
 #                        if ~VIS_MODALITY:
 #                            EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed)+shift_wii_x_in_aud
@@ -1505,6 +1552,8 @@ if __name__ == '__main__':
                             EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[index_in_buffer]+(PI/2)
                         else:
                             EFFECTOR[SAMPLE_COUNTER - 1] = X_STATE_BUFFER[index_in_buffer]
+                            
+                        #print EFFECTOR[SAMPLE_COUNTER - 1]
                     
                 if SOUND_FLAG:
                     if task=='SIMULATION':
@@ -1561,6 +1610,8 @@ if __name__ == '__main__':
                                 #FORCEADDED[SAMPLE_COUNTER - 1] = EPSILON/2*(MIDINOTER-MIDINOTEL)
                             THETA[0] = (THETA[0] + dt*OMEGA_DRIVER + FORCEADDED[SAMPLE_COUNTER - 1]) % (PI*2)
                             BARTHETA = map_eff_states_to_screen_bars(THETA[0],EFFECTOR[SAMPLE_COUNTER-1])
+                            
+                            #print BARTHETA
                             
                             XDST_L[0] = THETA[0]
                             XDST_L[1] = BARTHETA[0]
