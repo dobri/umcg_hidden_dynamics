@@ -296,7 +296,7 @@ def set_FREQR02(fr):
 
 def set_XX(xvec):
     global XX
-    XX[((BUFFERS_N - 1) * CHUNK + 0):((BUFFERS_N) * CHUNK - 1)] = xvec
+    XX[((BUFFERS_N - 1) * SOUND_BUFFER_SIZE + 0):((BUFFERS_N) * SOUND_BUFFER_SIZE - 1)] = xvec
 
 def cdo(xin,yin,DT,freq):
     xout=xin+DT*yin
@@ -307,9 +307,9 @@ def osc():
     global WAVEDATAL
     global WAVEDATAR
     global XL,VL,XR,VR
-    for n in range(0, CHUNK, 1):
-        FREQVECL[n]=FREQL0 + (n / (CHUNK - 1.00)) * (FREQL1 - FREQL0)
-        FREQVECR[n]=FREQR0 + (n / (CHUNK - 1.00)) * (FREQR1 - FREQR0)
+    for n in range(0, SOUND_BUFFER_SIZE, 1):
+        FREQVECL[n]=FREQL0 + (n / (SOUND_BUFFER_SIZE - 1.00)) * (FREQL1 - FREQL0)
+        FREQVECR[n]=FREQR0 + (n / (SOUND_BUFFER_SIZE - 1.00)) * (FREQR1 - FREQR0)
         
         if AMPLIFY_OSC_L>0:
             xl=XL
@@ -350,9 +350,9 @@ def osc():
         VL02=VL2
         XR02=XR2
         VR02=VR2
-        for n in range(0, CHUNK, 1):
+        for n in range(0, SOUND_BUFFER_SIZE, 1):
             if AMPLIFY_OSC_L>0:
-                FREQVECL2[n]=FREQL02 + (n / (CHUNK - 1.00)) * (FREQL12 - FREQL02)
+                FREQVECL2[n]=FREQL02 + (n / (SOUND_BUFFER_SIZE - 1.00)) * (FREQL12 - FREQL02)
                 xl=XL02 + DT*VL02
                 vl=VL02 + DT * (-(FREQVECL2[n] * 2 * math.pi) ** 2 * XL02 - GAMMA * VL02 * ((FREQVECL2[n] * 2 * math.pi) ** 2 * XL02 ** 2 / 2 + VL02 ** 2 / 2 - BETA))
                 WAVEDATAL2[n] = xl
@@ -360,7 +360,7 @@ def osc():
                 VL02=vl
 
             if AMPLIFY_OSC_R>0:
-                FREQVECR2[n]=FREQR02 + (n / (CHUNK - 1.00)) * (FREQR12 - FREQR02)
+                FREQVECR2[n]=FREQR02 + (n / (SOUND_BUFFER_SIZE - 1.00)) * (FREQR12 - FREQR02)
                 xr=XR02 + DT*VR02
                 vr=VR02 + DT * (-(FREQVECR2[n] * 2 * math.pi) ** 2 * XR02 - GAMMA * VR02 * ((FREQVECR2[n] * 2 * math.pi) ** 2 * XR02 ** 2 / 2 + VR02 ** 2 / 2 - BETA))
                 WAVEDATAR2[n] = xr
@@ -1021,13 +1021,13 @@ if __name__ == '__main__':
     
     # Prepare sound engine
     if SOUND_FLAG:
-        RATE = int(48000/8)
-        CHUNK = 16. #8.0 or 20 # ms
-        CHUNK = int(CHUNK/1000.0*RATE) # samples
-        WAVEDATAL = [0.00] * CHUNK
-        WAVEDATAR = [0.00] * CHUNK
-        WAVEDATAL2 = [0.00] * CHUNK
-        WAVEDATAR2 = [0.00] * CHUNK
+        SOUND_S_RATE = int(48000/6)
+        SOUND_BUFFER_SIZE = 10. # ms. Also try 8.0 up to 20.
+        SOUND_BUFFER_SIZE = int(SOUND_BUFFER_SIZE/1000.0*SOUND_S_RATE) # num of samples
+        WAVEDATAL = [0.00] * SOUND_BUFFER_SIZE
+        WAVEDATAR = [0.00] * SOUND_BUFFER_SIZE
+        WAVEDATAL2 = [0.00] * SOUND_BUFFER_SIZE
+        WAVEDATAR2 = [0.00] * SOUND_BUFFER_SIZE
         BUFFERS_N = 0
         if SOUND_EXPORT_FLAG:
             sound_frames=[]
@@ -1035,7 +1035,7 @@ if __name__ == '__main__':
         # The parameters of the synth oscillator
         BETA  = 10.00**3
         GAMMA = 1
-        DT = 1.00/RATE
+        DT = 1.00/SOUND_S_RATE
         XL = np.asarray( np.random.uniform(.01,.1,len(Fs_RATIOS[0])) )
         VL = np.asarray( np.random.uniform(.01,.1,len(Fs_RATIOS[0])) )
         XR = np.asarray( np.random.uniform(.01,.1,len(Fs_RATIOS[0])) )
@@ -1055,7 +1055,8 @@ if __name__ == '__main__':
         else:
             AMPLIFY_OSC_R = 0
         
-        MIDINOTER = MIDINOTEL = (np.asscalar( np.random.uniform(.01,1,1) ) * 20 + 40)
+        MIDINOTER = np.asscalar( np.random.uniform(.01,1,1) ) * 20 + 40
+        MIDINOTEL = np.asscalar( np.random.uniform(.01,1,1) ) * 20 + 40
         NOTES[0,:] = (MIDINOTEL,MIDINOTER)
         FREQL1 = 2.0**((MIDINOTEL - 69) / 12) * 440
         FREQL0 = 1*FREQL1
@@ -1065,10 +1066,10 @@ if __name__ == '__main__':
         FREQR0 = 1*FREQR1
         FREQR12 = FREQR1/FREQ_SQUEEZE
         FREQR02 = 1*FREQR12
-        FREQVECL = [FREQL1] * CHUNK
-        FREQVECR = [FREQR1] * CHUNK
-        FREQVECL2 = [FREQL12] * CHUNK
-        FREQVECR2 = [FREQR12] * CHUNK
+        FREQVECL = [FREQL1] * SOUND_BUFFER_SIZE
+        FREQVECR = [FREQR1] * SOUND_BUFFER_SIZE
+        FREQVECL2 = [FREQL12] * SOUND_BUFFER_SIZE
+        FREQVECR2 = [FREQR12] * SOUND_BUFFER_SIZE
         
     # Still testing.
     if VIS_MODALITY==True:
@@ -1222,17 +1223,17 @@ if __name__ == '__main__':
             NUM_CHANS=int(2)
             stream = p.open(format = pyaudio.paFloat32,
                         channels = NUM_CHANS,
-                        rate = RATE,
+                        rate = SOUND_S_RATE,
                         output = True,
-                        frames_per_buffer=CHUNK,
+                        frames_per_buffer=SOUND_BUFFER_SIZE,
                         stream_callback = callback2)
         else:
             NUM_CHANS=int(4)
             stream = p.open(format = pyaudio.paFloat32,
                         channels = NUM_CHANS,
-                        rate = RATE,
+                        rate = SOUND_S_RATE,
                         output = True,
-                        frames_per_buffer=CHUNK,
+                        frames_per_buffer=SOUND_BUFFER_SIZE,
                         stream_callback = callback4)
         
         stream.start_stream()
@@ -1512,11 +1513,11 @@ if __name__ == '__main__':
                         #map_x_to_note((np.sin(XDST_L[0])+1)/2*SCALE_KUR_AMP)
                         if cpg_mode=='Kuramoto':
                             #MIDINOTER = map_x_to_note(EFFECTOR[SAMPLE_COUNTER-1]/PI)
-                            MIDINOTER = map_x_to_note(BARTHETA[1]/PI)
+                            MIDINOTER = float(map_x_to_note(BARTHETA[1]/PI))
                         else:
                             #AMPLIFY_OSC_R = AMPLIFY_OSC_0_R*((z/90+1)/1)
                             #EFFECTOR[SAMPLE_COUNTER - 1] = EFFECTOR[SAMPLE_COUNTER - 1]*2-.5
-                            MIDINOTER = map_x_to_note(float(EFFECTOR[SAMPLE_COUNTER - 1]))
+                            MIDINOTER = float(map_x_to_note(EFFECTOR[SAMPLE_COUNTER - 1]))
                             
                     FREQR1 = midi_key_to_hz(MIDINOTER)
                     FREQR12 = midi_key_to_hz(MIDINOTER)/FREQ_SQUEEZE
@@ -1624,13 +1625,13 @@ if __name__ == '__main__':
                         CPG[SAMPLE_COUNTER-1,:] = XDST_L
                         if SOUND_FLAG:
                             if cpg_mode=='Lorenz':
-                                MIDINOTEL = map_x_to_note((XDST_L[2]-10)/30)
+                                MIDINOTEL = float(map_x_to_note((XDST_L[2]-10)/30))
                             elif cpg_mode=='Kuramoto':
-                                MIDINOTEL = map_x_to_note(float(BARTHETA[0]/PI))
+                                MIDINOTEL = float(map_x_to_note(BARTHETA[0]/PI))
                                 #MIDINOTEL = map_x_to_note((np.sin(XDST_L[0])+1)/2*SCALE_KUR_AMP)
                                 #print np.sin(XDST_L[0])
                             else:
-                                MIDINOTEL = map_x_to_note(XDST_L[1])
+                                MIDINOTEL = float(map_x_to_note(XDST_L[1]))
                                 
                             # Consolidate into the vars that control the sound, and log
                             #FORCEADDED[SAMPLE_COUNTER - 1] = ForceAdded
@@ -1812,7 +1813,7 @@ if __name__ == '__main__':
     # Export the sound
     if SOUND_EXPORT_FLAG:
         wavefile=wave.open('sound_output' + time.strftime("%m-%d-%y-%H-%M-%S") + '.wav','w')
-        wavefile.setframerate(RATE)
+        wavefile.setframerate(SOUND_S_RATE)
         wavefile.setsampwidth(2)
         wavefile.setnchannels(2)
         wavefile.setnframes(0)
