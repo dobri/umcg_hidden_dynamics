@@ -22,7 +22,6 @@ def open_arduinos():
     the order of ACM and USB devices. No clue why is that. Just in case, 
     consider reducing the FIFO buffer size to decrease the max lag possible.
     http://www.hobbytronics.co.uk/arduino-serial-buffer-size
-    Nope.
     """
     devs2 = list()
     devs2.append(glob.glob('/dev/ttyACM?'))
@@ -653,7 +652,7 @@ if __name__ == '__main__':
     ForceAdded = .00
     tempo_block_duration = np.Inf
     tempo_block_dur_range = [0,0]
-    OMEGA_DRIVER = 1.*math.pi
+    OMEGA_DRIVER = 1.7*math.pi
     SCALE_KUR_AMP = .8
     
     """
@@ -740,7 +739,6 @@ if __name__ == '__main__':
     if synth_mode==0:
         Fs_RATIOS = np.array([[1.],[1.]],dtype=float)
     if synth_mode==1:
-        #Fs_RATIOS = np.array([[1.,2.,3.],[1.,2.,3.]],dtype=float)
         Fs_RATIOS = np.array([[1.,2.,3.],[1.,2.,3.]],dtype=float)
     if synth_mode==2:
         Fs_RATIOS = np.array([[1.,1*1.33,3.*1.2],[1,1.875,3.75]],dtype=float)
@@ -826,14 +824,14 @@ if __name__ == '__main__':
         task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
-        OMEGA_DRIVER = .75*math.pi
-        SCALE_KUR_AMP = .6
+        OMEGA_DRIVER = 2.2*math.pi
+        SCALE_KUR_AMP = 2.
         
     # Kuramoto stimulus, phase-coupled.
     elif task==15:
         task = 'CPG_AND_ACC_AND_SONIFY'
         cpg_mode = 'Kuramoto'
-        EPSILON = .005
+        EPSILON = .02
         
     # Sine stimulus with perturbation as changing tempo. 
     # Mov sonification but w/out control. This sets \eps=0.
@@ -924,19 +922,18 @@ if __name__ == '__main__':
         DS_SPEEDUP_0=4
     else:
         DS_SPEEDUP_0=4
-    if task==4:
-        DS_SPEEDUP_0=4
     if VIS_MODALITY:
         DS_SPEEDUP_0=4
     if cpg_mode=='Lorenz':
         DS_SPEEDUP_0 = 1
         DS_SPEEDUP_0 = DS_SPEEDUP_0*(28/RHO*1)
         
-    if cpg_mode=='Kuramoto':
-        DS_SPEEDUP_0 = DS_SPEEDUP_0*.8
+    #if cpg_mode=='Chua':
+    #    DS_SPEEDUP_0 = DS_SPEEDUP_0*1.
     DS_SPEEDUP = DS_SPEEDUP_0
     
-    #OMEGA_DRIVER = 1*math.pi/5*DS_SPEEDUP
+    if VIS_MODALITY:
+        OMEGA_DRIVER = OMEGA_DRIVER/2.
     
     # To set the range of stimulus tempo in task 6.
     omega_range = [OMEGA_DRIVER/2,OMEGA_DRIVER*2.]
@@ -945,7 +942,7 @@ if __name__ == '__main__':
         OMEGA_DRIVER = OMEGA_DRIVER/2
         DS_SPEEDUP = 4
 
-    if VIS_MODALITY & (cpg_mode=='Kuramoto'):
+    if VIS_MODALITY & (cpg_mode=='Kuramoto') & (mouse_status):
         MOUSE_GAIN = -5.
     
     THETA = [.00]*2
@@ -1206,8 +1203,11 @@ if __name__ == '__main__':
             shift_wii_x_in_aud  = .0
         else:
             flip_wii_xaxis_sign = -1
-            shift_wii_x_in_aud  = .5
-
+            if cpg_mode=='Kuramoto':
+                shift_wii_x_in_aud = .5
+            else:
+                shift_wii_x_in_aud = .4
+        # print shift_wii_x_in_aud
 
     # Start the sound engine
     if SOUND_FLAG:
@@ -1322,8 +1322,7 @@ if __name__ == '__main__':
                             x2=ard_data_vec[3]/32767.
                             y2=ard_data_vec[4]/32767.
                             z2=ard_data_vec[5]/32767.
-                    # Work on the scaling and calibration of the arduino!
-                    #x,y,z = rescale_ard_acc((x,y,z))
+                    # Work needed on the scaling and calibration of the arduino?
 
             if arduino_status:
                 data = ser.readline()
@@ -1459,11 +1458,18 @@ if __name__ == '__main__':
                         else:
                             xsmoothed = ACC[SAMPLE_COUNTER-1,0,0]
 
-                        if ~VIS_MODALITY:
-                            EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed)+shift_wii_x_in_aud
+                        EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed) + shift_wii_x_in_aud
+                        if cpg_mode=='Kuramoto':
+                            if VIS_MODALITY:
+                                EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
+                            else:
+                                EFFECTOR[SAMPLE_COUNTER - 1] = EFFECTOR[SAMPLE_COUNTER - 1]*PI
 
-                        if (cpg_mode=='Kuramoto') & VIS_MODALITY:
-                            EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
+#                        if ~VIS_MODALITY:
+#                            EFFECTOR[SAMPLE_COUNTER - 1] = rescale_x_acc_fun_linear(xsmoothed)+shift_wii_x_in_aud
+#
+#                        if (cpg_mode=='Kuramoto') & VIS_MODALITY:
+#                            EFFECTOR[SAMPLE_COUNTER - 1] = ((EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI)
                         #    EFFECTOR[SAMPLE_COUNTER - 1] = convert_to_angle(EFFECTOR,SAMPLE_COUNTER)
                         #else:
                         
@@ -1472,9 +1478,9 @@ if __name__ == '__main__':
                     
                     if arduino2_status:
 #                        if VIS_MODALITY:
-                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
-                            if cpg_mode=='Kuramoto':
-                                EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
+                        EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90+shift_ard_y_in_aud
+                        if cpg_mode=='Kuramoto':
+                            EFFECTOR[SAMPLE_COUNTER - 1] = (EFFECTOR[SAMPLE_COUNTER - 1]+1)/2*PI
 #                        else:
 #                            EFFECTOR[SAMPLE_COUNTER - 1] = Y_STATE_BUFFER[index_in_buffer]/90
 #                            #EFFECTOR[SAMPLE_COUNTER - 1] = (Y_STATE_BUFFER[index_in_buffer]+90)/180*PI
@@ -1588,8 +1594,9 @@ if __name__ == '__main__':
                                 
                         if cpg_mode=='Lorenz':
                             if np.linalg.norm(XDST_L)>np.Inf:
-                                print str(XDST_L)
-                                print 'Numerical singularity!'
+                                if False:
+                                    print str(XDST_L)
+                                    print 'Numerical singularity!'
                                 #if SAMPLE_COUNTER>20:
                                 #    XDST_L[0] = float(CPG[SAMPLE_COUNTER-20,0])
                                 #    XDST_L[1] = float(CPG[SAMPLE_COUNTER-20,1])
@@ -1601,22 +1608,23 @@ if __name__ == '__main__':
                                 
                         if cpg_mode=='Chua':
                             if np.linalg.norm(XDST_L)>2:
-                                print str(XDST_L)
-                                print 'Numerical singularity!'
-                                if SAMPLE_COUNTER>20:
-                                    XDST_L[0] = float(CPG[SAMPLE_COUNTER-20,0])
-                                    XDST_L[1] = float(CPG[SAMPLE_COUNTER-20,1])
-                                    XDST_L[2] = float(CPG[SAMPLE_COUNTER-20,2])
-                                else:
-                                    XDST_L[0] = float(rand[0])
-                                    XDST_L[1] = float(rand[1])
-                                    XDST_L[2] = float(rand[2])
-                            
+                                if False:
+                                    print str(XDST_L)
+                                    print 'Numerical singularity!'
+                                #if SAMPLE_COUNTER>20:
+                                #    XDST_L[0] = float(CPG[SAMPLE_COUNTER-20,0])
+                                #    XDST_L[1] = float(CPG[SAMPLE_COUNTER-20,1])
+                                #    XDST_L[2] = float(CPG[SAMPLE_COUNTER-20,2])
+                                #else:
+                                XDST_L[0] = float(rand[0])
+                                XDST_L[1] = float(rand[1])
+                                XDST_L[2] = float(rand[2])
+                        
                         
                         CPG[SAMPLE_COUNTER-1,:] = XDST_L
                         if SOUND_FLAG:
                             if cpg_mode=='Lorenz':
-                                MIDINOTEL = map_x_to_note(XDST_L[2]/40)
+                                MIDINOTEL = map_x_to_note((XDST_L[2]-10)/30)
                             elif cpg_mode=='Kuramoto':
                                 MIDINOTEL = map_x_to_note(float(BARTHETA[0]/PI))
                                 #MIDINOTEL = map_x_to_note((np.sin(XDST_L[0])+1)/2*SCALE_KUR_AMP)
