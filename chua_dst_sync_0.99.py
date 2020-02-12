@@ -119,7 +119,7 @@ def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
                                      X['Time'][int(fps*5):(len(X)-1)],
                                      1,
                                      5,
-                                     False)
+                                     True)
     else:
         score,cmax,tau,err = np.nan,np.nan,np.nan,np.nan
 
@@ -619,7 +619,7 @@ if __name__ == '__main__':
     
     # Flag defaults.
     DURATION = 10.0
-    MOVT_LOGGING = bool(0)
+    MOVT_LOGGING = bool(1)
     MOVT_PLOTTING = bool(1)
     SOUND_EXPORT_FLAG = bool(0)
     AUD_FEEDBACK = bool(1)
@@ -837,8 +837,9 @@ if __name__ == '__main__':
         task = 'CPG_AND_ACC_AND_SONIFY'
         EPSILON = .0
         cpg_mode = 'Kuramoto'
-        tempo_block_duration = 1
-        tempo_block_dur_range = [1,2]
+        OMEGA_DRIVER = 1.*math.pi
+        tempo_block_duration = 5
+        tempo_block_dur_range = [1,5]
 
     elif task==20:
         task = 'CPG_AND_ACC_AND_SONIFY'
@@ -851,7 +852,7 @@ if __name__ == '__main__':
         EPSILON = .0
         cpg_mode = 'ChuaDriven' # use eps=.7 for a double period.
         EPSILON_driven = 1.
-        OMEGA_DRIVER = 2.*math.pi
+        OMEGA_DRIVER = 1.*math.pi
 
     # That's the interactive, unison task. Stimulus sound, control coupling, and mov sonification.
     elif task==25:
@@ -940,7 +941,7 @@ if __name__ == '__main__':
     if VIS_MODALITY:
         OMEGA_DRIVER = OMEGA_DRIVER/2.
     
-    # To set the range of stimulus tempo in task 6.
+    # To set the range of stimulus tempo in task 17.
     omega_range = [OMEGA_DRIVER/2,OMEGA_DRIVER*2.]
     
     if task=='SIMULATION':
@@ -1621,29 +1622,32 @@ if __name__ == '__main__':
 
                         if (cpg_mode=='Kuramoto') & (tempo_block_duration<np.inf):
                             # Randomly change the stimulus tempo.
-                            if 1: # Change at cycle beginning.
+                            if False: # Change at cycle beginning.
                                 if SAMPLE_COUNTER>3:
                                     if (np.diff(CPG[(SAMPLE_COUNTER-4):(SAMPLE_COUNTER-2),1])<0) & (np.diff(CPG[(SAMPLE_COUNTER-3):(SAMPLE_COUNTER-1),1])>0):
                                         change_tempo = np.asscalar(np.random.uniform(omega_range[0],omega_range[1],1))
                                         DS_SPEEDUP = DS_SPEEDUP_0*(OMEGA_DRIVER/change_tempo)
                                         OMEGA_DRIVER = change_tempo
                                         #print OMEGA_DRIVER, DS_SPEEDUP
+                                        #print tempo_block_duration, change_tempo
+                                    
                             else: # Change at given time intervals.
                                 if (time.time() - last_tempo_change_time)>tempo_block_duration:
                                     change_tempo = np.asscalar(np.random.uniform(omega_range[0],omega_range[1],1))
                                     DS_SPEEDUP = DS_SPEEDUP_0*(OMEGA_DRIVER/change_tempo)
                                     OMEGA_DRIVER = change_tempo
-                                    print OMEGA_DRIVER, DS_SPEEDUP
-                                    #print(OMEGA_DRIVER )
+                                    #print OMEGA_DRIVER, DS_SPEEDUP
                                     last_tempo_change_time = time.time()
                                     # Uniform:
                                     #tempo_block_duration = np.asscalar(np.random.uniform(tempo_block_dur_range[0],tempo_block_dur_range[1],1))
                                     # Add Gaussian to make Brownian
-                                    grand = np.random.normal(scale=.2)
-                                    tempo_block_duration += grand
-                                    if tempo_block_duration < .5:
-                                        tempo_block_duration -= grand
-                                
+                                    #grand = np.random.normal(scale=.2)
+                                    #tempo_block_duration += grand
+                                    #if tempo_block_duration < 1:
+                                    #    tempo_block_duration -= grand
+                                    #print tempo_block_duration, change_tempo
+                                    tempo_block_duration = float(np.random.uniform(tempo_block_dur_range[0],tempo_block_dur_range[1]))
+                                    
                         if cpg_mode=='Lorenz':
                             if np.linalg.norm(XDST_L)>np.Inf:
                                 if False:
