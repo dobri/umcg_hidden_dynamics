@@ -13,7 +13,7 @@ import sys, getopt
 if __name__ == '__main__':
     argv = sys.argv[1:]
     try:
-        opts, args = getopt.getopt(argv,"hl:s:p:c1:c2:",["help","lag=","step=","plotting=","col1name=","col2name="])
+        opts, args = getopt.getopt(argv,"hl:s:p:c1:c2:",["help","transient=","lag=","step=","plotting=","col1name=","col2name="])
     except getopt.GetoptError:
         print '\n'
         sys.exit(2)
@@ -27,8 +27,10 @@ if __name__ == '__main__':
 
     for opt, arg in opts:
         if opt in ("-h","--help"):
-            print'get_perf_sync_scores_in_loop.py --lag=<seconds> --step=<seconds> --plotting=<0 or 1> --col1name=<var1 header label> --col2name=<var1 header label>'
+            print'get_perf_sync_scores_in_loop.py --transient=<seconds> --lag=<seconds> --step=<seconds> --plotting=<0 or 1> --col1name=<var1 header label> --col2name=<var1 header label>'
             sys.exit()
+        if opt in ("-t", "--transient"):
+            transient_secs = float(arg)
         if opt in ("-l", "--lag"):
             lag_range_seconds = float(arg)
         if opt in ("-s", "--step"):
@@ -44,7 +46,7 @@ if __name__ == '__main__':
     flist = sorted(glob.glob('trial*'))
     slist = glob.glob('scores')
     if len(slist)>0:
-        contents=pd.read_csv(slist[0],header=None,na_values='   nan')
+        contents=pd.read_csv(slist[0],header=[0],na_values='     nan')
         if len(contents)==len(flist):
             print '\nExisting \'scores\' data file is same length as the number of raw data files.'
             print 'Are you sure you are not re-analyzing the same data?\n'
@@ -54,6 +56,15 @@ if __name__ == '__main__':
         if len(flist)==0:
             print 'No raw data files found.'
         else:
+            if len(slist)==0:
+                f = open('scores','a+')
+                f.write("%s," % 'raw file name')
+                f.write("%s," % 'score')
+                f.write("%s," % 'cmax')
+                f.write("%s," % 'tau')
+                f.write("%s\n" % 'rmse')
+                
+                
             for log_file_name in flist:
                 X = pd.read_csv(log_file_name,skipinitialspace=True)
                 fps=1/np.mean(np.diff(X['Time']))
@@ -68,22 +79,23 @@ if __name__ == '__main__':
                                                  plotting)
                 else:
                     score,cmax,tau,err = np.nan,np.nan,np.nan,np.nan
+                    #print score,cmax,tau,err
                     
                 f = open('scores','a+')
-                f.write("%50s," % log_file_name)
-                f.write("%6.3f," % score)
-                f.write("%6.3f," % cmax)
-                f.write("%6.3f," % (tau/1e3))
-                f.write("%6.3f\n" % err)
+                f.write("%60s," % log_file_name)
+                f.write("%8.3f," % score)
+                f.write("%8.3f," % cmax)
+                f.write("%8.3f," % (tau/1e3))
+                f.write("%8.3f\n" % err)
                 f.close()
-                print "%6.3f" % (score*1e2), "%6.3f" % cmax, "%6.3f" % tau, "%6.3f" % err
+                print "%8.3f" % (score*1e2), "%8.3f" % cmax, "%8.3f" % tau, "%8.3f" % err
     
     slist = glob.glob('scores')
     if len(slist)==0:
         print 'No \'scores\' file found.'
     else:
         print '\'scores\' data file found.'
-        contents=pd.read_csv(slist[0],header=None,na_values='   nan')
+        contents=pd.read_csv(slist[0],header=[0],na_values='     nan')
         if len(contents)>0:
             print contents
             if plotting:
@@ -95,13 +107,13 @@ if __name__ == '__main__':
             
                 fig  = plt.figure(figsize=(20,15))
                 axes = fig.add_axes([.15,.15,.75,.75])
-                axes.plot(contents[1],'-o',linewidth=5,markersize=15,label='C_{max}/RMSE')
-                axes.plot(contents[2],'-o',linewidth=2,markersize=15,label='C_{max}')
-                axes.plot(contents[3],'-o',linewidth=2,markersize=15,label='tau')
-                axes.plot(contents[4],'-o',linewidth=2,markersize=15,label='RMSE')
+                axes.plot(contents['score'],'-o',linewidth=5,markersize=15,label='C_{max}/RMSE')
+                axes.plot(contents['cmax'],'-o',linewidth=2,markersize=15,label='C_{max}')
+                axes.plot(contents['tau'],'-o',linewidth=2,markersize=15,label='tau')
+                axes.plot(contents['rmse'],'-o',linewidth=2,markersize=15,label='RMSE')
                 axes.set_xlabel('Trial')
-                axes.set_xticks(range(0,len(contents[1]),1))
-                axes.set_xticklabels(range(1,len(contents[1])+1,1))
+                axes.set_xticks(range(0,len(contents['score']),1))
+                axes.set_xticklabels(range(1,len(contents['score'])+1,1))
                 axes.set_ylabel('Score')
                 axes.set_title('Performance (Synchronization and Pitch-matching)')
                 axes.legend(loc='upper left', shadow=False, fontsize='medium')

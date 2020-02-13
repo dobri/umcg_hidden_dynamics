@@ -109,6 +109,8 @@ def convert_to_angle_2(s,k):
 def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
     from wcc_by_rmse import wcc_by_rmse
     import pandas as pd
+    import glob
+
     X = pd.read_csv(log_file_name,skipinitialspace=True)
     fps=1/np.mean(np.diff(X['Time']))
     
@@ -123,22 +125,29 @@ def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
     else:
         score,cmax,tau,err = np.nan,np.nan,np.nan,np.nan
 
-    try:
-        contents=pd.read_csv('scores',header=None,na_values='   nan')
-    except:
+    slist = glob.glob('scores')
+    if len(slist)==0:
         contents=[]
+        f = open('scores','a+')
+        f.write("%s," % 'raw file name')
+        f.write("%s," % 'score')
+        f.write("%s," % 'cmax')
+        f.write("%s," % 'tau')
+        f.write("%s\n" % 'rmse')
+    else:
+        contents=pd.read_csv(slist[0],header=[0],na_values='     nan')
 
     f = open('scores','a+')
-    f.write("%50s," % log_file_name)
-    f.write("%6.3f," % score)
-    f.write("%6.3f," % cmax)
-    f.write("%6.3f," % (tau/1e3))
-    f.write("%6.3f\n" % err)
+    f.write("%60s," % log_file_name)
+    f.write("%8.3f," % score)
+    f.write("%8.3f," % cmax)
+    f.write("%8.3f," % (tau/1e3))
+    f.write("%8.3f\n" % err)
     f.close()
 
     if len(contents)>0:
         print "%s\n" % 'Your scores from previous trials:'
-        for c in contents[1].values:
+        for c in contents['score'].values:
             try:
                 print "%6.3f" % (c*1e2)
             except:
@@ -156,15 +165,15 @@ def compute_and_return_performance_feedback(log_file_name,col1name,col2name):
     fig  = plt.figure(figsize=(20,15))
     axes = fig.add_axes([.15,.15,.75,.75])
     if len(contents)>0:
-        if len(contents[1])>0:
-            axes.plot(contents[1]*1e2,'-o',linewidth=2,markersize=15,label='Previous Trials')
+        if len(contents['score'])>0:
+            axes.plot(contents['score']*1e2,'-o',linewidth=2,markersize=15,label='Previous Trials')
     axes.plot(len(contents),np.array(score*1e2),'-o',linewidth=2,markersize=15,color='r',label='Last Trial')
     axes.set_xlabel('Trial')
     axes.set_xticks(range(0,len(contents)+1,1))
     axes.set_xticklabels(range(1,len(contents)+2,1))
     axes.set_ylabel('Score')
-    #axes.set_yticks(range(np.floor(contents[1].min()),np.ceil(contents[1].max())+1,10))
-    #axes.set_ylim(np.floor(contents[1].min())-10,np.ceil(contents[1].max())+10)
+    #axes.set_yticks(range(np.floor(contents['score'].min()),np.ceil(contents['score'].max())+1,10))
+    #axes.set_ylim(np.floor(contents['score'].min())-10,np.ceil(contents['score'].max())+10)
     axes.set_title('Performance (Synchronization and Pitch-matching)')
     axes.legend(loc='upper center', shadow=False, fontsize='medium')
     plt.show()
