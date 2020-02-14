@@ -23,7 +23,7 @@ if __name__ == '__main__':
     plotting=True
     col1name='NoteL'
     col2name='NoteR'
-    transient_secs = 0
+    transient_secs = 20
 
     for opt, arg in opts:
         if opt in ("-h","--help"):
