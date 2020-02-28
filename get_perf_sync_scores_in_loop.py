@@ -58,7 +58,7 @@ if __name__ == '__main__':
         else:
             if len(slist)==0:
                 f = open('scores','a+')
-                f.write("%s," % 'raw file name')
+                f.write("%s," % 'raw data file')
                 f.write("%s," % 'score')
                 f.write("%s," % 'cmax')
                 f.write("%s," % 'tau')
