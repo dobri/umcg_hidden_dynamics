@@ -88,17 +88,18 @@ if __name__ == '__main__':
                                                  step_seconds,
                                                  plotting)
                 else:
+                    print('Bad raw data or an empty trial. What is wrong this time?')
                     score,cmax,tau,err = np.nan,np.nan,np.nan,np.nan
                     #print score,cmax,tau,err
-                    fig  = plt.figure(figsize=(20,15))
-                    axes = fig.add_axes([.15,.15,.75,.75])
-                    axes.plot(x,'-o',linewidth=5,markersize=15,label='Stim')
-                    axes.plot(y,'-o',linewidth=2,markersize=15,label='Participant')
-                    #axes.plot(contents['rmse'],'-o',linewidth=2,markersize=15,label='RMSE')
-                    axes.set_xlabel('Time')
-                    axes.set_title('Raw data from a bad trial. What is wrong here?')
-                    axes.legend(loc='upper left', shadow=False, fontsize='medium')
-                    plt.show()
+                    #                    fig  = plt.figure(figsize=(20,15))
+                    #                    axes = fig.add_axes([.15,.15,.75,.75])
+                    #                    axes.plot(x,'-o',linewidth=5,markersize=15,label='Stim')
+                    #                    axes.plot(y,'-o',linewidth=2,markersize=15,label='Participant')
+                    #                    #axes.plot(contents['rmse'],'-o',linewidth=2,markersize=15,label='RMSE')
+                    #                    axes.set_xlabel('Time')
+                    #                    axes.set_title('Raw data from a bad trial. What is wrong here?')
+                    #                    axes.legend(loc='upper left', shadow=False, fontsize='medium')
+                    #                    plt.show()
                     
                 f = open('scores','a+')
                 f.write("%60s," % log_file_name)
