@@ -9,6 +9,7 @@ from wcc_by_rmse import wcc_by_rmse
 import pandas as pd
 import numpy as np
 import sys, getopt
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     argv = sys.argv[1:]
@@ -20,7 +21,7 @@ if __name__ == '__main__':
 
     lag_range_seconds=1
     step_seconds=5
-    transient_secs = 20
+    transient_secs = 10
     plotting=True
     col1name='NoteL'
     col2name='NoteR'
@@ -76,6 +77,7 @@ if __name__ == '__main__':
                 else:
                     c1 = col1name
                     c2 = col2name
+                # print c1,c2
                 
                 x = X[c1][int(fps*transient_secs):(len(X)-1)]
                 y = X[c2][int(fps*transient_secs):(len(X)-1)]
@@ -88,6 +90,15 @@ if __name__ == '__main__':
                 else:
                     score,cmax,tau,err = np.nan,np.nan,np.nan,np.nan
                     #print score,cmax,tau,err
+                    fig  = plt.figure(figsize=(20,15))
+                    axes = fig.add_axes([.15,.15,.75,.75])
+                    axes.plot(x,'-o',linewidth=5,markersize=15,label='Stim')
+                    axes.plot(y,'-o',linewidth=2,markersize=15,label='Participant')
+                    #axes.plot(contents['rmse'],'-o',linewidth=2,markersize=15,label='RMSE')
+                    axes.set_xlabel('Time')
+                    axes.set_title('Raw data from a bad trial. What is wrong here?')
+                    axes.legend(loc='upper left', shadow=False, fontsize='medium')
+                    plt.show()
                     
                 f = open('scores','a+')
                 f.write("%60s," % log_file_name)
@@ -118,7 +129,7 @@ if __name__ == '__main__':
                 axes.plot(contents['score'],'-o',linewidth=5,markersize=15,label='C_{max}/RMSE')
                 axes.plot(contents['cmax'],'-o',linewidth=2,markersize=15,label='C_{max}')
                 axes.plot(contents['tau'],'-o',linewidth=2,markersize=15,label='tau')
-                axes.plot(contents['rmse'],'-o',linewidth=2,markersize=15,label='RMSE')
+                #axes.plot(contents['rmse'],'-o',linewidth=2,markersize=15,label='RMSE')
                 axes.set_xlabel('Trial')
                 axes.set_xticks(range(0,len(contents['score']),1))
                 axes.set_xticklabels(range(1,len(contents['score'])+1,1))
