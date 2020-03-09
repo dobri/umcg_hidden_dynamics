@@ -20,10 +20,10 @@ if __name__ == '__main__':
 
     lag_range_seconds=1
     step_seconds=5
+    transient_secs = 20
     plotting=True
     col1name='NoteL'
     col2name='NoteR'
-    transient_secs = 20
 
     for opt, arg in opts:
         if opt in ("-h","--help"):
@@ -69,8 +69,16 @@ if __name__ == '__main__':
                 X = pd.read_csv(log_file_name,skipinitialspace=True)
                 fps=1/np.mean(np.diff(X['Time']))
                 
-                x = X[col1name][int(fps*transient_secs):(len(X)-1)]
-                y = X[col2name][int(fps*transient_secs):(len(X)-1)]
+                # That's a hack, but anyway. Be careful when using later for different studies.
+                if log_file_name.find('vis1')>0:
+                    c1 = 'XPixStim'
+                    c2 = 'XPixPart'
+                else:
+                    c1 = col1name
+                    c2 = col2name
+                
+                x = X[c1][int(fps*transient_secs):(len(X)-1)]
+                y = X[c2][int(fps*transient_secs):(len(X)-1)]
                 if (np.var(x)>.0001) & (np.var(y)>.0001):
                     score,cmax,tau,err = wcc_by_rmse(x,y,
                                                  X['Time'][int(fps*transient_secs):(len(X)-1)],
