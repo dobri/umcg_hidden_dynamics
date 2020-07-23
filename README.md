@@ -24,5 +24,6 @@ sudo apt install python-dev-is-python2
 pip install PyAudio
 
 pip3 install PyUserInput
+pip3 install pyserial
 
 ...
