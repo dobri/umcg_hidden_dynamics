@@ -8,8 +8,20 @@ some prerequisites, when moving to python3
 pip3 install opencv-python
 ? pip install opencv-python
 
+
+https://linuxize.com/post/how-to-install-pip-on-ubuntu-20.04/
 sudo apt install portaudio19-dev 
 pip3 install PyAudio
+
+sudo apt update 
+sudo apt upgrade
+sudo apt autoremove 
+sudo apt install python2
+curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+sudo python2 get-pip.py
+pip2 --version
+sudo apt install python-dev-is-python2
+pip install PyAudio
 
 pip3 install PyUserInput
 
