@@ -1,0 +1,596 @@
+[1] "Sync & Match Score [C/RMSE]"
+[1] "Sync & Match Score [C/RMSE]"
+[1] "Sync & Match Score [C/RMSE]"
+Data: x
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + task + (1 | pp)
+m4: dv ~ 1 + trial * task + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)    
+m1    3 -848.18 -832.92 427.09  -854.18                         
+m2    4 -907.52 -887.17 457.76  -915.52 61.340  1  4.803e-15 ***
+m3    6 -923.61 -893.09 467.80  -935.61 20.093  2  4.334e-05 ***
+m4    8 -929.96 -889.27 472.98  -945.96 10.354  2   0.005646 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+  -848.2   -832.9    427.1   -854.2     1193 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.0107 -0.4955 -0.0522  0.4062  8.0833 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.05836  0.2416  
+ Residual             0.02559  0.1600  
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.50620    0.04435   11.41
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+  -907.5   -887.2    457.8   -915.5     1192 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.2456 -0.4656 -0.0815  0.4069  8.4459 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.05839  0.2417  
+ Residual             0.02428  0.1558  
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept) 0.4427035  0.0450647   9.824
+trial       0.0031077  0.0003916   7.936
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.178
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + task + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+  -923.6   -893.1    467.8   -935.6     1190 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.2463 -0.4639 -0.0864  0.4020  8.4583 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.02959  0.1720  
+ Residual             0.02428  0.1558  
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+                       Estimate Std. Error t value
+(Intercept)           0.3683493  0.0555326   6.633
+trial                 0.0031077  0.0003916   7.936
+taskuncoupl_periodic  0.3091626  0.0777201   3.978
+taskuncoupl_unstable -0.0861001  0.0777191  -1.108
+
+Correlation of Fixed Effects:
+            (Intr) trial  tskncpl_p
+trial       -0.143                 
+tskncpl_prd -0.700 -0.001          
+tskncpl_nst -0.700 -0.001  0.500   
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial * task + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+  -930.0   -889.3    473.0   -946.0     1188 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.3271 -0.4790 -0.0821  0.4134  8.5812 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.02962  0.1721  
+ Residual             0.02407  0.1551  
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+                             Estimate Std. Error t value
+(Intercept)                 3.865e-01  5.669e-02   6.819
+trial                       2.214e-03  6.794e-04   3.258
+taskuncoupl_periodic        2.547e-01  8.016e-02   3.177
+taskuncoupl_unstable       -8.610e-02  8.016e-02  -1.074
+trial:taskuncoupl_periodic  2.669e-03  9.573e-04   2.787
+trial:taskuncoupl_unstable  6.328e-06  9.556e-04   0.007
+
+Correlation of Fixed Effects:
+              (Intr) trial  tskncpl_p tskncpl_n trl:tskncpl_p
+trial         -0.244                                         
+tskncpl_prd   -0.707  0.172                                  
+tskncpl_nst   -0.707  0.172  0.500                           
+trl:tskncpl_p  0.173 -0.710 -0.244    -0.122                 
+trl:tskncpl_n  0.173 -0.711 -0.123    -0.243     0.505       
+
+==============================================================================
+                            Model 1      Model 2      Model 3      Model 4    
+------------------------------------------------------------------------------
+(Intercept)                    0.51 ***     0.44 ***     0.37 ***     0.39 ***
+                              (0.04)       (0.05)       (0.06)       (0.06)   
+trial                                       0.00 ***     0.00 ***     0.00 ** 
+                                           (0.00)       (0.00)       (0.00)   
+taskuncoupl_periodic                                     0.31 ***     0.25 ** 
+                                                        (0.08)       (0.08)   
+taskuncoupl_unstable                                    -0.09        -0.09    
+                                                        (0.08)       (0.08)   
+trial:taskuncoupl_periodic                                            0.00 ** 
+                                                                     (0.00)   
+trial:taskuncoupl_unstable                                            0.00    
+                                                                     (0.00)   
+------------------------------------------------------------------------------
+AIC                         -848.18      -907.52      -923.61      -929.96    
+BIC                         -832.92      -887.17      -893.09      -889.27    
+Log Likelihood               427.09       457.76       467.80       472.98    
+Num. obs.                   1196         1196         1196         1196       
+Num. groups: pp               30           30           30           30       
+Var: pp (Intercept)            0.06         0.06         0.03         0.03    
+Var: Residual                  0.03         0.02         0.02         0.02    
+==============================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+[1] "C"
+[1] "C"
+[1] "C"
+Data: x
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + task + (1 | pp)
+m4: dv ~ 1 + trial * task + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)    
+m1    3 -2356.8 -2341.6 1181.4  -2362.8                         
+m2    4 -2416.1 -2395.8 1212.1  -2424.1 61.334  1  4.818e-15 ***
+m3    6 -2476.9 -2446.4 1244.4  -2488.9 64.745  2  8.728e-15 ***
+m4    8 -2484.4 -2443.7 1250.2  -2500.4 11.538  2   0.003123 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+ -2356.8  -2341.5   1181.4  -2362.8     1193 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.0927 -0.5306  0.0833  0.5569  3.8800 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.029039 0.17041 
+ Residual             0.007146 0.08453 
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.62412    0.03121      20
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+ -2416.1  -2395.8   1212.1  -2424.1     1192 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.9403 -0.5227  0.0593  0.5451  3.8739 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.02904  0.17040 
+ Residual             0.00678  0.08234 
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept) 0.5905658  0.0314866  18.756
+trial       0.0016421  0.0002069   7.936
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.134
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + task + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+ -2476.9  -2446.4   1244.4  -2488.9     1190 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.9464 -0.5243  0.0646  0.5615  3.9206 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.003205 0.05661 
+ Residual             0.006780 0.08234 
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+                      Estimate Std. Error t value
+(Intercept)          0.4701357  0.0188485  24.943
+trial                0.0016425  0.0002069   7.938
+taskuncoupl_periodic 0.3475768  0.0259804  13.378
+taskuncoupl_unstable 0.0136955  0.0259796   0.527
+
+Correlation of Fixed Effects:
+            (Intr) trial  tskncpl_p
+trial       -0.223                 
+tskncpl_prd -0.689 -0.001          
+tskncpl_nst -0.689 -0.001  0.500   
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial * task + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+ -2484.4  -2443.7   1250.2  -2500.4     1188 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.7858 -0.5167  0.0487  0.5786  3.9922 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.003210 0.05665 
+ Residual             0.006713 0.08193 
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+                             Estimate Std. Error t value
+(Intercept)                 0.4870333  0.0197790  24.624
+trial                       0.0008122  0.0003588   2.263
+taskuncoupl_periodic        0.3125370  0.0279653  11.176
+taskuncoupl_unstable       -0.0017968  0.0279622  -0.064
+trial:taskuncoupl_periodic  0.0017175  0.0005056   3.397
+trial:taskuncoupl_unstable  0.0007618  0.0005047   1.509
+
+Correlation of Fixed Effects:
+              (Intr) trial  tskncpl_p tskncpl_n trl:tskncpl_p
+trial         -0.369                                         
+tskncpl_prd   -0.707  0.261                                  
+tskncpl_nst   -0.707  0.261  0.500                           
+trl:tskncpl_p  0.262 -0.710 -0.369    -0.185                 
+trl:tskncpl_n  0.263 -0.711 -0.186    -0.369     0.505       
+
+==================================================================================
+                            Model 1       Model 2       Model 3       Model 4     
+----------------------------------------------------------------------------------
+(Intercept)                     0.62 ***      0.59 ***      0.47 ***      0.49 ***
+                               (0.03)        (0.03)        (0.02)        (0.02)   
+trial                                         0.00 ***      0.00 ***      0.00 *  
+                                             (0.00)        (0.00)        (0.00)   
+taskuncoupl_periodic                                        0.35 ***      0.31 ***
+                                                           (0.03)        (0.03)   
+taskuncoupl_unstable                                        0.01         -0.00    
+                                                           (0.03)        (0.03)   
+trial:taskuncoupl_periodic                                                0.00 ***
+                                                                         (0.00)   
+trial:taskuncoupl_unstable                                                0.00    
+                                                                         (0.00)   
+----------------------------------------------------------------------------------
+AIC                         -2356.81      -2416.14      -2476.88      -2484.42    
+BIC                         -2341.55      -2395.79      -2446.36      -2443.73    
+Log Likelihood               1181.40       1212.07       1244.44       1250.21    
+Num. obs.                    1196          1196          1196          1196       
+Num. groups: pp                30            30            30            30       
+Var: pp (Intercept)             0.03          0.03          0.00          0.00    
+Var: Residual                   0.01          0.01          0.01          0.01    
+==================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+[1] "τ"
+[1] "τ"
+[1] "τ"
+Data: x
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + task + (1 | pp)
+m4: dv ~ 1 + trial * task + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -2696.1 -2680.9 1351.1  -2702.1                          
+m2    4 -2707.9 -2687.6 1358.0  -2715.9 13.8096  1  0.0002023 ***
+m3    6 -2711.9 -2681.4 1362.0  -2723.9  7.9734  2  0.0185606 *  
+m4    8 -2709.6 -2668.9 1362.8  -2725.6  1.6819  2  0.4312937    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+ -2696.1  -2680.9   1351.1  -2702.1     1193 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5779 -0.5586  0.0087  0.5955  5.2270 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002513 0.05013 
+ Residual             0.005681 0.07537 
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept) -0.015704   0.009409  -1.669
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+ -2707.9  -2687.6   1358.0  -2715.9     1192 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4576 -0.5758 -0.0007  0.5894  5.2722 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002511 0.05011 
+ Residual             0.005615 0.07493 
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+              Estimate Std. Error t value
+(Intercept) -0.0300454  0.0101590  -2.958
+trial        0.0007018  0.0001883   3.727
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.379
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + task + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+ -2711.9  -2681.4   1362.0  -2723.9     1190 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4474 -0.5752 -0.0023  0.5843  5.2971 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.001892 0.04350 
+ Residual             0.005615 0.07493 
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+                       Estimate Std. Error t value
+(Intercept)          -0.0648607  0.0147671  -4.392
+trial                 0.0007015  0.0001883   3.725
+taskuncoupl_periodic  0.0566131  0.0201666   2.807
+taskuncoupl_unstable  0.0478484  0.0201657   2.373
+
+Correlation of Fixed Effects:
+            (Intr) trial  tskncpl_p
+trial       -0.260                 
+tskncpl_prd -0.683 -0.001          
+tskncpl_nst -0.683 -0.001  0.500   
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial * task + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+ -2709.6  -2668.9   1362.8  -2725.6     1188 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.3815 -0.5754  0.0023  0.5918  5.3077 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.001892 0.04350 
+ Residual             0.005607 0.07488 
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+                             Estimate Std. Error t value
+(Intercept)                -0.0717973  0.0157436  -4.560
+trial                       0.0010423  0.0003279   3.178
+taskuncoupl_periodic        0.0682414  0.0222581   3.066
+taskuncoupl_unstable        0.0569507  0.0222549   2.559
+trial:taskuncoupl_periodic -0.0005703  0.0004621  -1.234
+trial:taskuncoupl_unstable -0.0004465  0.0004612  -0.968
+
+Correlation of Fixed Effects:
+              (Intr) trial  tskncpl_p tskncpl_n trl:tskncpl_p
+trial         -0.424                                         
+tskncpl_prd   -0.707  0.300                                  
+tskncpl_nst   -0.707  0.300  0.500                           
+trl:tskncpl_p  0.301 -0.710 -0.423    -0.213                 
+trl:tskncpl_n  0.301 -0.711 -0.213    -0.423     0.505       
+
+===============================================================================
+                            Model 1    Model 2       Model 3       Model 4     
+-------------------------------------------------------------------------------
+(Intercept)                    -0.02      -0.03 **      -0.06 ***     -0.07 ***
+                               (0.01)     (0.01)        (0.01)        (0.02)   
+trial                                      0.00 ***      0.00 ***      0.00 ** 
+                                          (0.00)        (0.00)        (0.00)   
+taskuncoupl_periodic                                     0.06 **       0.07 ** 
+                                                        (0.02)        (0.02)   
+taskuncoupl_unstable                                     0.05 *        0.06 *  
+                                                        (0.02)        (0.02)   
+trial:taskuncoupl_periodic                                            -0.00    
+                                                                      (0.00)   
+trial:taskuncoupl_unstable                                            -0.00    
+                                                                      (0.00)   
+-------------------------------------------------------------------------------
+AIC                         -2696.14   -2707.95      -2711.92      -2709.60    
+BIC                         -2680.88   -2687.60      -2681.40      -2668.91    
+Log Likelihood               1351.07    1357.97       1361.96       1362.80    
+Num. obs.                    1196       1196          1196          1196       
+Num. groups: pp                30         30            30            30       
+Var: pp (Intercept)             0.00       0.00          0.00          0.00    
+Var: Residual                   0.01       0.01          0.01          0.01    
+===============================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+[1] "RMSE"
+[1] "RMSE"
+[1] "RMSE"
+Data: x
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + task + (1 | pp)
+m4: dv ~ 1 + trial * task + (1 | pp)
+   npar    AIC    BIC  logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 952.18 967.44 -473.09   946.18                          
+m2    4 893.95 914.30 -442.98   885.95 60.2274  1  8.451e-15 ***
+m3    6 895.97 926.49 -441.98   883.97  1.9874  2     0.3702    
+m4    8 898.43 939.12 -441.21   882.43  1.5411  2     0.4628    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+   952.2    967.4   -473.1    946.2     1193 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.3073 -0.5140 -0.1019  0.3543  6.4634 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.4675   0.6837  
+ Residual             0.1136   0.3371  
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   1.4751     0.1252   11.78
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+   894.0    914.3   -443.0    886.0     1192 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.9129 -0.4961 -0.0925  0.3539  6.3559 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.4678   0.6840  
+ Residual             0.1079   0.3285  
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+              Estimate Std. Error t value
+(Intercept)  1.6077388  0.1263638  12.723
+trial       -0.0064902  0.0008255  -7.862
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.133
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + task + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+   896.0    926.5   -442.0    884.0     1190 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.9109 -0.4989 -0.0931  0.3517  6.3605 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.4376   0.6615  
+ Residual             0.1079   0.3285  
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+                       Estimate Std. Error t value
+(Intercept)           1.3642305  0.2105164   6.480
+trial                -0.0064907  0.0008255  -7.863
+taskuncoupl_periodic  0.3376105  0.2967634   1.138
+taskuncoupl_unstable  0.3929331  0.2967622   1.324
+
+Correlation of Fixed Effects:
+            (Intr) trial  tskncpl_p
+trial       -0.080                 
+tskncpl_prd -0.705  0.000          
+tskncpl_nst -0.705  0.000  0.500   
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial * task + (1 | pp)
+   Data: x
+
+     AIC      BIC   logLik deviance df.resid 
+   898.4    939.1   -441.2    882.4     1188 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-9.0027 -0.4845 -0.0925  0.3619  6.3955 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.4377   0.6616  
+ Residual             0.1078   0.3283  
+Number of obs: 1196, groups:  pp, 30
+
+Fixed effects:
+                             Estimate Std. Error t value
+(Intercept)                 1.350e+00  2.119e-01   6.369
+trial                      -5.769e-03  1.438e-03  -4.012
+taskuncoupl_periodic        3.819e-01  2.996e-01   1.274
+taskuncoupl_unstable        3.927e-01  2.996e-01   1.310
+trial:taskuncoupl_periodic -2.168e-03  2.026e-03  -1.070
+trial:taskuncoupl_unstable  7.896e-06  2.022e-03   0.004
+
+Correlation of Fixed Effects:
+              (Intr) trial  tskncpl_p tskncpl_n trl:tskncpl_p
+trial         -0.138                                         
+tskncpl_prd   -0.707  0.098                                  
+tskncpl_nst   -0.707  0.098  0.500                           
+trl:tskncpl_p  0.098 -0.710 -0.138    -0.069                 
+trl:tskncpl_n  0.098 -0.711 -0.069    -0.138     0.505       
+
+==============================================================================
+                            Model 1      Model 2      Model 3      Model 4    
+------------------------------------------------------------------------------
+(Intercept)                    1.48 ***     1.61 ***     1.36 ***     1.35 ***
+                              (0.13)       (0.13)       (0.21)       (0.21)   
+trial                                      -0.01 ***    -0.01 ***    -0.01 ***
+                                           (0.00)       (0.00)       (0.00)   
+taskuncoupl_periodic                                     0.34         0.38    
+                                                        (0.30)       (0.30)   
+taskuncoupl_unstable                                     0.39         0.39    
+                                                        (0.30)       (0.30)   
+trial:taskuncoupl_periodic                                           -0.00    
+                                                                     (0.00)   
+trial:taskuncoupl_unstable                                            0.00    
+                                                                     (0.00)   
+------------------------------------------------------------------------------
+AIC                          952.18       893.95       895.97       898.43    
+BIC                          967.44       914.30       926.49       939.12    
+Log Likelihood              -473.09      -442.98      -441.98      -441.21    
+Num. obs.                   1196         1196         1196         1196       
+Num. groups: pp               30           30           30           30       
+Var: pp (Intercept)            0.47         0.47         0.44         0.44    
+Var: Residual                  0.11         0.11         0.11         0.11    
+==============================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Fri Dec  6 11:47:18 2019
@@ -39,7 +39,7 @@ def crosscorr(datax, datay, lag=0, wrap=False):
 # X = pd.read_csv(FILEPATH,skipinitialspace=True)
 # from wcc_by_rmse import wcc_by_rmse
 # print(wcc_by_rmse(X['NoteL'],X['NoteR'],X['Time'],True))
-def wcc_by_rmse(x,y,t,lag_range_seconds=1,step_seconds=5,PLOTTINGFLAG=True):
+def wcc_by_rmse(x,y,t,lag_range_seconds=1,step_seconds=5,PLOTTINGFLAG=True,fig_file_name=False):
     er = rmse(x,y)
     x = zscore(x)
     y = zscore(y)
@@ -64,15 +64,15 @@ def wcc_by_rmse(x,y,t,lag_range_seconds=1,step_seconds=5,PLOTTINGFLAG=True):
         t_end = t_end + step_size
     rss = pd.DataFrame(rss)
     cmax_ave = np.mean(cmax)
-    tau = -np.mean(taus)
+    tau = np.mean(taus)
     
     if PLOTTINGFLAG==True:
         import matplotlib.pyplot as plt
         import seaborn as sns
         
         fig, axes = plt.subplots(nrows=2, ncols=1,figsize=(10,8))
-        axes[0].plot(t,x,'-')
-        axes[0].plot(t,y,'-')
+        axes[0].plot(t,x,'-',label='Tutor')
+        axes[0].plot(t,y,'-',label='Trainee')
         axes[0].set_xlabel('Time, s')
         axes[0].set_ylabel('z-score of MIDI notes')
         axes[0].legend(loc='upper right', shadow=False, fontsize='small')    
@@ -87,7 +87,12 @@ def wcc_by_rmse(x,y,t,lag_range_seconds=1,step_seconds=5,PLOTTINGFLAG=True):
         axes[1].set_xticks(range(0,d[0]+1,3))
         axes[1].set_xticklabels(range(0,d[0]+1,3))
         plt.tight_layout()
-        plt.show()
+        if fig_file_name:
+            plt.savefig(fig_file_name,dpi=100,bbox_inches='tight')
+        else:
+            plt.show()
+            
+        plt.close()
     
     return (cmax_ave/er,cmax_ave,tau,er)
     

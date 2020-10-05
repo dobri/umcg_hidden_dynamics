@@ -1,0 +1,35 @@
+TODO
+
+Lyapunov
+TE
+
+DONE
+
+cc, rmse w/ trial -> score file
+
+# To run the script that extracts performance scores trial by trial and saves results in a file 'scores' in each participant's folder:
+cd ~/c3/umcg/data/training/
+dirlist=$(ls)
+for d in $dirlist; do cd $d; python3 ~/logos/c3/umcg_hidden_dynamics/get_perf_sync_scores_in_loop.py -i1 -l.5; cd ..; done
+
+
+# Merge the 'scores' files:
+cd ~/c3/umcg/data/training/
+dirlist=$(ls)
+cat pp01/scores | head -n 1 > all_scores.csv
+for d in $dirlist;do cat $d/scores | tail -n +2 >> all_scores.csv;done
+
+
+# Copy image files around:
+cd ~/c3/umcg/data/training/
+dirlist=$(ls)
+mkdir ind_perf_timeseries_pics
+for d in $dirlist;do cp $d/scores_pp*.png ind_perf_timeseries_pics/;done
+
+
+# Careful there!
+cd ~/c3/umcg/data/training/
+dirlist=$(ls)
+for d in $dirlist; do rm $d/scores; rm $d/*.png; done
+
+
