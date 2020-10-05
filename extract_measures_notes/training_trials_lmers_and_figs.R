@@ -49,10 +49,13 @@ for (dv in c(2,3,4,5)){
   if (names(x)[dv]=='tau') {dv_lab = 'τ'}
   if (names(x)[dv]=='rmse') {dv_lab = 'RMSE'}
   
-  m1=lmer(dv ~ 1 + (1|pp),data=x,REML=0)
-  m2=lmer(dv ~ 1 + trial + (1|pp),data=x,REML=0)
-  m3=lmer(dv ~ 1 + trial+task + (1|pp),data=x,REML=0)
-  m4=lmer(dv ~ 1 + trial*task + (1|pp),data=x,REML=0)
+  m1=lmer(dv ~ 1 + (-1+trial|pp),data=x,REML=0)
+  m2=lmer(dv ~ 1 + trial + (-1+trial|pp),data=x,REML=0)
+  m3=lmer(dv ~ 1 + trial+task + (-1+trial|pp),data=x,REML=0)
+  m4=lmer(dv ~ 1 + trial*task + (-1+trial|pp),data=x,REML=0)
+  # These don't seem to work.
+  m5a=lmer(dv ~ 1 + trial*task + (1 + trial|pp),data=x,REML=0)
+  m5b=lmer(dv ~ 1 + trial*task + (1|pp) + (trial|pp),data=x,REML=0)
   
   sink(paste("diary_lmems_trial_task_",'_',Sys.Date(),sep=''),append=TRUE)
   print(dv_lab)
@@ -132,15 +135,19 @@ for (dv in c(2,3,5,4)){
   if (names(x)[dv]=='tau') {dv_lab = 'τ'}
   if (names(x)[dv]=='rmse') {dv_lab = 'RMSE'}
   
-  m1=lmer(dv ~ 1 + (1|pp),data=x,REML=0)
-  m2=lmer(dv ~ 1 + trial + (1|pp),data=x,REML=0)
-  m3=lmer(dv ~ 1 + trial+task + (1|pp),data=x,REML=0)
-  m4=lmer(dv ~ 1 + trial*task + (1|pp),data=x,REML=0)
+  m1=lmer(dv ~ 1 + (-1+trial|pp),data=x,REML=0)
+  m2=lmer(dv ~ 1 + trial + (-1+trial|pp),data=x,REML=0)
+  m3=lmer(dv ~ 1 + trial+task + (-1+trial|pp),data=x,REML=0)
+  m4=lmer(dv ~ 1 + trial*task + (-1+trial|pp),data=x,REML=0)
 
-  if (dv==2) {x$fitted <- getME(m4,'X') %*% fixef(m4)} 
-  if (dv==3) {x$fitted <- getME(m4,'X') %*% fixef(m4)}
+  # if (dv==2) {x$fitted <- getME(m4,'X') %*% fixef(m4)} 
+  # if (dv==3) {x$fitted <- getME(m4,'X') %*% fixef(m4)}
+  # if (dv==4) {x$fitted <- getME(m3,'X') %*% fixef(m3)}
+  # if (dv==5) {x$fitted <- getME(m2,'X') %*% fixef(m2)}
+  if (dv==2) {x$fitted <- getME(m3,'X') %*% fixef(m3)}
+  if (dv==3) {x$fitted <- getME(m3,'X') %*% fixef(m3)}
   if (dv==4) {x$fitted <- getME(m3,'X') %*% fixef(m3)}
-  if (dv==5) {x$fitted <- getME(m2,'X') %*% fixef(m2)}
+  if (dv==5) {x$fitted <- getME(m3,'X') %*% fixef(m3)}
   
   counter = counter + 1
   g[[counter]] <- ggplot(data=x, aes(x=trial, y=dv, colour=as.factor(task))) +
