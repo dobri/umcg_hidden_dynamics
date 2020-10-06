@@ -27,6 +27,13 @@ mkdir ind_perf_timeseries_pics
 for d in $dirlist;do cp $d/scores_pp*.png ind_perf_timeseries_pics/;done
 
 
+# Copy image files around:
+cd ~/c3/umcg/data/training/
+dirlist=$(ls)
+mkdir ind_perf_timeseries_raw_pics
+for d in $dirlist;do mv $d/*.png ind_perf_timeseries_raw_pics/;done
+
+
 # Careful there!
 cd ~/c3/umcg/data/training/
 dirlist=$(ls)
