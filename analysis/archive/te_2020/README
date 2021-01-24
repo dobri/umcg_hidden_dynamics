@@ -1,0 +1,44 @@
+The whole TRENTOOL toolbox and important edited files, example scripts, how to constrain some parameters, and sample data are all packed together here. You just need to add a line for the path to the folder on your computer containing both the toolbox and the sample data. To get a feel of the workflow it should be enough to run through the blocks of code in MASTER_loop.m. Don't treat this as a complete and final analysis. In particular, I'm not positive about the surrogates method. Read below.
+
+Warning: First, TRENTOOL is very big, complicated, and sometimes messy. It's hard to debug. It does a bunch of optimizations in loops which complicates things further. Second, it takes forever. Even just one participant with ~20 trials runs for hours!
+
+
+TRENTOOL3 has a bunch of dependencies. It needs fieldtrip for some minor formatting tasks. It shouldn't be necessary to rely on fieldtrip which is a giant set of libraries for very different uses but we don't want to modify TRENTOOL too much.
+
+Certain modified .m files of our own have to go in specific locations:
+- MASTER_loop.m, set_common_paramters.m, tau_quarter_period.m go in the root of the 'libs' folder (two levels above 'TRENTOOL3').
+- dd_TEshufftest.m, dd_TEsurrogatestats.m go in the 'TRENTOOL3' folder.
+- transferentropy_dd.m goes in the folder 'private' which is inside 'TRENTOOL3'. 
+
+The modified version of their core script implements a different form of block-shuffling and reversing that randomizes more than the default options. The default is to do a combination of splitting the trial in two and reversing the one part. We can also split in multiple blocks with random length and order and then reverse.
+
+Attention! Maybe it's not the best idea to draw a lot of variability from a single trial in order to build a distribution of the TE measure from surrogate trials. I haven't investigated how useful it is to shuffle the same trial multiple times in different scenarios. It produced sensible results previously but I don't know how reliable is this procedure. It might be better to fall back on the default options: one set of timeline-shuffled trials + permutation test over all of these trials. But how to account for learning over trials then? To get a learning curve in that case one option is to analyze blocks of trials and get stats for each block. For example, a sequence of 40 learning trials could be broken into 4 blocks (or stages of learning) of 10 trials, resulting in a timeseries of 4 points.
+
+
+Bad drifting non-stationairy can cause Inf ACT (autocorrelation time) which screws up everything because ACT is then used as a parameter. This refers to cases when the participant slowly drifts from, say, right-side to left-side oriented movement. As a quick hack to prevent TRENTOOL from exiting with an error I added the following lines in TEprepare.m, l. 680-682. This was easier than pre-selecting the trials to exclude ones with such trends. It is wiser, however, to not have this hack and instead manually exclude such trials.
+ACT(ACT==inf) = nan;
+mACT = nanmean(nanmean(nanmean(ACT)));
+ACT(isnan(ACT)) = round(mACT);
+
+
+%% Clusters and GPUs.
+%{
+% Even larger parallel execution on a cluster of lab PCs is possible. The
+loop will still use parfor but the Default cluster in Matlab will be configured for
+a network cluster of matlab computers that act as workers instead of the cores in the local CPU.
+I had it set up and working at a certain point. This requires that all 
+computers have Matlab and the same toolboxes, if I remember correctly, so it is hard to implement. 
+Add these before the parfor loop:
+delete(gcp('nocreate'));
+poolobj = gcp;
+addAttachedFiles(poolobj,{'zscore.m'}) % This shares an mfile that other
+workers in the cluster don't have because they lack the respective toolbox.
+
+Instead, it might be more useful and educational for students to start 
+using the GPU capabilities of TRENTOOL. There's an example script for that, 
+focused on what they call ensemble processing such as with multi-channel neuroimaging data.
+I find it that lab workstations with decent GPUs are becoming more and more common. 
+Dealing with these is also an important prerequisite skill for machine learning 
+work. So students who want to specialize into computational methods will need this.
+%}
+
