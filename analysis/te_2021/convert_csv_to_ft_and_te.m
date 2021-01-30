@@ -39,6 +39,7 @@ DATA = cell(1); % The number of cells in DATA will grow.
 
 counter = 0;
 for f=1:length(folderCell)
+    S = readtable(fullfile(folderCell(f).folder,folderCell(f).name,'scores'));
     f_trials = dir(fullfile(folderCell(f).folder,folderCell(f).name,'trial*'));
     
     % How many different stimulus types in the given folder?
@@ -129,6 +130,7 @@ for f=1:length(folderCell)
                 tau_pp = tau_quarter_period(x_user,t);
                 
                 counter_d = counter_d + 1;
+                DATA{counter}.scores(counter_d,:) = S{tr,2:end};
                 DATA{counter}.pp{counter_d} = folderCell(f).name;
                 DATA{counter}.file_name{counter_d} = trial_file_name;
                 DATA{counter}.conditions(counter_d,:) = cond_vec;

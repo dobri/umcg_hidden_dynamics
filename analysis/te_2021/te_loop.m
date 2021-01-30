@@ -14,7 +14,8 @@ InputDataPath  = fullfile(base_folder,'training_processed/training');
 cd(fullfile(base_folder))
 
 TGA_results = cell(1,numel(DATA));
-parfor pp = 1:numel(TGA_results)
+parfor pp = 1%:numel(TGA_results)
+%for pp = 1%:numel(TGA_results)
     % data
     data = DATA{pp};
     
@@ -27,8 +28,8 @@ parfor pp = 1:numel(TGA_results)
     
     % scanning of interaction delays u
     cfgTEP.predicttimemin_u    = 10;      % minimum u to be scanned
-    cfgTEP.predicttimemax_u    = 210;	  % maximum u to be scanned
-    cfgTEP.predicttimestepsize = 20; 	  % time steps between u's to be scanned
+    cfgTEP.predicttimemax_u    = 200;	  % maximum u to be scanned
+    cfgTEP.predicttimestepsize = 100; 	  % time steps between u's to be scanned
     
     % estimator
     cfgTEP.TEcalctype  = 'VW_ds'; % use the new TE estimator (Wibral, 2013)
@@ -41,18 +42,18 @@ parfor pp = 1:numel(TGA_results)
     % optimizing embedding
     cfgTEP.optimizemethod ='ragwitz';  % criterion used
     cfgTEP.ragdim         = 5:9;       % criterion dimension
-    %cfgTEP.ragdim         = 3;       % data.dim(1,1) criterion dimension
+    cfgTEP.ragdim         = 3;       % data.dim(1,1) criterion dimension
     cfgTEP.ragtaurange    = [0.75 1.]; % range for tau
     cfgTEP.ragtausteps    = 5;        % steps for ragwitz tau steps
     cfgTEP.repPred        = 100; % round(size(data.trial{1,1},2)*(1/2));      % size(data.trial{1,1},2)*(3/4);
     
     % kernel-based TE estimation
-    cfgTEP.flagNei = 'Mass' ;           % neigbour analyse type
+    cfgTEP.flagNei = 'Mass';           % neigbour analyse type
     cfgTEP.sizeNei = 4;                 % neigbours to analyse
     
     % set the level of verbosity of console outputs
-    %cfgTEP.verbosity = 'info_minor';
-    cfgTEP.verbosity = 'none';
+    cfgTEP.verbosity = 'info_minor';
+    %cfgTEP.verbosity = 'none';
     
     %% define cfg for TE
     cfgTESS = [];
@@ -68,20 +69,21 @@ parfor pp = 1:numel(TGA_results)
     % statistical and shift testing
     cfgTESS.tail           = 1;
     cfgTESS.numpermutation = 5e3;
+    %cfgTESS.numpermutation = 'findDelay';
     cfgTESS.shifttest      = 'no';
     cfgTESS.alpha          = 1e-3;
     %cfgTESS.shifttesttype  ='TEshift>TE';
     
-    cfgTESS.surrogatetype  = 'trialshuffling';
-    %cfgTESS.surrogatetype  = 'trialreverse';
-    %cfgTESS.surrogatetype  = 'blockreverse2';
-    %cfgTESS.surrogatetype  = 'swapneighbors';
+    cfgTESS.surrogatetype = 'trialshuffling';
+    %cfgTESS.surrogatetype = 'trialreverse';
+    %cfgTESS.surrogatetype = 'blockreverse2';
+    %cfgTESS.surrogatetype = 'swapneighbors';
     
     % don't calculate MI additionally to TE
     cfgTESS.MIcalc = 0;
     
     % results file name
-    cfgTESS.fileidout  = strcat(OutputDataPath,'out_');
+    cfgTESS.fileidout = strcat(OutputDataPath,'out_');
     
     %% calculation - scan over specified values for u
     TGA_results{pp} = InteractionDelayReconstruction_calculate(cfgTEP,cfgTESS,data);
