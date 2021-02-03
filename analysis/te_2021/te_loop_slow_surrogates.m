@@ -15,7 +15,8 @@ cd(fullfile(base_folder))
 
 TGA_results = cell(1,numel(DATA));
 parfor pp = 1:numel(TGA_results)
-%for pp = 1%:numel(TGA_results)
+%parfor pp = 1:14%numel(TGA_results)
+%for pp = 1:14%numel(TGA_results)
     %% data
     data = DATA{pp};
     [cfgTEP,cfgTESS] = define_cfgs(data);
@@ -34,8 +35,8 @@ parfor pp = 1:numel(TGA_results)
     TGA_results{pp}.TEsurr = nan(ncomps,ntrials,ntrials);
     TGA_results{pp}.TEsurr_prop = nan(size(TGA_results{pp}.TEmat));
     
-    %% Exhaustive trial-matching surrogates
-    cfgTESS.trial_shuffle_surr_n_per_trial = 10;
+    %% Trial-shuffled surrogates. Can be the exhaustive set.
+    cfgTESS.trial_shuffle_surr_n_per_trial = 3e1;
     nsurrs = ntrials*cfgTESS.trial_shuffle_surr_n_per_trial;
     counter = 0;
     for tr1 = 1:ntrials
@@ -59,6 +60,7 @@ parfor pp = 1:numel(TGA_results)
                 cfgTEPtr.ragdim = max(TGA_results{pp}.cfg.dim);
                 cfgTEPtr.minnrtrials = 0;   % minimum acceptable number of trials
                 TGAtemp = InteractionDelayReconstruction_calculate(cfgTEPtr,cfgTESS,datatr);
+                % Also collect the interaction delays after shuffling.
                 TGA_results{pp}.TEsurr(:,tr1,tr2) = TGAtemp.TEmat;
                 if mod(counter,10)==0;fprintf('%6.2f%% surrs done.\n',counter/nsurrs*1e2);end
             end
@@ -69,15 +71,25 @@ parfor pp = 1:numel(TGA_results)
         TGA_results{pp}.TEsurr_prop(:,tr) = (sum(TGA_results{pp}.TEmat(:,tr)'>surrs')./nsurrs)';
     end
 end
-%save([OutputDataPath 'out_TGA_results.mat'],'TGA_results','DATA','OutputDataPath','InputDataPath');
-%save([OutputDataPath 'out_TGA_results.mat'],'TGA_results','DATA','OutputDataPath','InputDataPath','TEtable');
+%save([OutputDataPath 'out_TGA_results_' datestr(date) '.mat'],'TGA_results','DATA','OutputDataPath','InputDataPath');
+%save([OutputDataPath 'out_TGA_results_' datestr(date) '.mat'],'TGA_results','DATA','OutputDataPath','InputDataPath','TEtable');
 
 
 return
 
+
+isnotemptyvec = [];
+for pp=1:numel(TGA_results)
+    if ~isempty(TGA_results{pp})
+        isnotemptyvec = vertcat(isnotemptyvec,pp);
+    end
+end
+
+
 %% Collect in long table for stats.
 TEtable = [];
-for pp=1:numel(TGA_results)
+for p=1:numel(isnotemptyvec)
+    pp=isnotemptyvec(p);
     TEtable = vertcat(TEtable,[DATA{pp}.conditions,...
         (1:size(DATA{pp}.conditions,1))',...
         TGA_results{pp}.TEmat', ...
@@ -119,7 +131,8 @@ boxplot(TEtable.permtest21,TEtable.Task)
 
 
 %% Visually check the TE and surrogate distibutions and stats.
-for pp=1:numel(TGA_results)
+for p=1:numel(isnotemptyvec)
+    pp=isnotemptyvec(p);
     if isfield(TGA_results{pp},'TEmat_sur')
         for d=1:size(TGA_results{pp}.TEmat_sur,1)
             [c0,n0]=hist(TGA_results{pp}.TEmat_sur(d,:));
@@ -147,8 +160,9 @@ end
 %% Check trends. Average TE across pps per training trial.
 TE = zeros(40,2,3);
 TEcount= zeros(40,1,3);
-for f=1:numel(DATA)
-    switch DATA{f}.conditions(1,3)
+for p=1:numel(isnotemptyvec)
+    pp=isnotemptyvec(p);
+    switch DATA{pp}.conditions(1,3)
         case 10
             task = 1;
         case 30
@@ -156,11 +170,11 @@ for f=1:numel(DATA)
         case 25
             task = 3;
     end
-    TEcount(1:numel(TGA_results{f}.TEmat(1,:)'),1,task) = TEcount(1:numel(TGA_results{f}.TEmat(1,:)'),1,task)+1;
-    TE(1:numel(TGA_results{f}.TEmat(1,:)'),1,task) = TE(1:numel(TGA_results{f}.TEmat(1,:)'),1,task)+TGA_results{f}.TEmat(1,:)';
-    TE(1:numel(TGA_results{f}.TEmat(1,:)'),2,task) = TE(1:numel(TGA_results{f}.TEmat(1,:)'),2,task)+TGA_results{f}.TEmat(2,:)';
-    %TE(1:numel(TGA_results{f}.TEmat(1,:)'),1,task) = TE(1:numel(TGA_results{f}.TEmat(1,:)'),1,task)+TGA_results{f}.TEsurr_prop(1,:)';
-    %TE(1:numel(TGA_results{f}.TEmat(1,:)'),2,task) = TE(1:numel(TGA_results{f}.TEmat(1,:)'),2,task)+TGA_results{f}.TEsurr_prop(2,:)';
+    TEcount(1:numel(TGA_results{pp}.TEmat(1,:)'),1,task) = TEcount(1:numel(TGA_results{pp}.TEmat(1,:)'),1,task)+1;
+    TE(1:numel(TGA_results{pp}.TEmat(1,:)'),1,task) = TE(1:numel(TGA_results{pp}.TEmat(1,:)'),1,task)+TGA_results{pp}.TEmat(1,:)';
+    TE(1:numel(TGA_results{pp}.TEmat(1,:)'),2,task) = TE(1:numel(TGA_results{pp}.TEmat(1,:)'),2,task)+TGA_results{pp}.TEmat(2,:)';
+    %TE(1:numel(TGA_results{pp}.TEmat(1,:)'),1,task) = TE(1:numel(TGA_results{pp}.TEmat(1,:)'),1,task)+TGA_results{pp}.TEsurr_prop(1,:)';
+    %TE(1:numel(TGA_results{pp}.TEmat(1,:)'),2,task) = TE(1:numel(TGA_results{pp}.TEmat(1,:)'),2,task)+TGA_results{pp}.TEsurr_prop(2,:)';
 end
 for task=1:3
     TE(:,1,task) = TE(:,1,task)./TEcount(:,1,task);
@@ -173,8 +187,9 @@ for task=1:3
     plot(TE(TE(:,3)==task,1),'-ob')
     hold on
     plot(TE(TE(:,3)==task,2),'-or')
-    plot(abs(diff(TE(TE(:,3)==task,1:2),1,2)),'-dm')
+    %plot(abs(diff(TE(TE(:,3)==task,1:2),1,2)),'--dm')
     hold off
-    legend('stim->user','user->stim','abs(stim-user)')
+    %legend('stim->user','user->stim','abs(stim-user)')
+    ylim([min(min(TE(:,1:2))) max(max(TE(:,1:2)))].*[1 1])
 end
 
