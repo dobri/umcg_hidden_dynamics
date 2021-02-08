@@ -475,8 +475,8 @@ def first_camera_frame(cap):
     global of_fb_winsize
     global center
     
-    cap.set(4,240*1) # 1080 720
-    cap.set(3,320*1) # 1920 1280
+    cap.set(4,240*2) # 1080 720
+    cap.set(3,320*2) # 1920 1280
 
     ret,frame0 = cap.read()
     #cv2.imshow('First raw frame',frame0)
@@ -676,7 +676,7 @@ if __name__ == '__main__':
     # Video capture
     CAM_VIS_FEEDBACK=False
     cam_status=False
-    GPU_FLAG=False
+    GPU_FLAG=False # Much faster and high-res video if this is available.
     feedback_circle_r = 200 # The size of the circle in the center of the screen.
     mag_threshold = .1 # This is important. We try to reduce noise by zero-ing out fluctuations in pixel intensity below a certain threshold.
     FAKE_FRAME_COUNTER = 0
@@ -789,7 +789,7 @@ if __name__ == '__main__':
         cam_status=True
         mouse_status=False
         wii_status=False
-        cam_gain = 2.
+        cam_gain = 1.
         X_integrated = 0
 
 
@@ -1110,7 +1110,7 @@ if __name__ == '__main__':
         import glob
         
         if len(glob.glob('/dev/video?'))>2:
-            cap = cv2.VideoCapture(2)
+            cap = cv2.VideoCapture(0) #!!? 2
         else:
             cap = cv2.VideoCapture(0)
         flow,frame0 = first_camera_frame(cap)
