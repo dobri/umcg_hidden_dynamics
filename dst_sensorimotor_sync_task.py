@@ -676,7 +676,7 @@ if __name__ == '__main__':
     # Video capture
     CAM_VIS_FEEDBACK=False
     cam_status=False
-    GPU_FLAG=False # Much faster and high-res video if this is available.
+    GPU_FLAG=True # Much faster and high-res video if this is available.
     feedback_circle_r = 200 # The size of the circle in the center of the screen.
     mag_threshold = .1 # This is important. We try to reduce noise by zero-ing out fluctuations in pixel intensity below a certain threshold.
     FAKE_FRAME_COUNTER = 0
