@@ -1,3 +1,5 @@
+% you may need to resample to an equally-spaced time frame. Some weird trial-dependent trends in max l are happening where they shouldn't, even in the fixed stimuli.
+
 clear
 addpath('/home/dobri/logos/c3/umcg_hidden_dynamics/matlyap')
 flbase = '/media/dobri/disk2/c3/umcg/data/training_processed';
