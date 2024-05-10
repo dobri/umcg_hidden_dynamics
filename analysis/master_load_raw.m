@@ -1,9 +1,9 @@
 % cd('C:\Users\ddotov\biomech\projects\umcg\data\wii_study\data')
-cd('/home/ddotov/biomech/projects/umcg/data/wii_study/data/')
+cd('/home/ddotov/biomech/projects/umcg/data/raw_data')
 clear
 pps = dir('PP*')';
-A = table('Size',[3000,12],'VariableTypes',["int8","int8","string",'int8','string','logical','double','int32','double','double','double','double']);
-A.Properties.VariableNames = {'PP','Day','Date','TaskCode','TrainingPhase','Visual','TrialDuration','SamplesNum','Score','C','tau','PitchError'};
+A = table('Size',[3000,13],'VariableTypes',["string","int8","int8","string",'int8','string','logical','double','int32','double','double','double','double']);
+A.Properties.VariableNames = {'FileName','PP','Day','Date','TaskCode','TrainingPhase','Visual','TrialDuration','SamplesNum','Score','C','tau','PitchError'};
 c = 0;
 for p = pps
     dag = [];
@@ -27,32 +27,35 @@ for p = pps
             % x = readtable(fullfile(f.folder,fname));
             trial_counter = trial_counter + 1;
             c = c+1;
-            A{c,1} = str2double(regexp(fname,'((?<=pp).*(?=_d))','match','once'));
-            A{c,2} = str2double(regexp(fname,'(?<=_d)([^_]+)','match','once'));
-            A{c,3} = string(regexp(fname,'((?<=log-).*(?=_task))','match','once'));
-            A{c,4} = str2double(regexp(fname,'((?<=task).*(?=_aud))','match','once'));
+            % A{c,1} = string([fname '.txt']);
+            A{c,1} = string(fname);
+            A{c,2} = str2double(regexp(fname,'((?<=pp).*(?=_d))','match','once'));
+            A{c,3} = str2double(regexp(fname,'(?<=_d)([^_]+)','match','once'));
+            A{c,4} = string(regexp(fname,'((?<=log-).*(?=_task))','match','once'));
+            A{c,5} = str2double(regexp(fname,'((?<=task).*(?=_aud))','match','once'));
             if d == 1
                 if any(regexp(fname,'test'))
                     if trial_counter < 30
-                        A{c,5} = "PreTest__";
+                        A{c,6} = "PreTest__";
                     else
-                        A{c,5} = "PostTest_";
+                        A{c,6} = "PostTest_";
                     end
                 else
-                    A{c,5} = "Training_";
+                    A{c,6} = "Training_";
                 end
             else
-                A{c,5} = "Retention";
+                A{c,6} = "Retention";
             end
-            A{c,6} = str2double(regexp(fname,'((?<=vis).*(?=_eps))','match','once'))==1;
-            A{c,7} = x(end,1);
-            A{c,8} = size(x,1);
-            A{c,9} = scores.score(s);
-            A{c,10} = scores.cmax(s);
-            A{c,11} = scores.tau(s);
-            A{c,12} = scores.rmse(s);
+            A{c,7} = str2double(regexp(fname,'((?<=vis).*(?=_eps))','match','once'))==1;
+            A{c,8} = x(end,1);
+            A{c,9} = size(x,1);
+            A{c,10} = scores.score(s);
+            A{c,11} = scores.cmax(s);
+            A{c,12} = scores.tau(s);
+            A{c,13} = scores.rmse(s);
         end
     end
 end
 A(c+1:end,:) = [];
 save(['Scores_' char(datetime('now','Format','yyyy-MM-dd')) '.mat'],'A')
+writetable(A,['Scores_' char(datetime('now','Format','yyyy-MM-dd')) '.csv'])

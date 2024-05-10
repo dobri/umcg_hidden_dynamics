@@ -1,120 +1,87 @@
-
-setwd('~/logos/c3/umcg_hidden_dynamics/extract_measures_notes/')
-x<-read.csv('all_scores.csv')
-
-summary(x)
-
-trial_counter = 0
-ind1 <- regexpr('_pp',as.character(x$raw.data.file[1]))
-ind2 <- regexpr('_d',as.character(x$raw.data.file[1]))
-pp0 <- as.numeric(substr(as.character(x$raw.data.file[1]),ind1[1]+3,ind2[1]-1))
-for (n in seq(1,dim(x)[1])) {
-  ind1 <- regexpr('_pp',as.character(x$raw.data.file[n]))
-  ind2 <- regexpr('_d',as.character(x$raw.data.file[n]))
-  pp <- as.numeric(substr(as.character(x$raw.data.file[n]),ind1[1]+3,ind2[1]-1))
-  if (pp!=pp0) {trial_counter = 1; pp0=pp} else {trial_counter = trial_counter + 1}
-  x$trial[n] <- trial_counter
-  x$pp[n] <- pp
-  
-  ind<-regexpr('task',as.character(x$raw.data.file[n]))
-  x$task_num[n] <- as.numeric(substr(as.character(x$raw.data.file[n]),ind[1]+4,ind[1]+6))
-  if (x$task_num[n]==25) x$task[n]='coupled_unstable'
-  if (x$task_num[n]==30) x$task[n]='uncoupl_unstable'
-  if (x$task_num[n]==10) x$task[n]='uncoupl_periodic'
-  
-  x$trial_id[n] <- as.numeric(substr(as.character(x$raw.data.file[n]),ind[1]-7,ind[1]-2))
-  
-  ind<-regexpr('aud',as.character(x$raw.data.file[n]))
-  x$aud[n] <- as.numeric(substr(as.character(x$raw.data.file[n]),ind[1]+3,ind[1]+3))
-  ind<-regexpr('vis',as.character(x$raw.data.file[n]))
-  x$vis[n] <- as.numeric(substr(as.character(x$raw.data.file[n]),ind[1]+3,ind[1]+3))
-  ind<-regexpr('eps',as.character(x$raw.data.file[n]))
-  x$eps[n] <- as.numeric(substr(as.character(x$raw.data.file[n]),ind[1]+3,ind[1]+5))
-  ind<-regexpr('_d',as.character(x$raw.data.file[n]))
-  x$dn[n] <- as.numeric(substr(as.character(x$raw.data.file[n]),ind[1]+2,ind[1]+2))
-  
-}
-x$pp <- factor(x$pp)
-
-
-# Linear mixed-effects models
-library(lme4)
-library(texreg)
-
-for (dv in c(2,3,4,5)){
-  x$dv<-x[,dv]
-  
-  if (names(x)[dv]=='score') {dv_lab = 'Sync & Match Score [C/RMSE]'}
-  if (names(x)[dv]=='cmax') {dv_lab = 'C'}
-  if (names(x)[dv]=='tau') {dv_lab = 'τ'}
-  if (names(x)[dv]=='rmse') {dv_lab = 'RMSE'}
-  
-  m1=lmer(dv ~ 1 + (-1+trial|pp),data=x,REML=0)
-  m2=lmer(dv ~ 1 + trial + (-1+trial|pp),data=x,REML=0)
-  m3=lmer(dv ~ 1 + trial+task + (-1+trial|pp),data=x,REML=0)
-  m4=lmer(dv ~ 1 + trial*task + (-1+trial|pp),data=x,REML=0)
-  # These don't seem to work.
-  m5a=lmer(dv ~ 1 + trial*task + (1 + trial|pp),data=x,REML=0)
-  m5b=lmer(dv ~ 1 + trial*task + (1|pp) + (trial|pp),data=x,REML=0)
-  
-  sink(paste("diary_lmems_trial_task_",'_',Sys.Date(),sep=''),append=TRUE)
-  print(dv_lab)
-  print(dv_lab)
-  print(dv_lab)
-  print(anova(m1,m2,m3,m4))
-  print(summary(m1))
-  print(summary(m2))
-  print(summary(m3))
-  print(summary(m4))
-  print(screenreg(list(m1,m2,m3,m4)))
-  sink()
-  htmlreg(list(m1,m2,m3,m4), file = paste("texreg_lmems_",names(x)[dv],'_',Sys.Date(),'.doc',sep=''), single.row = FALSE, digits=3, inline.css=FALSE, doctype=TRUE, html.tag=TRUE, head.tag=TRUE, body.tag=TRUE)
-}
-
-
-# Plot performance scores and stats ~ trial
-source('~/logos/c3/umcg_hidden_dynamics/extract_measures_notes/multiplot.R')
+library(janitor)
+library(tidyverse)
 library(ggplot2)
 library(ghibli)
 
+
+setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
+x<-read.csv('Scores_2024-05-09.csv') %>%
+  clean_names()
+x$training_phase <- sub("_", "", x$training_phase)
+x$training_phase <- sub("est_", "est", x$training_phase)
+summary(x)
+
+
+# Create a 'training condition' label in the long table
+xcond <- x[x$training_phase=='Training',] %>%
+  select(pp, task_code) %>%
+  group_by(pp) %>%
+  summarise(training_condition = mean(task_code)) %>%
+  ungroup()
+x <- x %>%
+  left_join(.,
+            xcond,
+            by = "pp")
+
+x$task_code <- x$task_code + x$visual
+x$task_code <- as.factor(x$task_code)
+x$training_condition <- as.factor(x$training_condition)
+x$training_phase <- as.factor(x$training_phase)
+x$training_phase <- relevel(x$training_phase, ref='PreTest')
+
+
+# Visualize
 colors<-ghibli_palette("PonyoMedium",7,type=("continuous"))[c(3,5,6)]
-# colors[1]<-ghibli_palette("MarnieDark2",7,type=("continuous"))[6]
-# colors[2]<-ghibli_palette("MononokeDark",7,type=("continuous"))[5]
-# colors[3]<-ghibli_palette("YesterdayDark",7,type=("continuous"))[6]
-# Autumn color palette!
 colors[1]<-ghibli_palette("MarnieMedium2",7,type=("continuous"))[6]
 colors[2]<-ghibli_palette("MononokeMedium",7,type=("continuous"))[5]
 colors[3]<-ghibli_palette("YesterdayMedium",7,type=("continuous"))[6]
 
-g<-list('vector',4)
-counter = 0
-for (dv in c(2,3,5,4)){
 
-  x$dv<-x[,dv]
-
-  if (names(x)[dv]=='score') {dv_lab = 'Sync & Match Score [C/RMSE]'}
-  if (names(x)[dv]=='cmax') {dv_lab = 'C'}
-  if (names(x)[dv]=='tau') {dv_lab = 'τ'}
-  if (names(x)[dv]=='rmse') {dv_lab = 'RMSE'}
-  
-  counter = counter + 1
-  g[[counter]] <- ggplot(data=x, aes(x=trial, y=dv, colour=as.factor(task))) +
-    geom_jitter(size=1, alpha=.2, width=.1, height=0) +
-    #geom_line(aes(x=trial, y=0), col='black', size=1.2, alpha=.7) +
-    stat_summary(aes(x=trial, y=dv, colour=as.factor(task)), fun='mean', geom='line', size=2.2, alpha=1) +
-    stat_summary(aes(x=trial, y=dv, colour=as.factor(task)), geom="ribbon", fun.data=mean_cl_boot, alpha=.5) +
-    theme_classic() +
-    theme(panel.background = element_rect(fill = "#111111",
-          colour = "#000000",size = 1, linetype = "solid")) +
-    theme(legend.position="top",legend.title=element_blank()) +
-    #scale_x_continuous(breaks=seq(0,limit_lags,1), limits=c(0,limit_lags)) +
-    #scale_y_continuous(limits=c(-.6,.4)) +
-    labs(y = dv_lab) +
-    labs(x = "Trial")
-    g[[counter]] <- g[[counter]] + scale_colour_manual(values=colors)
+trial_counter = 1
+x$trial = 0
+x$trial[1] = trial_counter
+for (n in seq(2,dim(x)[1])) {
+  if ((x$pp[n]==x$pp[n-1]) && (x$task_code[n]==x$task_code[n-1]) ) {
+    trial_counter = trial_counter + 1
+  }
+  else {
+    trial_counter = 1
+  }
+  x$trial[n] <- trial_counter
 }
-multiplot(plotlist=g,cols=4)
+x$pp <- factor(x$pp)
 
+
+# Plot performance scores and stats ~ trial
+for (dv in c('score','c','pitch_error')) {
+  for (task in c(11,12,20,21)){
+    xs <- x[x$task_code==task,]
+    x$dv<-x[,dv]
+
+    if (dv=='score') {dv_lab = 'Sync + Deviation Score'}
+    if (dv=='c') {dv_lab = 'Sync'}
+    if (dv=='pitch_error') {dv_lab = 'Deviation'}
+    
+    g<-ggplot(data=xs, aes(x=trial, y=dv, colour=training_condition)) +
+      facet_grid(~training_phase,scales="free_x") +
+      geom_jitter(size=1, alpha=.2, width=.1, height=0) +
+      #geom_line(aes(x=trial, y=0), col='black', size=1.2, alpha=.7) +
+      stat_summary(aes(x=trial, y=dv, colour=training_condition), fun='mean', geom='line', linewidth=2.2, alpha=1) +
+      stat_summary(aes(x=trial, y=dv, colour=training_condition), geom="ribbon", fun.data=mean_cl_boot, alpha=.5) +
+      theme_classic() +
+      theme(panel.background = element_rect(fill = "#111111",
+            colour = "#000000",linewidth = 1, linetype = "solid")) +
+      theme(legend.position="top",legend.title=element_blank()) +
+      #scale_x_continuous(breaks=seq(0,limit_lags,1), limits=c(0,limit_lags)) +
+      #scale_y_continuous(limits=c(-.6,.4)) +
+      labs(y = dv_lab) +
+      labs(x = "Trial") + 
+      scale_colour_manual(values=colors)
+    print(g)
+  }
+}
+
+### 
 if (FALSE){
   filename=paste("perf_scores_training",'_',Sys.Date(),'.png',sep='')
   png(filename=filename,width=16,height=4,units="in",res=300)
@@ -170,3 +137,6 @@ if (FALSE){
   multiplot(plotlist=g,cols=4)
   dev.off()
 }
+
+
+
