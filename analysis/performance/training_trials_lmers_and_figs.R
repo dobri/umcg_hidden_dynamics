@@ -5,10 +5,13 @@ library(ghibli)
 
 
 setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
+# setwd('C:\\Users\\ddotov\\Downloads')
 x<-read.csv('Scores_2024-05-09.csv') %>%
   clean_names()
 x$training_phase <- sub("_", "", x$training_phase)
 x$training_phase <- sub("est_", "est", x$training_phase)
+summary(x)
+x<-x[x$trial_duration>50,]
 summary(x)
 
 
@@ -30,13 +33,7 @@ x$training_phase <- as.factor(x$training_phase)
 x$training_phase <- relevel(x$training_phase, ref='PreTest')
 
 
-# Visualize
-colors<-ghibli_palette("PonyoMedium",7,type=("continuous"))[c(3,5,6)]
-colors[1]<-ghibli_palette("MarnieMedium2",7,type=("continuous"))[6]
-colors[2]<-ghibli_palette("MononokeMedium",7,type=("continuous"))[5]
-colors[3]<-ghibli_palette("YesterdayMedium",7,type=("continuous"))[6]
-
-
+# Pseudo-trial vector
 trial_counter = 1
 x$trial = 0
 x$trial[1] = trial_counter
@@ -52,15 +49,21 @@ for (n in seq(2,dim(x)[1])) {
 x$pp <- factor(x$pp)
 
 
+# Visualize
+colors<-ghibli_palette("PonyoMedium",7,type=("continuous"))[c(3,5,6)]
+colors[1]<-ghibli_palette("MarnieMedium2",7,type=("continuous"))[6]
+colors[2]<-ghibli_palette("MononokeMedium",7,type=("continuous"))[5]
+colors[3]<-ghibli_palette("YesterdayMedium",7,type=("continuous"))[6]
+
 # Plot performance scores and stats ~ trial
 for (dv in c('score','c','pitch_error')) {
   for (task in c(11,12,20,21)){
     xs <- x[x$task_code==task,]
-    x$dv<-x[,dv]
+    x$dv <- x[,dv]
 
-    if (dv=='score') {dv_lab = 'Sync + Deviation Score'}
+    if (dv=='score') {dv_lab = 'Score'}
     if (dv=='c') {dv_lab = 'Sync'}
-    if (dv=='pitch_error') {dv_lab = 'Deviation'}
+    if (dv=='pitch_error') {dv_lab = 'Pitch Error'}
     
     g<-ggplot(data=xs, aes(x=trial, y=dv, colour=training_condition)) +
       facet_grid(~training_phase,scales="free_x") +
@@ -81,7 +84,7 @@ for (dv in c('score','c','pitch_error')) {
   }
 }
 
-### 
+### ...
 if (FALSE){
   filename=paste("perf_scores_training",'_',Sys.Date(),'.png',sep='')
   png(filename=filename,width=16,height=4,units="in",res=300)
