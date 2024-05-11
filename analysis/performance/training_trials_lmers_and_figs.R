@@ -24,7 +24,7 @@ xcond <- x[x$training_phase=='Training',] %>%
   summarise(training_condition = mean(task_code)) %>%
   ungroup()
 x <- x %>% left_join(., xcond, by = "pp")
-as.factor(x$training_condition)
+x$training_condition <- as.factor(x$training_condition)
 
 x$Training <- 'Periodic Fixed'
 x$Training[x$training_condition==25] <- 'Chaotic Interactive'
@@ -64,6 +64,21 @@ x$pp <- factor(x$pp)
 # One single weird trial.
 x <- x[!((x$training_phase == 'Retention') & (x$trial==6)),]
 
+# Rescale as %improvement
+xd <- x[x$training_phase=='PreTest',] %>%
+  group_by(pp,task_code) %>%
+  summarise(pre_score = mean(score),
+            pre_c = mean(c),
+            pre_tau = mean(tau),
+            pre_pitch_error = mean(pitch_error)) %>%
+  ungroup()
+x <- x %>% left_join(., xd, by = c("pp","task_code"))
+
+x$score_delta <- (x$score - x$pre_score)/x$pre_score
+x$c_delta <- (x$c - x$pre_c)/x$pre_c
+x$tau_delta <- (x$tau - x$pre_tau)/x$pre_tau
+x$pitch_error_delta <- (x$pitch_error - x$pre_pitch_error)/x$pre_pitch_error
+
 # filename = paste(filename_scores_in,'cleaned',Sys.Date(),'.csv',sep='_')
 # write.csv(x, file=filename, row.names=FALSE)
 
@@ -77,9 +92,9 @@ sink("performance_scores_stats.txt")
 print(Sys.Date())
 sink()
 # Plot performance scores and stats ~ trial
-for (dv in c('score','c','pitch_error','tau')) {
-# for (dv in c('tau')) {
-  for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
+# for (dv in c('score','c','pitch_error','tau')) {
+for (dv in c('score_delta','c_delta','pitch_error_delta','tau_delta')) {
+    for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
     xs <- x[(x$task_label==task) & (x$training_phase!='Training'),]
     xs$dv <- xs[,dv]
 
@@ -87,6 +102,10 @@ for (dv in c('score','c','pitch_error','tau')) {
     if (dv=='c') {dv_lab = 'Sync'}
     if (dv=='pitch_error') {dv_lab = 'Pitch Error'}
     if (dv=='tau') {dv_lab = 'Anticipation'}
+    if (dv=='score_delta') {dv_lab = 'Score Δ%'}
+    if (dv=='c_delta') {dv_lab = 'Sync Δ%'}
+    if (dv=='pitch_error_delta') {dv_lab = 'Pitch Error Δ%'}
+    if (dv=='tau_delta') {dv_lab = 'Anticipation Δ%'}
     
     m1=lmer(dv ~ 1 + (1|pp),data=xs,REML=0)
     m2=lmer(dv ~ 1 + trial + (1|pp),data=xs,REML=0)
@@ -103,11 +122,12 @@ for (dv in c('score','c','pitch_error','tau')) {
     print(screenreg(list(m1,m2,m3,m4)))
     sink()
   
-    if (dv=='score') {xs$fitted <- getME(m4,'X') %*% fixef(m4)}
-    if (dv=='c') {xs$fitted <- getME(m4,'X') %*% fixef(m4)}
-    if (dv=='pitch_error') {xs$fitted <- getME(m4,'X') %*% fixef(m4)}
-    if (dv=='tau') {xs$fitted <- getME(m4,'X') %*% fixef(m4)}
-
+    # if (dv=='score') {xs$fitted <- getME(m4,'X') %*% fixef(m4)}
+    # if (dv=='c') {xs$fitted <- getME(m4,'X') %*% fixef(m4)}
+    # if (dv=='pitch_error') {xs$fitted <- getME(m4,'X') %*% fixef(m4)}
+    # if (dv=='tau') {xs$fitted <- getME(m4,'X') %*% fixef(m4)}
+    xs$fitted <- getME(m4,'X') %*% fixef(m4)
+    
     if (TRUE){
       g<-ggplot(data=xs, aes(x=trial, y=dv, colour=Training)) +
         facet_grid(~training_phase, scales="free_x") +
