@@ -37,7 +37,7 @@ x$task_label <- 'Periodic Fixed'
 x$task_label[x$task_code==12] <- 'Periodic Fadeout (SCT)'
 x$task_label[x$task_code==20] <- 'Chaotic'
 x$task_label[x$task_code==20.5] <- 'Chaotic Visual'
-x$task_label[x$task_code==10] <- 'Chaotic Interactive Training'
+x$task_label[x$task_code==10] <- 'Periodic Interactive Training'
 x$task_label[x$task_code==25] <- 'Chaotic Interactive Training'
 x$task_label[x$task_code==30] <- 'Chaotic Non-Interactive Training'
 x$task_label <- as.factor(x$task_label)
@@ -94,7 +94,7 @@ sink()
 # Plot performance scores and stats ~ trial
 # for (dv in c('score','c','pitch_error','tau')) {
 for (dv in c('score_delta','c_delta','pitch_error_delta','tau_delta')) {
-    for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
+  for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
     xs <- x[(x$task_label==task) & (x$training_phase!='Training'),]
     xs$dv <- xs[,dv]
 
@@ -157,3 +157,5 @@ for (dv in c('score_delta','c_delta','pitch_error_delta','tau_delta')) {
     }
   }
 }
+
+
