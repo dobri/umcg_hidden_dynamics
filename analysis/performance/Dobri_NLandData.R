@@ -34,7 +34,8 @@ fun_ave_pivot_diff <- function(test_data, y){
     pivot_wider(names_from = training_phase, values_from = mean_PerTask) %>%
     group_by(pp) %>%
     mutate(PostDelta = (PostTest - PreTest)/PreTest, RetentionDelta = (Retention - PreTest)/PreTest) %>% # Calc diff scores
-    inner_join(select(X, pp, Training), relationship = "many-to-many") %>% # Add back columns of interest
+    # inner_join(select(X, pp, Training), relationship = "many-to-many") %>% # Add back columns of interest
+    inner_join(select(test_data, pp, Training), relationship = "many-to-many") %>% # Add back columns of interest
     distinct(pp, task_label, .keep_all = TRUE) %>% # Get rid of duplicated rows
     pivot_longer(cols=c("PostDelta","RetentionDelta"), 
                  names_to = "TrainingPhase", values_to = "Delta")
@@ -112,3 +113,67 @@ for (dv in c('score_Delta','c_Delta','pitch_error_Delta')) {
     ggsave(filename, width=6, height=10, units='in', dpi=600)
   }
 }
+
+
+test_ave <- test_data %>%
+  group_by(pp,task_label,training_phase) %>%
+  summarise(score = mean(score),
+            c = mean(c),
+            pitch_error = mean(pitch_error)) %>%
+  ungroup() %>%
+  # Add back columns of interest
+  inner_join(select(test_data, pp, task_label, Training), relationship = "many-to-many") %>%
+  # Get rid of duplicated rows
+  distinct(pp, task_label, training_phase, .keep_all = TRUE)
+
+test_ave$training_phase <- factor(test_ave$training_phase)
+test_ave$training_phase <- relevel(test_ave$training_phase, ref='PreTest')
+test_ave$Training <- factor(test_ave$Training)
+test_ave$Training <- relevel(test_ave$Training, ref='Periodic Fixed')
+test_ave$pp <- factor(test_ave$pp)
+for (dv in c('score','c','pitch_error')) {
+  test_ave$dv <- as.numeric(unlist(as.data.frame(test_ave[,dv])))
+  if (dv=='score') {dv_lab = 'Score'}
+  if (dv=='c') {dv_lab = 'Sync'}
+  if (dv=='pitch_error') {dv_lab = 'Pitch Error'}
+  g<-ggplot(data=test_ave, aes(x=training_phase, y=dv, group=pp)) +
+    facet_grid(task_label~Training, scales="free_y") +
+    geom_jitter(size=2, alpha=1, width=0, height=0, colour = 'black') +
+    # geom_violin(linewidth=1, alpha=.5, fill='grey') +
+    geom_line(aes(x=training_phase, y=dv, group=pp), linewidth=1, alpha=.5, colour = 'black') +
+    # stat_summary(geom = "line", fun.y = mean, size = 3, colour = 'red') +
+    theme_classic() +
+    theme(panel.background = element_rect(fill = "#ffffff",
+                                          colour = "#888888", linewidth = 1, linetype = "solid")) +
+    theme(legend.position="top", legend.title=element_blank()) +
+    labs(y=dv_lab, x='') +
+    # coord_cartesian(ylim=c(-.5,1.)) +
+    scale_colour_manual(values='black')
+  print(g)
+  if (TRUE){
+    filename = paste("performance_lines",dv,Sys.Date(),'.png',sep='_')
+    filename <- sub(" ", "_", filename)
+    ggsave(filename, width=7, height=6, units='in', dpi=600)
+  }
+}
+
+
+#----------------------------------------------
+# Stats
+#----------------------------------------------
+
+# Check assumptions: normalcy; variance is tested in Sphericity
+shapiro.test(Delta$score_Delta)
+
+ggplot(data = Delta, aes(sample = score_Delta)) + stat_qq() +
+  stat_qq_line()
+
+
+
+# ANOVA
+Delta_aov <- aov(score_Delta ~ task_label * Training, data = Delta)
+summary(Delta_aov)
+
+Delta_lm <- lm(score_Delta ~ task_label * Training, data = Delta)
+anova(Delta_lm)
+summary(Delat_lm) # this one has the intercept
