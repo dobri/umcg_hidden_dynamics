@@ -126,10 +126,10 @@ test_ave <- test_data %>%
   # Get rid of duplicated rows
   distinct(pp, task_label, training_phase, .keep_all = TRUE)
 
-pivot_data <- test_ave %>%
+test_ave_wide <- test_ave %>%
   pivot_wider(names_from = training_phase, values_from = c('score','c','pitch_error'))
 # filename_ave = paste(filename,'_ave_wide','.csv',sep='_')
-# write.csv(test_ave, file=filename_ave, row.names=FALSE)
+# write.csv(test_ave_wide, file=filename_ave, row.names=FALSE)
 
 test_ave$training_phase <- factor(test_ave$training_phase)
 test_ave$training_phase <- relevel(test_ave$training_phase, ref='PreTest')
