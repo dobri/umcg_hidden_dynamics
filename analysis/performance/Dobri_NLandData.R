@@ -33,8 +33,7 @@ fun_ave_pivot_diff <- function(test_data, y){
     ungroup() %>%
     pivot_wider(names_from = training_phase, values_from = mean_PerTask) %>%
     group_by(pp) %>%
-    mutate(PostDelta = (PostTest - PreTest)/PreTest, RetentionDelta = (Retention - PreTest)/PreTest) %>% # Calc diff scores
-    # inner_join(select(X, pp, Training), relationship = "many-to-many") %>% # Add back columns of interest
+    mutate(PostDelta = 100*(PostTest - PreTest)/PreTest, RetentionDelta = 100*(Retention - PreTest)/PreTest) %>% # Calc diff scores
     inner_join(select(test_data, pp, Training), relationship = "many-to-many") %>% # Add back columns of interest
     distinct(pp, task_label, .keep_all = TRUE) %>% # Get rid of duplicated rows
     pivot_longer(cols=c("PostDelta","RetentionDelta"), 
@@ -59,22 +58,35 @@ names(Delta) <- c("pp","task_label",
                   "score_Delta","c_PostTest","c_PreTest","c_Retention","c_Delta",
                   "pitch_error_PostTest","pitch_error_PreTest","pitch_error_Retention","pitch_error_Delta")
 
-# sum_data <- test_data %>%
-#   group_by(pp, training_phase, task_label) %>%
-#   summarise(mean_PerTask = mean(dv)) %>%
-#   ungroup()
-# 
-# pivot_data <- sum_data %>%
-#   pivot_wider(names_from = training_phase, values_from = mean_PerTask)
-# 
-# diff_data <- pivot_data %>%
-#   group_by(pp) %>%
-#   mutate(Post_Pre = PostTest - PreTest, Ret_Pre = Retention - PreTest) %>% # Calc diff scores
-#   inner_join(select(X, pp, Training), relationship = "many-to-many") %>% # Add back columns of interest
-#   distinct(pp, task_label, .keep_all = TRUE) # Get rid of duplicated rows
+Delta_wider <- Delta %>%
+  select(pp, task_label, Training, TrainingPhase, c_Delta, pitch_error_Delta, score_Delta) %>%
+  pivot_wider(names_from = TrainingPhase, values_from = c('c_Delta','pitch_error_Delta','score_Delta'))
+names(Delta_wider) <- c("pp","Task Label","Training","c Delta% PostTest","c Delta% Retention",
+                        "Pitch Error Delta% PostTest","Pitch Error Delta% Retention",
+                        "Score Delta% PostTest","Score Delta% Retention")
+# filename_delta = paste(filename,'_delta_ave_wide','.csv',sep='_')
+# write.csv(Delta_wider, file=filename_delta, row.names=FALSE)
+
+
+test_ave <- test_data %>%
+  group_by(pp,task_label,training_phase) %>%
+  summarise(score = mean(score),
+            c = mean(c),
+            pitch_error = mean(pitch_error)) %>%
+  ungroup() %>%
+  # Add back columns of interest
+  inner_join(select(test_data, pp, task_label, Training), relationship = "many-to-many") %>%
+  # Get rid of duplicated rows
+  distinct(pp, task_label, training_phase, .keep_all = TRUE)
+
+test_ave_wide <- test_ave %>%
+  pivot_wider(names_from = training_phase, values_from = c('score','c','pitch_error'))
+# filename_ave = paste(filename,'_ave_wide','.csv',sep='_')
+# write.csv(test_ave_wide, file=filename_ave, row.names=FALSE)
+
 
 #----------------------------------------------
-# Stats
+# Figures
 library(ggplot2)
 library(ghibli)
 #----------------------------------------------
@@ -114,22 +126,6 @@ for (dv in c('score_Delta','c_Delta','pitch_error_Delta')) {
   }
 }
 
-
-test_ave <- test_data %>%
-  group_by(pp,task_label,training_phase) %>%
-  summarise(score = mean(score),
-            c = mean(c),
-            pitch_error = mean(pitch_error)) %>%
-  ungroup() %>%
-  # Add back columns of interest
-  inner_join(select(test_data, pp, task_label, Training), relationship = "many-to-many") %>%
-  # Get rid of duplicated rows
-  distinct(pp, task_label, training_phase, .keep_all = TRUE)
-
-test_ave_wide <- test_ave %>%
-  pivot_wider(names_from = training_phase, values_from = c('score','c','pitch_error'))
-# filename_ave = paste(filename,'_ave_wide','.csv',sep='_')
-# write.csv(test_ave_wide, file=filename_ave, row.names=FALSE)
 
 test_ave$training_phase <- factor(test_ave$training_phase)
 test_ave$training_phase <- relevel(test_ave$training_phase, ref='PreTest')
