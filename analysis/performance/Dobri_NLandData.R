@@ -2,7 +2,8 @@
 library(tidyverse)
 #----------------------------------------------
 
-X <- read.csv('Scores_2024-05-09.csv_cleaned_2024-05-12_.csv',sep=',')
+filename = 'Scores_2024-05-09.csv_cleaned_2024-05-12_.csv'
+X <- read.csv(filename,sep=',')
 
 # Important columns:
 # pp (participant)
@@ -13,10 +14,9 @@ X <- read.csv('Scores_2024-05-09.csv_cleaned_2024-05-12_.csv',sep=',')
 
 
 # Filter out the training conditions from test conditions
-# test_data <- filter(X, training_phase != "Training")
-test_data <- filter(X,
-                    task_label %in% c("Periodic Fixed", "Periodic Fadeout (SCT)",
-                                      "Chaotic", "Chaotic Visual"))
+test_data <- filter(X, training_phase != "Training")
+# test_data <- filter(X, task_label %in% c("Periodic Fixed", "Periodic Fadeout (SCT)",
+#                                       "Chaotic", "Chaotic Visual"))
 
 #----------------------------------------------
 # Average the score for each task_label per pp and training_phase
@@ -126,6 +126,11 @@ test_ave <- test_data %>%
   # Get rid of duplicated rows
   distinct(pp, task_label, training_phase, .keep_all = TRUE)
 
+pivot_data <- test_ave %>%
+  pivot_wider(names_from = training_phase, values_from = c('score','c','pitch_error'))
+# filename_ave = paste(filename,'_ave_wide','.csv',sep='_')
+# write.csv(test_ave, file=filename_ave, row.names=FALSE)
+
 test_ave$training_phase <- factor(test_ave$training_phase)
 test_ave$training_phase <- relevel(test_ave$training_phase, ref='PreTest')
 test_ave$Training <- factor(test_ave$Training)
@@ -136,11 +141,12 @@ for (dv in c('score','c','pitch_error')) {
   if (dv=='score') {dv_lab = 'Score'}
   if (dv=='c') {dv_lab = 'Sync'}
   if (dv=='pitch_error') {dv_lab = 'Pitch Error'}
-  g<-ggplot(data=test_ave, aes(x=training_phase, y=dv, group=pp)) +
+  g<-ggplot(data=test_ave, aes(x=training_phase, y=dv)) +
     facet_grid(task_label~Training, scales="free_y") +
+    geom_violin(linewidth=1, alpha=.5, fill='grey') +
+    geom_line(aes(x=training_phase, y=dv, group=pp), linewidth=.5, alpha=.4, colour = 'black') +
     geom_jitter(size=2, alpha=1, width=0, height=0, colour = 'black') +
-    # geom_violin(linewidth=1, alpha=.5, fill='grey') +
-    geom_line(aes(x=training_phase, y=dv, group=pp), linewidth=1, alpha=.5, colour = 'black') +
+    # linetype='solid',
     # stat_summary(geom = "line", fun.y = mean, size = 3, colour = 'red') +
     theme_classic() +
     theme(panel.background = element_rect(fill = "#ffffff",
@@ -150,7 +156,7 @@ for (dv in c('score','c','pitch_error')) {
     # coord_cartesian(ylim=c(-.5,1.)) +
     scale_colour_manual(values='black')
   print(g)
-  if (TRUE){
+  if (FALSE){
     filename = paste("performance_lines",dv,Sys.Date(),'.png',sep='_')
     filename <- sub(" ", "_", filename)
     ggsave(filename, width=7, height=6, units='in', dpi=600)
