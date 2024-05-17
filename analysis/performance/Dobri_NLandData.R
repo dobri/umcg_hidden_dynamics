@@ -103,35 +103,41 @@ colors[3]<-ghibli_palette("YesterdayMedium",7,type=("continuous"))[6]
 Delta$TrainingPhase <- factor(Delta$TrainingPhase)
 Delta$Training <- factor(Delta$Training)
 Delta$task_label <- factor(Delta$task_label)
+sink("performance_deltas_stats.txt")
+sink()
 for (dv in c('score_Delta','c_Delta','pitch_error_Delta')) {
   Delta$dv <- as.numeric(unlist(as.data.frame(Delta[,dv])))
   if (dv=='score_Delta') {dv_lab = 'Score Δ%'}
   if (dv=='c_Delta') {dv_lab = 'Sync Δ%'}
   if (dv=='pitch_error_Delta') {dv_lab = 'Pitch Error Δ%'}
-  sink("performance_deltas_stats.txt", append = T)
+  # sink("performance_deltas_stats.txt", append = T)
   for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
     cat("\n###########\n\n")
     print(paste('Test: ',task,'; DV: ',dv_lab,sep=''))
     xs <- Delta[Delta$task_label==task,]
-    m1=lmer(dv ~ 1 + (1|pp),data=xs,REML=0)
-    m2=lmer(dv ~ 1 + TrainingPhase + (1|pp),data=xs,REML=0)
-    m3=lmer(dv ~ 1 + TrainingPhase + Training + (1|pp),data=xs,REML=0)
-    m4=lmer(dv ~ 1 + TrainingPhase * Training + (1|pp),data=xs,REML=0)
-    print(anova(m1,m2,m3,m4))
-    print(summary(m1))
-    print(summary(m2))
-    print(summary(m3))
-    print(summary(m4))
-    print(screenreg(list(m1,m2,m3,m4)))
+    # m1=lmer(dv ~ 1 + (1|pp),data=xs,REML=0)
+    # m2=lmer(dv ~ 1 + TrainingPhase + (1|pp),data=xs,REML=0)
+    # m3=lmer(dv ~ 1 + TrainingPhase + Training + (1|pp),data=xs,REML=0)
+    # m4=lmer(dv ~ 1 + TrainingPhase * Training + (1|pp),data=xs,REML=0)
+    # print(anova(m1,m2,m3,m4))
+    # print(summary(m1))
+    # print(summary(m2))
+    # print(summary(m3))
+    # print(summary(m4))
+    # print(screenreg(list(m1,m2,m3,m4)))
+    
+    sink("performance_deltas_stats.txt", append = T)
+    cat("\n###########\n\n")
+    print(paste('Test: ',task,'; DV: ',dv_lab,sep=''))
     cat("\n########### t-tests ~ 0 \n\n")
     stat.test <- xs %>%
       group_by(Training,TrainingPhase) %>%
       t_test(dv ~ 1, mu = 0) %>%
-      adjust_pvalue(method = "BH") %>%
+      adjust_pvalue(method = "fdr") %>%
       add_significance()
     print(stat.test)
+    sink()
   }
-  sink()
   
   g<-ggplot(data=Delta, aes(x=Training, y=dv, colour=Training)) +
     facet_grid(task_label~TrainingPhase, scales="free_x") +
