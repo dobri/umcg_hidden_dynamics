@@ -1,5 +1,9 @@
 #----------------------------------------------
 library(tidyverse)
+library(lme4)
+library(lmerTest)
+library(texreg)
+library(rstatix)
 #----------------------------------------------
 
 filename = 'Scores_2024-05-09.csv_cleaned_2024-05-12_.csv'
@@ -104,6 +108,31 @@ for (dv in c('score_Delta','c_Delta','pitch_error_Delta')) {
   if (dv=='score_Delta') {dv_lab = 'Score Δ%'}
   if (dv=='c_Delta') {dv_lab = 'Sync Δ%'}
   if (dv=='pitch_error_Delta') {dv_lab = 'Pitch Error Δ%'}
+  sink("performance_deltas_stats.txt", append = T)
+  for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
+    cat("\n###########\n\n")
+    print(paste('Test: ',task,'; DV: ',dv_lab,sep=''))
+    xs <- Delta[Delta$task_label==task,]
+    m1=lmer(dv ~ 1 + (1|pp),data=xs,REML=0)
+    m2=lmer(dv ~ 1 + TrainingPhase + (1|pp),data=xs,REML=0)
+    m3=lmer(dv ~ 1 + TrainingPhase + Training + (1|pp),data=xs,REML=0)
+    m4=lmer(dv ~ 1 + TrainingPhase * Training + (1|pp),data=xs,REML=0)
+    print(anova(m1,m2,m3,m4))
+    print(summary(m1))
+    print(summary(m2))
+    print(summary(m3))
+    print(summary(m4))
+    print(screenreg(list(m1,m2,m3,m4)))
+    cat("\n########### t-tests ~ 0 \n\n")
+    stat.test <- xs %>%
+      group_by(Training,TrainingPhase) %>%
+      t_test(dv ~ 1, mu = 0) %>%
+      adjust_pvalue(method = "BH") %>%
+      add_significance()
+    print(stat.test)
+  }
+  sink()
+  
   g<-ggplot(data=Delta, aes(x=Training, y=dv, colour=Training)) +
     facet_grid(task_label~TrainingPhase, scales="free_x") +
     geom_jitter(size=1, alpha=1, width=.1, height=0) +
@@ -115,11 +144,11 @@ for (dv in c('score_Delta','c_Delta','pitch_error_Delta')) {
                                           colour = "#888888", linewidth = 1, linetype = "solid")) +
     theme(legend.position="none", legend.title=element_blank()) +
     labs(y = dv_lab) +
-    coord_cartesian(ylim=c(-.5,1.)) +
+    coord_cartesian(ylim=c(-50,100.)) +
     scale_x_discrete(guide = guide_axis(angle = 10)) +
     scale_colour_manual(values=colors)
   print(g)
-  if (TRUE){
+  if (FALSE){
     filename = paste("performance",dv,Sys.Date(),'.png',sep='_')
     filename <- sub(" ", "_", filename)
     ggsave(filename, width=6, height=10, units='in', dpi=600)

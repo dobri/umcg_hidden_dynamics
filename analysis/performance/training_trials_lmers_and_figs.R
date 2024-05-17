@@ -3,6 +3,7 @@ library(tidyverse)
 library(ggplot2)
 library(ghibli)
 library(lme4)
+library(lmerTest)
 library(texreg)
 
 setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
