@@ -1,0 +1,3031 @@
+[1] "2024-05-11"
+
+###########
+
+[1] "Test: Periodic Fixed; DV: score_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)    
+m1    3 650.80 662.26 -322.40   644.80                         
+m2    4 652.04 667.32 -322.02   644.04  0.762  1     0.3827    
+m3    6 617.03 639.95 -302.51   605.03 39.007  2  3.386e-09 ***
+m4   12 616.50 662.34 -296.25   592.50 12.527  6     0.0512 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   650.8    662.3   -322.4    644.8      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7482 -0.4699 -0.1601  0.2906  6.6040 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.1302   0.3609  
+ Residual             0.3460   0.5883  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.23944    0.07769   3.082
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   652.0    667.3   -322.0    644.0      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7797 -0.4661 -0.1450  0.2937  6.6203 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.1304   0.3611  
+ Residual             0.3452   0.5875  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.29606    0.10121   2.925
+trial       -0.02050    0.02347  -0.873
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.641
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   617.0    639.9   -302.5    605.0      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.5297 -0.5794 -0.1269  0.4737  6.6203 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.1341   0.3662  
+ Residual             0.3044   0.5517  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)             -0.023147   0.110864  -0.209
+trial                    0.006757   0.023156   0.292
+training_phasePostTest   0.469830   0.082354   5.705
+training_phaseRetention  0.350228   0.068576   5.107
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.623              
+trnng_phsPT -0.431  0.277       
+trnng_phsRt -0.307 -0.006  0.417
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |      pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   616.5    662.3   -296.3    592.5      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.4343 -0.5864 -0.0781  0.4241  6.7826 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.1213   0.3483  
+ Residual             0.2946   0.5428  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate Std. Error t value
+(Intercept)                                             -2.165e-02  1.507e-01  -0.144
+trial                                                    7.217e-03  2.278e-02   0.317
+training_phasePostTest                                   4.378e-01  1.274e-01   3.436
+training_phaseRetention                                  3.555e-01  1.086e-01   3.275
+training_phasePreTest:TrainingChaotic Non-interactive   -6.061e-03  2.019e-01  -0.030
+training_phasePostTest:TrainingChaotic Non-interactive  -2.576e-01  2.222e-01  -1.159
+training_phaseRetention:TrainingChaotic Non-interactive -2.068e-01  2.014e-01  -1.027
+training_phasePreTest:TrainingPeriodic Fixed            -1.146e-15  2.014e-01   0.000
+training_phasePostTest:TrainingPeriodic Fixed            3.538e-01  2.222e-01   1.592
+training_phaseRetention:TrainingPeriodic Fixed           1.804e-01  2.014e-01   0.896
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN- trnng_phsPsT:TCN- t_R:TN
+trial             -0.454                                                                
+trnng_phsPT       -0.388  0.179                                                         
+trnng_phsRt       -0.360  0.000  0.426                                                  
+trnng_phsPrT:TCN- -0.595  0.006  0.230  0.269                                           
+trnng_phsPsT:TCN- -0.362  0.000 -0.347  0.000  0.608                                    
+trnn_R:TCN-       -0.400  0.000  0.000 -0.270  0.671             0.610                  
+trnng_phsPrT:TPF  -0.594  0.000  0.230  0.270  0.443             0.271             0.299
+trnng_phsPsT:TPF  -0.362  0.000 -0.347  0.000  0.270             0.444             0.271
+trnng_R:TPF       -0.400  0.000  0.000 -0.270  0.298             0.271             0.444
+                  trnng_phsPrT:TPF trnng_phsPsT:TPF
+trial                                              
+trnng_phsPT                                        
+trnng_phsRt                                        
+trnng_phsPrT:TCN-                                  
+trnng_phsPsT:TCN-                                  
+trnn_R:TCN-                                        
+trnng_phsPrT:TPF                                   
+trnng_phsPsT:TPF   0.610                           
+trnng_R:TPF        0.673            0.610          
+
+=========================================================================================================
+                                                         Model 1     Model 2     Model 3      Model 4    
+---------------------------------------------------------------------------------------------------------
+(Intercept)                                                 0.24 **     0.30 **    -0.02        -0.02    
+                                                           (0.08)      (0.10)      (0.11)       (0.15)   
+trial                                                                  -0.02        0.01         0.01    
+                                                                       (0.02)      (0.02)       (0.02)   
+training_phasePostTest                                                              0.47 ***     0.44 ***
+                                                                                   (0.08)       (0.13)   
+training_phaseRetention                                                             0.35 ***     0.36 ** 
+                                                                                   (0.07)       (0.11)   
+training_phasePreTest:TrainingChaotic Non-interactive                                           -0.01    
+                                                                                                (0.20)   
+training_phasePostTest:TrainingChaotic Non-interactive                                          -0.26    
+                                                                                                (0.22)   
+training_phaseRetention:TrainingChaotic Non-interactive                                         -0.21    
+                                                                                                (0.20)   
+training_phasePreTest:TrainingPeriodic Fixed                                                    -0.00    
+                                                                                                (0.20)   
+training_phasePostTest:TrainingPeriodic Fixed                                                    0.35    
+                                                                                                (0.22)   
+training_phaseRetention:TrainingPeriodic Fixed                                                   0.18    
+                                                                                                (0.20)   
+---------------------------------------------------------------------------------------------------------
+AIC                                                       650.80      652.04      617.03       616.50    
+BIC                                                       662.26      667.32      639.95       662.34    
+Log Likelihood                                           -322.40     -322.02     -302.51      -296.25    
+Num. obs.                                                 337         337         337          337       
+Num. groups: pp                                            26          26          26           26       
+Var: pp (Intercept)                                         0.13        0.13        0.13         0.12    
+Var: Residual                                               0.35        0.35        0.30         0.29    
+=========================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Periodic Fadeout (SCT); DV: score_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar    AIC    BIC  logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 473.04 484.50 -233.52   467.04                          
+m2    4 475.00 490.28 -233.50   467.00  0.0378  1  0.8457725    
+m3    6 381.06 403.98 -184.53   369.06 97.9455  2  < 2.2e-16 ***
+m4   12 367.40 413.24 -171.70   343.40 25.6628  6  0.0002573 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   473.0    484.5   -233.5    467.0      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5293 -0.5039 -0.0688  0.4176  4.7938 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.0806   0.2839  
+ Residual             0.2035   0.4511  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.27544    0.06086   4.526
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   475.0    490.3   -233.5    467.0      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5158 -0.5128 -0.0706  0.4158  4.8000 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.0806   0.2839  
+ Residual             0.2035   0.4511  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) 0.265754   0.078624   3.380
+trial       0.003505   0.018021   0.195
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.633
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   381.1    404.0   -184.5    369.1      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4662 -0.5742 -0.0338  0.5331  5.0769 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.08493  0.2914  
+ Residual             0.14852  0.3854  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                        Estimate Std. Error t value
+(Intercept)             -0.05085    0.08224  -0.618
+trial                    0.01695    0.01617   1.048
+training_phasePostTest   0.38137    0.05752   6.631
+training_phaseRetention  0.49963    0.04790  10.431
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.590              
+trnng_phsPT -0.407  0.281       
+trnng_phsRt -0.293  0.006  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |      pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   367.4    413.2   -171.7    343.4      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4362 -0.5586 -0.0210  0.4479  5.1115 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.07263  0.2695  
+ Residual             0.13843  0.3721  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate Std. Error t value
+(Intercept)                                             -5.098e-02  1.106e-01  -0.461
+trial                                                    1.699e-02  1.562e-02   1.088
+training_phasePostTest                                   5.129e-01  8.733e-02   5.873
+training_phaseRetention                                  5.577e-01  7.482e-02   7.453
+training_phasePreTest:TrainingChaotic Non-interactive    3.158e-15  1.502e-01   0.000
+training_phasePostTest:TrainingChaotic Non-interactive  -3.822e-01  1.635e-01  -2.338
+training_phaseRetention:TrainingChaotic Non-interactive -3.461e-01  1.504e-01  -2.301
+training_phasePreTest:TrainingPeriodic Fixed             3.426e-15  1.502e-01   0.000
+training_phasePostTest:TrainingPeriodic Fixed           -4.516e-02  1.635e-01  -0.276
+training_phaseRetention:TrainingPeriodic Fixed           1.578e-01  1.504e-01   1.049
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN- trnng_phsPsT:TCN- t_R:TN
+trial             -0.424                                                                
+trnng_phsPT       -0.362  0.179                                                         
+trnng_phsRt       -0.339  0.009  0.425                                                  
+trnng_phsPrT:TCN- -0.604  0.000  0.211  0.246                                           
+trnng_phsPsT:TCN- -0.402  0.000 -0.323  0.000  0.665                                    
+trnn_R:TCN-       -0.435 -0.005 -0.001 -0.251  0.723             0.664                  
+trnng_phsPrT:TPF  -0.604  0.000  0.211  0.246  0.444             0.296             0.321
+trnng_phsPsT:TPF  -0.402  0.000 -0.323  0.000  0.296             0.444             0.295
+trnng_R:TPF       -0.435 -0.005 -0.001 -0.251  0.321             0.295             0.446
+                  trnng_phsPrT:TPF trnng_phsPsT:TPF
+trial                                              
+trnng_phsPT                                        
+trnng_phsRt                                        
+trnng_phsPrT:TCN-                                  
+trnng_phsPsT:TCN-                                  
+trnn_R:TCN-                                        
+trnng_phsPrT:TPF                                   
+trnng_phsPsT:TPF   0.665                           
+trnng_R:TPF        0.723            0.664          
+
+===========================================================================================================
+                                                         Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------
+(Intercept)                                                 0.28 ***     0.27 ***    -0.05        -0.05    
+                                                           (0.06)       (0.08)       (0.08)       (0.11)   
+trial                                                                    0.00         0.02         0.02    
+                                                                        (0.02)       (0.02)       (0.02)   
+training_phasePostTest                                                                0.38 ***     0.51 ***
+                                                                                     (0.06)       (0.09)   
+training_phaseRetention                                                               0.50 ***     0.56 ***
+                                                                                     (0.05)       (0.07)   
+training_phasePreTest:TrainingChaotic Non-interactive                                              0.00    
+                                                                                                  (0.15)   
+training_phasePostTest:TrainingChaotic Non-interactive                                            -0.38 *  
+                                                                                                  (0.16)   
+training_phaseRetention:TrainingChaotic Non-interactive                                           -0.35 *  
+                                                                                                  (0.15)   
+training_phasePreTest:TrainingPeriodic Fixed                                                       0.00    
+                                                                                                  (0.15)   
+training_phasePostTest:TrainingPeriodic Fixed                                                     -0.05    
+                                                                                                  (0.16)   
+training_phaseRetention:TrainingPeriodic Fixed                                                     0.16    
+                                                                                                  (0.15)   
+-----------------------------------------------------------------------------------------------------------
+AIC                                                       473.04       475.00       381.06       367.40    
+BIC                                                       484.50       490.28       403.98       413.24    
+Log Likelihood                                           -233.52      -233.50      -184.53      -171.70    
+Num. obs.                                                 337          337          337          337       
+Num. groups: pp                                            26           26           26           26       
+Var: pp (Intercept)                                         0.08         0.08         0.08         0.07    
+Var: Residual                                               0.20         0.20         0.15         0.14    
+===========================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Chaotic; DV: score_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar    AIC    BIC   logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 247.17 258.63 -120.583   241.17                          
+m2    4 247.43 262.72 -119.713   239.43  1.7394  1    0.18721    
+m3    6 182.25 205.19  -85.126   170.25 69.1750  2  9.525e-16 ***
+m4   12 181.98 227.86  -78.992   157.98 12.2675  6    0.05626 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   247.2    258.6   -120.6    241.2      335 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.3093 -0.5070 -0.0855  0.4878  4.3843 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.03583  0.1893  
+ Residual             0.10491  0.3239  
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.16678    0.04109   4.059
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   247.4    262.7   -119.7    239.4      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.2280 -0.5426 -0.0766  0.5101  4.2769 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.03587  0.1894  
+ Residual             0.10433  0.3230  
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.11979    0.05435   2.204
+trial        0.01697    0.01285   1.321
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.655
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   182.3    205.2    -85.1    170.3      332 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.2111 -0.5796 -0.0083  0.5374  4.2473 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.03747  0.1936  
+ Residual             0.08358  0.2891  
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+                        Estimate Std. Error t value
+(Intercept)             -0.10707    0.05830  -1.836
+trial                    0.03569    0.01209   2.952
+training_phasePostTest   0.32670    0.04313   7.574
+training_phaseRetention  0.25903    0.03586   7.224
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.622              
+trnng_phsPT -0.430  0.280       
+trnng_phsRt -0.308  0.000  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |      pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   182.0    227.9    -79.0    158.0      326 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.6588 -0.5468  0.0045  0.5346  4.3544 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.03577  0.1891  
+ Residual             0.08066  0.2840  
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate Std. Error t value
+(Intercept)                                             -1.071e-01  8.037e-02  -1.332
+trial                                                    3.569e-02  1.187e-02   3.005
+training_phasePostTest                                   4.825e-01  6.665e-02   7.239
+training_phaseRetention                                  3.017e-01  5.680e-02   5.311
+training_phasePreTest:TrainingChaotic Non-interactive    1.402e-15  1.081e-01   0.000
+training_phasePostTest:TrainingChaotic Non-interactive  -3.219e-01  1.187e-01  -2.711
+training_phaseRetention:TrainingChaotic Non-interactive -7.610e-02  1.081e-01  -0.704
+training_phasePreTest:TrainingPeriodic Fixed             1.451e-15  1.081e-01   0.000
+training_phasePostTest:TrainingPeriodic Fixed           -1.845e-01  1.187e-01  -1.554
+training_phaseRetention:TrainingPeriodic Fixed          -6.251e-02  1.081e-01  -0.579
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN- trnng_phsPsT:TCN- t_R:TN
+trial             -0.443                                                                
+trnng_phsPT       -0.380  0.178                                                         
+trnng_phsRt       -0.353  0.000  0.426                                                  
+trnng_phsPrT:TCN- -0.598  0.000  0.224  0.263                                           
+trnng_phsPsT:TCN- -0.375  0.000 -0.340  0.000  0.627                                    
+trnn_R:TCN-       -0.412  0.000  0.000 -0.263  0.689             0.627                  
+trnng_phsPrT:TPF  -0.598  0.000  0.224  0.263  0.444             0.279             0.306
+trnng_phsPsT:TPF  -0.375  0.000 -0.340  0.000  0.279             0.444             0.279
+trnng_R:TPF       -0.412  0.000  0.000 -0.263  0.306             0.279             0.444
+                  trnng_phsPrT:TPF trnng_phsPsT:TPF
+trial                                              
+trnng_phsPT                                        
+trnng_phsRt                                        
+trnng_phsPrT:TCN-                                  
+trnng_phsPsT:TCN-                                  
+trnn_R:TCN-                                        
+trnng_phsPrT:TPF                                   
+trnng_phsPsT:TPF   0.627                           
+trnng_R:TPF        0.689            0.627          
+
+=======================================================================================================
+                                                         Model 1      Model 2    Model 3     Model 4   
+-------------------------------------------------------------------------------------------------------
+(Intercept)                                                 0.17 ***     0.12 *   -0.11       -0.11    
+                                                           (0.04)       (0.05)    (0.06)      (0.08)   
+trial                                                                    0.02      0.04 **     0.04 ** 
+                                                                        (0.01)    (0.01)      (0.01)   
+training_phasePostTest                                                             0.33 ***    0.48 ***
+                                                                                  (0.04)      (0.07)   
+training_phaseRetention                                                            0.26 ***    0.30 ***
+                                                                                  (0.04)      (0.06)   
+training_phasePreTest:TrainingChaotic Non-interactive                                          0.00    
+                                                                                              (0.11)   
+training_phasePostTest:TrainingChaotic Non-interactive                                        -0.32 ** 
+                                                                                              (0.12)   
+training_phaseRetention:TrainingChaotic Non-interactive                                       -0.08    
+                                                                                              (0.11)   
+training_phasePreTest:TrainingPeriodic Fixed                                                   0.00    
+                                                                                              (0.11)   
+training_phasePostTest:TrainingPeriodic Fixed                                                 -0.18    
+                                                                                              (0.12)   
+training_phaseRetention:TrainingPeriodic Fixed                                                -0.06    
+                                                                                              (0.11)   
+-------------------------------------------------------------------------------------------------------
+AIC                                                       247.17       247.43    182.25      181.98    
+BIC                                                       258.63       262.72    205.19      227.86    
+Log Likelihood                                           -120.58      -119.71    -85.13      -78.99    
+Num. obs.                                                 338          338       338         338       
+Num. groups: pp                                            26           26        26          26       
+Var: pp (Intercept)                                         0.04         0.04      0.04        0.04    
+Var: Residual                                               0.10         0.10      0.08        0.08    
+=======================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Chaotic Visual; DV: score_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -388.30 -376.84 197.15  -394.30                          
+m2    4 -386.54 -371.26 197.27  -394.54  0.2457  1     0.6201    
+m3    6 -402.69 -379.77 207.35  -414.69 20.1500  2  4.212e-05 ***
+m4   12 -395.99 -350.14 209.99  -419.99  5.2938  6     0.5067    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -388.3   -376.8    197.1   -394.3      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.6712 -0.7058  0.0380  0.6384  3.8895 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002046 0.04524 
+ Residual             0.016895 0.12998 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.02255    0.01135   1.987
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -386.5   -371.3    197.3   -394.5      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7075 -0.7259  0.0259  0.6367  3.8958 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.00205  0.04528 
+ Residual             0.01688  0.12993 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)  0.029662   0.018288   1.622
+trial       -0.002573   0.005190  -0.496
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.784
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -402.7   -379.8    207.3   -414.7      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.6901 -0.6527 -0.0368  0.6430  3.7165 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002145 0.04632 
+ Residual             0.015817 0.12577 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)              0.019010   0.021288   0.893
+trial                   -0.006486   0.005278  -1.229
+training_phasePostTest  -0.009354   0.018772  -0.498
+training_phaseRetention  0.061218   0.015631   3.916
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.740              
+trnng_phsPT -0.512  0.277       
+trnng_phsRt -0.365 -0.005  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |      pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -396.0   -350.1    210.0   -420.0      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.6277 -0.6412 -0.0451  0.7088  3.9372 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002043 0.0452  
+ Residual             0.015597 0.1249  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                         Estimate Std. Error t value
+(Intercept)                                              0.018340   0.027625   0.664
+trial                                                   -0.006469   0.005241  -1.234
+training_phasePostTest                                  -0.029685   0.029388  -1.010
+training_phaseRetention                                  0.056227   0.025112   2.239
+training_phasePreTest:TrainingChaotic Non-interactive    0.001067   0.034179   0.031
+training_phasePostTest:TrainingChaotic Non-interactive   0.037256   0.040366   0.923
+training_phaseRetention:TrainingChaotic Non-interactive -0.023246   0.034081  -0.682
+training_phasePreTest:TrainingPeriodic Fixed             0.001067   0.034179   0.031
+training_phasePostTest:TrainingPeriodic Fixed            0.030889   0.040366   0.765
+training_phaseRetention:TrainingPeriodic Fixed           0.041480   0.034081   1.217
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN- trnng_phsPsT:TCN- t_R:TN
+trial             -0.561                                                                
+trnng_phsPT       -0.488  0.171                                                         
+trnng_phsRt       -0.454 -0.009  0.430                                                  
+trnng_phsPrT:TCN- -0.550 -0.007  0.316  0.371                                           
+trnng_phsPsT:TCN- -0.183  0.000 -0.438  0.000  0.333                                    
+trnn_R:TCN-       -0.217  0.000  0.000 -0.364  0.395             0.334                  
+trnng_phsPrT:TPF  -0.550 -0.007  0.316  0.371  0.448             0.148             0.175
+trnng_phsPsT:TPF  -0.183  0.000 -0.438  0.000  0.148             0.444             0.148
+trnng_R:TPF       -0.217  0.000  0.000 -0.364  0.175             0.148             0.444
+                  trnng_phsPrT:TPF trnng_phsPsT:TPF
+trial                                              
+trnng_phsPT                                        
+trnng_phsRt                                        
+trnng_phsPrT:TCN-                                  
+trnng_phsPsT:TCN-                                  
+trnn_R:TCN-                                        
+trnng_phsPrT:TPF                                   
+trnng_phsPsT:TPF   0.333                           
+trnng_R:TPF        0.395            0.334          
+
+====================================================================================================
+                                                         Model 1    Model 2   Model 3      Model 4  
+----------------------------------------------------------------------------------------------------
+(Intercept)                                                 0.02 *     0.03      0.02         0.02  
+                                                           (0.01)     (0.02)    (0.02)       (0.03) 
+trial                                                                 -0.00     -0.01        -0.01  
+                                                                      (0.01)    (0.01)       (0.01) 
+training_phasePostTest                                                          -0.01        -0.03  
+                                                                                (0.02)       (0.03) 
+training_phaseRetention                                                          0.06 ***     0.06 *
+                                                                                (0.02)       (0.03) 
+training_phasePreTest:TrainingChaotic Non-interactive                                         0.00  
+                                                                                             (0.03) 
+training_phasePostTest:TrainingChaotic Non-interactive                                        0.04  
+                                                                                             (0.04) 
+training_phaseRetention:TrainingChaotic Non-interactive                                      -0.02  
+                                                                                             (0.03) 
+training_phasePreTest:TrainingPeriodic Fixed                                                  0.00  
+                                                                                             (0.03) 
+training_phasePostTest:TrainingPeriodic Fixed                                                 0.03  
+                                                                                             (0.04) 
+training_phaseRetention:TrainingPeriodic Fixed                                                0.04  
+                                                                                             (0.03) 
+----------------------------------------------------------------------------------------------------
+AIC                                                      -388.30    -386.54   -402.69      -395.99  
+BIC                                                      -376.84    -371.26   -379.77      -350.14  
+Log Likelihood                                            197.15     197.27    207.35       209.99  
+Num. obs.                                                 337        337       337          337     
+Num. groups: pp                                            26         26        26           26     
+Var: pp (Intercept)                                         0.00       0.00      0.00         0.00  
+Var: Residual                                               0.02       0.02      0.02         0.02  
+====================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Periodic Fixed; DV: c_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar    AIC    BIC  logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 419.26 430.72 -206.63   413.26                          
+m2    4 421.26 436.54 -206.63   413.26  0.0030  1     0.9564    
+m3    6 391.41 414.33 -189.71   379.41 33.8471  2  4.469e-08 ***
+m4   12 396.71 442.55 -186.36   372.71  6.6969  6     0.3498    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   419.3    430.7   -206.6    413.3      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9651 -0.3034  0.0083  0.2640  8.8379 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.08458  0.2908  
+ Residual             0.17100  0.4135  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.15155    0.06132   2.471
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   421.3    436.5   -206.6    413.3      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9668 -0.3051  0.0081  0.2667  8.8385 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.08458  0.2908  
+ Residual             0.17099  0.4135  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+              Estimate Std. Error t value
+(Intercept)  0.1540388  0.0764349   2.015
+trial       -0.0009021  0.0165186  -0.055
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.597
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   391.4    414.3   -189.7    379.4      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7972 -0.4341 -0.0440  0.3933  8.8698 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.08598  0.2932  
+ Residual             0.15336  0.3916  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                        Estimate Std. Error t value
+(Intercept)             -0.05877    0.08307  -0.707
+trial                    0.01952    0.01644   1.188
+training_phasePostTest   0.32479    0.05845   5.556
+training_phaseRetention  0.21045    0.04867   4.324
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.590              
+trnng_phsPT -0.408  0.277       
+trnng_phsRt -0.291 -0.006  0.417
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |      pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   396.7    442.6   -186.4    372.7      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7409 -0.4363 -0.0340  0.3465  9.0047 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.08261  0.2874  
+ Residual             0.15056  0.3880  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate Std. Error t value
+(Intercept)                                             -5.909e-02  1.169e-01  -0.506
+trial                                                    1.970e-02  1.629e-02   1.209
+training_phasePostTest                                   2.799e-01  9.108e-02   3.073
+training_phaseRetention                                  1.614e-01  7.760e-02   2.079
+training_phasePreTest:TrainingChaotic Non-interactive    5.926e-04  1.596e-01   0.004
+training_phasePostTest:TrainingChaotic Non-interactive  -8.007e-02  1.729e-01  -0.463
+training_phaseRetention:TrainingChaotic Non-interactive -1.146e-02  1.593e-01  -0.072
+training_phasePreTest:TrainingPeriodic Fixed            -2.141e-15  1.593e-01   0.000
+training_phasePostTest:TrainingPeriodic Fixed            2.260e-01  1.729e-01   1.307
+training_phaseRetention:TrainingPeriodic Fixed           1.704e-01  1.593e-01   1.070
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN- trnng_phsPsT:TCN- t_R:TN
+trial             -0.418                                                                
+trnng_phsPT       -0.358  0.179                                                         
+trnng_phsRt       -0.332  0.000  0.426                                                  
+trnng_phsPrT:TCN- -0.607  0.006  0.208  0.243                                           
+trnng_phsPsT:TCN- -0.409  0.000 -0.319  0.000  0.674                                    
+trnn_R:TCN-       -0.444  0.000  0.000 -0.244  0.731             0.675                  
+trnng_phsPrT:TPF  -0.606  0.000  0.208  0.244  0.444             0.300             0.326
+trnng_phsPsT:TPF  -0.409  0.000 -0.319  0.000  0.299             0.444             0.300
+trnng_R:TPF       -0.444  0.000  0.000 -0.244  0.325             0.300             0.444
+                  trnng_phsPrT:TPF trnng_phsPsT:TPF
+trial                                              
+trnng_phsPT                                        
+trnng_phsRt                                        
+trnng_phsPrT:TCN-                                  
+trnng_phsPsT:TCN-                                  
+trnn_R:TCN-                                        
+trnng_phsPrT:TPF                                   
+trnng_phsPsT:TPF   0.675                           
+trnng_R:TPF        0.733            0.675          
+
+======================================================================================================
+                                                         Model 1    Model 2    Model 3      Model 4   
+------------------------------------------------------------------------------------------------------
+(Intercept)                                                 0.15 *     0.15 *    -0.06        -0.06   
+                                                           (0.06)     (0.08)     (0.08)       (0.12)  
+trial                                                                 -0.00       0.02         0.02   
+                                                                      (0.02)     (0.02)       (0.02)  
+training_phasePostTest                                                            0.32 ***     0.28 **
+                                                                                 (0.06)       (0.09)  
+training_phaseRetention                                                           0.21 ***     0.16 * 
+                                                                                 (0.05)       (0.08)  
+training_phasePreTest:TrainingChaotic Non-interactive                                          0.00   
+                                                                                              (0.16)  
+training_phasePostTest:TrainingChaotic Non-interactive                                        -0.08   
+                                                                                              (0.17)  
+training_phaseRetention:TrainingChaotic Non-interactive                                       -0.01   
+                                                                                              (0.16)  
+training_phasePreTest:TrainingPeriodic Fixed                                                  -0.00   
+                                                                                              (0.16)  
+training_phasePostTest:TrainingPeriodic Fixed                                                  0.23   
+                                                                                              (0.17)  
+training_phaseRetention:TrainingPeriodic Fixed                                                 0.17   
+                                                                                              (0.16)  
+------------------------------------------------------------------------------------------------------
+AIC                                                       419.26     421.26     391.41       396.71   
+BIC                                                       430.72     436.54     414.33       442.55   
+Log Likelihood                                           -206.63    -206.63    -189.70      -186.36   
+Num. obs.                                                 337        337        337          337      
+Num. groups: pp                                            26         26         26           26      
+Var: pp (Intercept)                                         0.08       0.08       0.09         0.08   
+Var: Residual                                               0.17       0.17       0.15         0.15   
+======================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Periodic Fadeout (SCT); DV: c_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -282.81 -271.35 144.41  -288.81                          
+m2    4 -281.32 -266.04 144.66  -289.32  0.5087  1  0.4757185    
+m3    6 -317.25 -294.33 164.62  -329.25 39.9305  2  2.134e-09 ***
+m4   12 -329.72 -283.88 176.86  -353.72 24.4724  6  0.0004274 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -282.8   -271.4    144.4   -288.8      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.2923 -0.1989 -0.0184  0.2990  7.2587 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.006682 0.08174 
+ Residual             0.021968 0.14822 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.06230    0.01795   3.471
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -281.3   -266.0    144.7   -289.3      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.3468 -0.1902 -0.0212  0.3155  7.2421 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.006688 0.08178 
+ Residual             0.021932 0.14809 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)  0.073955   0.024276   3.046
+trial       -0.004221   0.005916  -0.714
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.673
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -317.3   -294.3    164.6   -329.3      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.8592 -0.3645 -0.0076  0.4267  7.3564 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.006876 0.08292 
+ Residual             0.019292 0.13890 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)             -0.006084   0.026809  -0.227
+trial                    0.002028   0.005829   0.348
+training_phasePostTest   0.112107   0.020730   5.408
+training_phaseRetention  0.096224   0.017264   5.574
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.652              
+trnng_phsPT -0.450  0.281       
+trnng_phsRt -0.324  0.006  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |      pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -329.7   -283.9    176.9   -353.7      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.8482 -0.3389  0.0373  0.3914  7.3496 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.005703 0.07552 
+ Residual             0.018079 0.13446 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate Std. Error t value
+(Intercept)                                             -5.891e-03  3.491e-02  -0.169
+trial                                                    1.964e-03  5.643e-03   0.348
+training_phasePostTest                                   1.536e-01  3.156e-02   4.865
+training_phaseRetention                                  8.124e-02  2.704e-02   3.005
+training_phasePreTest:TrainingChaotic Non-interactive    7.363e-16  4.579e-02   0.000
+training_phasePostTest:TrainingChaotic Non-interactive  -1.285e-01  5.137e-02  -2.500
+training_phaseRetention:TrainingChaotic Non-interactive -5.701e-02  4.588e-02  -1.243
+training_phasePreTest:TrainingPeriodic Fixed             7.372e-16  4.579e-02   0.000
+training_phasePostTest:TrainingPeriodic Fixed           -6.449e-03  5.137e-02  -0.126
+training_phaseRetention:TrainingPeriodic Fixed           1.052e-01  4.588e-02   2.294
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN- trnng_phsPsT:TCN- t_R:TN
+trial             -0.485                                                                
+trnng_phsPT       -0.415  0.179                                                         
+trnng_phsRt       -0.387  0.009  0.425                                                  
+trnng_phsPrT:TCN- -0.583  0.000  0.250  0.292                                           
+trnng_phsPsT:TCN- -0.318  0.000 -0.372  0.000  0.546                                    
+trnn_R:TCN-       -0.354 -0.005 -0.001 -0.298  0.611             0.544                  
+trnng_phsPrT:TPF  -0.583  0.000  0.250  0.292  0.444             0.242             0.271
+trnng_phsPsT:TPF  -0.318  0.000 -0.372  0.000  0.242             0.444             0.242
+trnng_R:TPF       -0.354 -0.005 -0.001 -0.298  0.271             0.242             0.447
+                  trnng_phsPrT:TPF trnng_phsPsT:TPF
+trial                                              
+trnng_phsPT                                        
+trnng_phsRt                                        
+trnng_phsPrT:TCN-                                  
+trnng_phsPsT:TCN-                                  
+trnn_R:TCN-                                        
+trnng_phsPrT:TPF                                   
+trnng_phsPsT:TPF   0.546                           
+trnng_R:TPF        0.611            0.544          
+
+==========================================================================================================
+                                                         Model 1      Model 2     Model 3      Model 4    
+----------------------------------------------------------------------------------------------------------
+(Intercept)                                                 0.06 ***     0.07 **    -0.01        -0.01    
+                                                           (0.02)       (0.02)      (0.03)       (0.03)   
+trial                                                                   -0.00        0.00         0.00    
+                                                                        (0.01)      (0.01)       (0.01)   
+training_phasePostTest                                                               0.11 ***     0.15 ***
+                                                                                    (0.02)       (0.03)   
+training_phaseRetention                                                              0.10 ***     0.08 ** 
+                                                                                    (0.02)       (0.03)   
+training_phasePreTest:TrainingChaotic Non-interactive                                             0.00    
+                                                                                                 (0.05)   
+training_phasePostTest:TrainingChaotic Non-interactive                                           -0.13 *  
+                                                                                                 (0.05)   
+training_phaseRetention:TrainingChaotic Non-interactive                                          -0.06    
+                                                                                                 (0.05)   
+training_phasePreTest:TrainingPeriodic Fixed                                                      0.00    
+                                                                                                 (0.05)   
+training_phasePostTest:TrainingPeriodic Fixed                                                    -0.01    
+                                                                                                 (0.05)   
+training_phaseRetention:TrainingPeriodic Fixed                                                    0.11 *  
+                                                                                                 (0.05)   
+----------------------------------------------------------------------------------------------------------
+AIC                                                      -282.81      -281.32     -317.25      -329.72    
+BIC                                                      -271.35      -266.04     -294.33      -283.88    
+Log Likelihood                                            144.41       144.66      164.63       176.86    
+Num. obs.                                                 337          337         337          337       
+Num. groups: pp                                            26           26          26           26       
+Var: pp (Intercept)                                         0.01         0.01        0.01         0.01    
+Var: Residual                                               0.02         0.02        0.02         0.02    
+==========================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Chaotic; DV: c_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -340.85 -329.38 173.43  -346.85                          
+m2    4 -339.98 -324.69 173.99  -347.98  1.1275  1   0.288301    
+m3    6 -352.60 -329.66 182.30  -364.60 16.6207  2   0.000246 ***
+m4   12 -352.33 -306.45 188.16  -376.33 11.7280  6   0.068320 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -340.9   -329.4    173.4   -346.9      335 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.8348 -0.5809 -0.0233  0.6079  3.3017 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004971 0.0705  
+ Residual             0.018705 0.1368  
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  0.03848    0.01570   2.451
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -340.0   -324.7    174.0   -348.0      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7448 -0.5863 -0.0231  0.5771  3.2337 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004976 0.07054 
+ Residual             0.018637 0.13652 
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)  0.054467   0.021741   2.505
+trial       -0.005771   0.005430  -1.063
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.692
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -352.6   -329.7    182.3   -364.6      332 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.0192 -0.5679 -0.0224  0.6010  3.6684 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.00505  0.07107 
+ Residual             0.01767  0.13293 
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)              0.006130   0.024662   0.249
+trial                   -0.002043   0.005558  -0.368
+training_phasePostTest   0.068220   0.019833   3.440
+training_phaseRetention  0.057901   0.016488   3.512
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.676              
+trnng_phsPT -0.467  0.280       
+trnng_phsRt -0.334  0.000  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |      pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -352.3   -306.5    188.2   -376.3      326 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.8196 -0.6458 -0.0198  0.6107  3.5445 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004671 0.06835 
+ Residual             0.017115 0.13083 
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate Std. Error t value
+(Intercept)                                              6.130e-03  3.284e-02   0.187
+trial                                                   -2.043e-03  5.470e-03  -0.374
+training_phasePostTest                                   1.198e-01  3.070e-02   3.903
+training_phaseRetention                                  7.853e-02  2.617e-02   3.001
+training_phasePreTest:TrainingChaotic Non-interactive   -1.513e-16  4.268e-02   0.000
+training_phasePostTest:TrainingChaotic Non-interactive  -8.312e-02  4.832e-02  -1.720
+training_phaseRetention:TrainingChaotic Non-interactive  9.967e-03  4.268e-02   0.234
+training_phasePreTest:TrainingPeriodic Fixed            -9.149e-17  4.268e-02   0.000
+training_phasePostTest:TrainingPeriodic Fixed           -8.463e-02  4.832e-02  -1.751
+training_phaseRetention:TrainingPeriodic Fixed          -7.701e-02  4.268e-02  -1.805
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN- trnng_phsPsT:TCN- t_R:TN
+trial             -0.500                                                                
+trnng_phsPT       -0.428  0.178                                                         
+trnng_phsRt       -0.398  0.000  0.426                                                  
+trnng_phsPrT:TCN- -0.577  0.000  0.261  0.307                                           
+trnng_phsPsT:TCN- -0.294  0.000 -0.385  0.000  0.510                                    
+trnn_R:TCN-       -0.333  0.000  0.000 -0.307  0.577             0.510                  
+trnng_phsPrT:TPF  -0.577  0.000  0.261  0.307  0.444             0.227             0.256
+trnng_phsPsT:TPF  -0.294  0.000 -0.385  0.000  0.227             0.444             0.227
+trnng_R:TPF       -0.333  0.000  0.000 -0.307  0.256             0.227             0.444
+                  trnng_phsPrT:TPF trnng_phsPsT:TPF
+trial                                              
+trnng_phsPT                                        
+trnng_phsRt                                        
+trnng_phsPrT:TCN-                                  
+trnng_phsPsT:TCN-                                  
+trnn_R:TCN-                                        
+trnng_phsPrT:TPF                                   
+trnng_phsPsT:TPF   0.510                           
+trnng_R:TPF        0.577            0.510          
+
+=======================================================================================================
+                                                         Model 1    Model 2    Model 3      Model 4    
+-------------------------------------------------------------------------------------------------------
+(Intercept)                                                 0.04 *     0.05 *     0.01         0.01    
+                                                           (0.02)     (0.02)     (0.02)       (0.03)   
+trial                                                                 -0.01      -0.00        -0.00    
+                                                                      (0.01)     (0.01)       (0.01)   
+training_phasePostTest                                                            0.07 ***     0.12 ***
+                                                                                 (0.02)       (0.03)   
+training_phaseRetention                                                           0.06 ***     0.08 ** 
+                                                                                 (0.02)       (0.03)   
+training_phasePreTest:TrainingChaotic Non-interactive                                         -0.00    
+                                                                                              (0.04)   
+training_phasePostTest:TrainingChaotic Non-interactive                                        -0.08    
+                                                                                              (0.05)   
+training_phaseRetention:TrainingChaotic Non-interactive                                        0.01    
+                                                                                              (0.04)   
+training_phasePreTest:TrainingPeriodic Fixed                                                  -0.00    
+                                                                                              (0.04)   
+training_phasePostTest:TrainingPeriodic Fixed                                                 -0.08    
+                                                                                              (0.05)   
+training_phaseRetention:TrainingPeriodic Fixed                                                -0.08    
+                                                                                              (0.04)   
+-------------------------------------------------------------------------------------------------------
+AIC                                                      -340.85    -339.98    -352.60      -352.33    
+BIC                                                      -329.38    -324.69    -329.66      -306.45    
+Log Likelihood                                            173.43     173.99     182.30       188.16    
+Num. obs.                                                 338        338        338          338       
+Num. groups: pp                                            26         26         26           26       
+Var: pp (Intercept)                                         0.00       0.00       0.01         0.00    
+Var: Residual                                               0.02       0.02       0.02         0.02    
+=======================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Chaotic Visual; DV: c_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -464.07 -452.61 235.04  -470.07                          
+m2    4 -468.26 -452.98 238.13  -476.26  6.1844  1    0.01289 *  
+m3    6 -484.08 -461.16 248.04  -496.08 19.8204  2  4.967e-05 ***
+m4   12 -482.91 -437.07 253.45  -506.91 10.8295  6    0.09379 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -464.1   -452.6    235.0   -470.1      334 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.79170 -0.69190  0.07665  0.61850  3.15403 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.003047 0.0552  
+ Residual             0.013033 0.1142  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) 0.009179   0.012485   0.735
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -468.3   -453.0    238.1   -476.3      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9495 -0.6748  0.0362  0.6464  3.3994 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.003073 0.05544 
+ Residual             0.012774 0.11302 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)  0.040348   0.017653   2.286
+trial       -0.011284   0.004515  -2.499
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.706
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -484.1   -461.2    248.0   -496.1      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.0793 -0.6416  0.0215  0.6674  3.3077 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.003139 0.05602 
+ Residual             0.011985 0.10947 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)              0.048955   0.020039   2.443
+trial                   -0.016491   0.004595  -3.589
+training_phasePostTest  -0.035881   0.016341  -2.196
+training_phaseRetention  0.036487   0.013607   2.682
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.684              
+trnng_phsPT -0.473  0.277       
+trnng_phsRt -0.337 -0.006  0.417
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -482.9   -437.1    253.5   -506.9      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.0002 -0.6521  0.0196  0.6216  3.1813 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.00297  0.0545  
+ Residual             0.01162  0.1078  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                         Estimate
+(Intercept)                                              0.048129
+trial                                                   -0.016491
+training_phasePostTest                                  -0.057587
+training_phaseRetention                                  0.049500
+training_phasePreTest:TrainingChaotic Non-interactive    0.001343
+training_phasePostTest:TrainingChaotic Non-interactive   0.028875
+training_phaseRetention:TrainingChaotic Non-interactive -0.061506
+training_phasePreTest:TrainingPeriodic Fixed             0.001343
+training_phasePostTest:TrainingPeriodic Fixed            0.044354
+training_phaseRetention:TrainingPeriodic Fixed           0.021898
+                                                        Std. Error t value
+(Intercept)                                               0.026712   1.802
+trial                                                     0.004525  -3.645
+training_phasePostTest                                    0.025370  -2.270
+training_phaseRetention                                   0.021678   2.283
+training_phasePreTest:TrainingChaotic Non-interactive     0.034589   0.039
+training_phasePostTest:TrainingChaotic Non-interactive    0.039243   0.736
+training_phaseRetention:TrainingChaotic Non-interactive   0.034516  -1.782
+training_phasePreTest:TrainingPeriodic Fixed              0.034589   0.039
+training_phasePostTest:TrainingPeriodic Fixed             0.039243   1.130
+training_phaseRetention:TrainingPeriodic Fixed            0.034516   0.634
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.501                                       
+trnng_phsPT       -0.436  0.171                                
+trnng_phsRt       -0.406 -0.009  0.430                         
+trnng_phsPrT:TCN- -0.576 -0.006  0.270  0.317                  
+trnng_phsPsT:TCN- -0.283  0.000 -0.389  0.000  0.492           
+trnn_R:TCN-       -0.322  0.000  0.000 -0.311  0.560           
+trnng_phsPrT:TPF  -0.576 -0.006  0.270  0.317  0.447           
+trnng_phsPsT:TPF  -0.283  0.000 -0.389  0.000  0.219           
+trnng_R:TPF       -0.322  0.000  0.000 -0.311  0.249           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.493                                   
+trnng_phsPrT:TPF   0.219             0.249                 
+trnng_phsPsT:TPF   0.444             0.219  0.492          
+trnng_R:TPF        0.219             0.444  0.560          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.493          
+
+======================================================================================================
+                                                         Model 1   Model 2    Model 3      Model 4    
+------------------------------------------------------------------------------------------------------
+(Intercept)                                                 0.01      0.04 *     0.05 *       0.05    
+                                                           (0.01)    (0.02)     (0.02)       (0.03)   
+trial                                                                -0.01 *    -0.02 ***    -0.02 ***
+                                                                     (0.00)     (0.00)       (0.00)   
+training_phasePostTest                                                          -0.04 *      -0.06 *  
+                                                                                (0.02)       (0.03)   
+training_phaseRetention                                                          0.04 **      0.05 *  
+                                                                                (0.01)       (0.02)   
+training_phasePreTest:TrainingChaotic Non-interactive                                         0.00    
+                                                                                             (0.03)   
+training_phasePostTest:TrainingChaotic Non-interactive                                        0.03    
+                                                                                             (0.04)   
+training_phaseRetention:TrainingChaotic Non-interactive                                      -0.06    
+                                                                                             (0.03)   
+training_phasePreTest:TrainingPeriodic Fixed                                                  0.00    
+                                                                                             (0.03)   
+training_phasePostTest:TrainingPeriodic Fixed                                                 0.04    
+                                                                                             (0.04)   
+training_phaseRetention:TrainingPeriodic Fixed                                                0.02    
+                                                                                             (0.03)   
+------------------------------------------------------------------------------------------------------
+AIC                                                      -464.07   -468.26    -484.08      -482.91    
+BIC                                                      -452.61   -452.98    -461.16      -437.07    
+Log Likelihood                                            235.04    238.13     248.04       253.45    
+Num. obs.                                                 337       337        337          337       
+Num. groups: pp                                            26        26         26           26       
+Var: pp (Intercept)                                         0.00      0.00       0.00         0.00    
+Var: Residual                                               0.01      0.01       0.01         0.01    
+======================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Periodic Fixed; DV: pitch_error_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar      AIC     BIC  logLik deviance   Chisq Df Pr(>Chisq)   
+m1    3  -7.4768  3.9835  6.7384  -13.477                         
+m2    4  -9.4258  5.8545  8.7129  -17.426  3.9491  1   0.046897 * 
+m3    6  -9.7441 13.1764 10.8721  -21.744  4.3183  2   0.115424   
+m4   12 -18.2848 27.5562 21.1424  -42.285 20.5406  6   0.002218 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+    -7.5      4.0      6.7    -13.5      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9505 -0.6545 -0.0031  0.5589  3.6132 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.01681  0.1296  
+ Residual             0.04938  0.2222  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) -0.02000    0.02816   -0.71
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+    -9.4      5.9      8.7    -17.4      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.8301 -0.6422 -0.0181  0.5299  3.6880 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.01698  0.1303  
+ Residual             0.04874  0.2208  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept) -0.068566   0.037297  -1.838
+trial        0.017586   0.008819   1.994
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.653
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+    -9.7     13.2     10.9    -21.7      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9315 -0.6516 -0.0290  0.5835  3.6245 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.01706  0.1306  
+ Residual             0.04806  0.2192  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)             -0.032424   0.042218  -0.768
+trial                    0.011878   0.009201   1.291
+training_phasePostTest  -0.066824   0.032723  -2.042
+training_phaseRetention -0.012710   0.027248  -0.466
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.650              
+trnng_phsPT -0.450  0.277       
+trnng_phsRt -0.320 -0.006  0.417
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   -18.3     27.6     21.1    -42.3      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.8591 -0.6198  0.0035  0.6083  3.8723 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.01364  0.1168  
+ Residual             0.04571  0.2138  
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate
+(Intercept)                                             -3.478e-02
+trial                                                    1.159e-02
+training_phasePostTest                                  -9.308e-02
+training_phaseRetention                                 -6.238e-02
+training_phasePreTest:TrainingChaotic Non-interactive    8.407e-03
+training_phasePostTest:TrainingChaotic Non-interactive   1.178e-01
+training_phaseRetention:TrainingChaotic Non-interactive  2.174e-01
+training_phasePreTest:TrainingPeriodic Fixed             6.643e-16
+training_phasePostTest:TrainingPeriodic Fixed           -2.293e-02
+training_phaseRetention:TrainingPeriodic Fixed          -4.549e-02
+                                                        Std. Error t value
+(Intercept)                                              5.480e-02  -0.635
+trial                                                    8.973e-03   1.292
+training_phasePostTest                                   5.018e-02  -1.855
+training_phaseRetention                                  4.276e-02  -1.459
+training_phasePreTest:TrainingChaotic Non-interactive    7.181e-02   0.117
+training_phasePostTest:TrainingChaotic Non-interactive   8.060e-02   1.461
+training_phaseRetention:TrainingChaotic Non-interactive  7.159e-02   3.036
+training_phasePreTest:TrainingPeriodic Fixed             7.159e-02   0.000
+training_phasePostTest:TrainingPeriodic Fixed            8.060e-02  -0.284
+training_phaseRetention:TrainingPeriodic Fixed           7.159e-02  -0.635
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.491                                       
+trnng_phsPT       -0.420  0.179                                
+trnng_phsRt       -0.390  0.000  0.426                         
+trnng_phsPrT:TCN- -0.582  0.007  0.255  0.298                  
+trnng_phsPsT:TCN- -0.309  0.000 -0.377  0.000  0.530           
+trnn_R:TCN-       -0.348  0.000  0.000 -0.299  0.597           
+trnng_phsPrT:TPF  -0.581  0.000  0.254  0.299  0.443           
+trnng_phsPsT:TPF  -0.309  0.000 -0.377  0.000  0.236           
+trnng_R:TPF       -0.348  0.000  0.000 -0.299  0.265           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.532                                   
+trnng_phsPrT:TPF   0.236             0.266                 
+trnng_phsPsT:TPF   0.444             0.236  0.532          
+trnng_R:TPF        0.236             0.444  0.599          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.532          
+
+===============================================================================================
+                                                         Model 1  Model 2   Model 3   Model 4  
+-----------------------------------------------------------------------------------------------
+(Intercept)                                               -0.02    -0.07     -0.03     -0.03   
+                                                          (0.03)   (0.04)    (0.04)    (0.05)  
+trial                                                               0.02 *    0.01      0.01   
+                                                                   (0.01)    (0.01)    (0.01)  
+training_phasePostTest                                                       -0.07 *   -0.09   
+                                                                             (0.03)    (0.05)  
+training_phaseRetention                                                      -0.01     -0.06   
+                                                                             (0.03)    (0.04)  
+training_phasePreTest:TrainingChaotic Non-interactive                                   0.01   
+                                                                                       (0.07)  
+training_phasePostTest:TrainingChaotic Non-interactive                                  0.12   
+                                                                                       (0.08)  
+training_phaseRetention:TrainingChaotic Non-interactive                                 0.22 **
+                                                                                       (0.07)  
+training_phasePreTest:TrainingPeriodic Fixed                                            0.00   
+                                                                                       (0.07)  
+training_phasePostTest:TrainingPeriodic Fixed                                          -0.02   
+                                                                                       (0.08)  
+training_phaseRetention:TrainingPeriodic Fixed                                         -0.05   
+                                                                                       (0.07)  
+-----------------------------------------------------------------------------------------------
+AIC                                                       -7.48    -9.43     -9.74    -18.28   
+BIC                                                        3.98     5.85     13.18     27.56   
+Log Likelihood                                             6.74     8.71     10.87     21.14   
+Num. obs.                                                337      337       337       337      
+Num. groups: pp                                           26       26        26        26      
+Var: pp (Intercept)                                        0.02     0.02      0.02      0.01   
+Var: Residual                                              0.05     0.05      0.05      0.05   
+===============================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Periodic Fadeout (SCT); DV: pitch_error_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar      AIC      BIC  logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3  -86.714  -75.254  46.357  -92.714                          
+m2    4  -85.974  -70.694  46.987  -93.974  1.2598  1    0.26168    
+m3    6 -173.855 -150.935  92.928 -185.855 91.8814  2    < 2e-16 ***
+m4   12 -176.838 -130.997 100.419 -200.838 14.9826  6    0.02039 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   -86.7    -75.3     46.4    -92.7      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9584 -0.6823 -0.0859  0.5287  3.7427 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.006533 0.08083 
+ Residual             0.040774 0.20193 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) -0.11680    0.01929  -6.053
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   -86.0    -70.7     47.0    -94.0      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0088 -0.7082 -0.0900  0.5442  3.7675 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.00656  0.08099 
+ Residual             0.04060  0.20151 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept) -0.091817   0.029447  -3.118
+trial       -0.009044   0.008049  -1.124
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.755
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -173.9   -150.9     92.9   -185.9      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.1273 -0.6867 -0.1137  0.5304  4.2330 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.007444 0.08628 
+ Residual             0.030197 0.17377 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)              0.041895   0.031580   1.327
+trial                   -0.013965   0.007293  -1.915
+training_phasePostTest  -0.156713   0.025935  -6.043
+training_phaseRetention -0.219168   0.021599 -10.147
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.693              
+trnng_phsPT -0.478  0.281       
+trnng_phsRt -0.344  0.006  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -176.8   -131.0    100.4   -200.8      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9825 -0.6171 -0.0976  0.4864  3.9721 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.006248 0.07904 
+ Residual             0.029117 0.17064 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate
+(Intercept)                                              4.173e-02
+trial                                                   -1.391e-02
+training_phasePostTest                                  -1.976e-01
+training_phaseRetention                                 -2.124e-01
+training_phasePreTest:TrainingChaotic Non-interactive    9.969e-16
+training_phasePostTest:TrainingChaotic Non-interactive   1.375e-01
+training_phaseRetention:TrainingChaotic Non-interactive  6.329e-02
+training_phasePreTest:TrainingPeriodic Fixed             8.975e-16
+training_phasePostTest:TrainingPeriodic Fixed           -4.405e-03
+training_phaseRetention:TrainingPeriodic Fixed          -8.483e-02
+                                                        Std. Error t value
+(Intercept)                                              4.085e-02   1.022
+trial                                                    7.162e-03  -1.942
+training_phasePostTest                                   4.005e-02  -4.934
+training_phaseRetention                                  3.431e-02  -6.191
+training_phasePreTest:TrainingChaotic Non-interactive    5.211e-02   0.000
+training_phasePostTest:TrainingChaotic Non-interactive   5.991e-02   2.295
+training_phaseRetention:TrainingChaotic Non-interactive  5.224e-02   1.212
+training_phasePreTest:TrainingPeriodic Fixed             5.211e-02   0.000
+training_phasePostTest:TrainingPeriodic Fixed            5.991e-02  -0.074
+training_phaseRetention:TrainingPeriodic Fixed           5.224e-02  -1.624
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.526                                       
+trnng_phsPT       -0.450  0.179                                
+trnng_phsRt       -0.420  0.009  0.425                         
+trnng_phsPrT:TCN- -0.567  0.000  0.279  0.326                  
+trnng_phsPsT:TCN- -0.255  0.000 -0.404  0.000  0.450           
+trnn_R:TCN-       -0.290 -0.006 -0.001 -0.332  0.516           
+trnng_phsPrT:TPF  -0.567  0.000  0.279  0.326  0.444           
+trnng_phsPsT:TPF  -0.255  0.000 -0.404  0.000  0.200           
+trnng_R:TPF       -0.290 -0.006 -0.001 -0.332  0.229           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.449                                   
+trnng_phsPrT:TPF   0.200             0.229                 
+trnng_phsPsT:TPF   0.444             0.200  0.450          
+trnng_R:TPF        0.200             0.447  0.516          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.449          
+
+========================================================================================================
+                                                         Model 1     Model 2    Model 3      Model 4    
+--------------------------------------------------------------------------------------------------------
+(Intercept)                                               -0.12 ***   -0.09 **     0.04         0.04    
+                                                          (0.02)      (0.03)      (0.03)       (0.04)   
+trial                                                                 -0.01       -0.01        -0.01    
+                                                                      (0.01)      (0.01)       (0.01)   
+training_phasePostTest                                                            -0.16 ***    -0.20 ***
+                                                                                  (0.03)       (0.04)   
+training_phaseRetention                                                           -0.22 ***    -0.21 ***
+                                                                                  (0.02)       (0.03)   
+training_phasePreTest:TrainingChaotic Non-interactive                                           0.00    
+                                                                                               (0.05)   
+training_phasePostTest:TrainingChaotic Non-interactive                                          0.14 *  
+                                                                                               (0.06)   
+training_phaseRetention:TrainingChaotic Non-interactive                                         0.06    
+                                                                                               (0.05)   
+training_phasePreTest:TrainingPeriodic Fixed                                                    0.00    
+                                                                                               (0.05)   
+training_phasePostTest:TrainingPeriodic Fixed                                                  -0.00    
+                                                                                               (0.06)   
+training_phaseRetention:TrainingPeriodic Fixed                                                 -0.08    
+                                                                                               (0.05)   
+--------------------------------------------------------------------------------------------------------
+AIC                                                      -86.71      -85.97     -173.86      -176.84    
+BIC                                                      -75.25      -70.69     -150.93      -131.00    
+Log Likelihood                                            46.36       46.99       92.93       100.42    
+Num. obs.                                                337         337         337          337       
+Num. groups: pp                                           26          26          26           26       
+Var: pp (Intercept)                                        0.01        0.01        0.01         0.01    
+Var: Residual                                              0.04        0.04        0.03         0.03    
+========================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Chaotic; DV: pitch_error_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -209.67 -198.20 107.83  -215.67                          
+m2    4 -217.53 -202.24 112.77  -225.53  9.8696  1    0.00168 ** 
+m3    6 -279.78 -256.84 145.89  -291.78 66.2427  2  4.127e-15 ***
+m4   12 -280.98 -235.11 152.49  -304.98 13.2041  6    0.03991 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -209.7   -198.2    107.8   -215.7      335 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.2481 -0.6743 -0.0659  0.5710  3.4302 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.00571  0.07557 
+ Residual             0.02800  0.16733 
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) -0.08009    0.01739  -4.605
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -217.5   -202.2    112.8   -225.5      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3731 -0.6605 -0.0246  0.6430  3.2697 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.005777 0.07601 
+ Residual             0.027128 0.16471 
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept) -0.022634   0.025132  -0.901
+trial       -0.020746   0.006552  -3.167
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.722
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -279.8   -256.8    145.9   -291.8      332 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3211 -0.6823 -0.1183  0.6130  3.0136 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.006177 0.07859 
+ Residual             0.021938 0.14812 
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)              0.091520   0.027414   3.339
+trial                   -0.030507   0.006193  -4.926
+training_phasePostTest  -0.166210   0.022099  -7.521
+training_phaseRetention -0.126800   0.018372  -6.902
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.678              
+trnng_phsPT -0.468  0.280       
+trnng_phsRt -0.335  0.000  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -281.0   -235.1    152.5   -305.0      326 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3927 -0.6432 -0.1330  0.6353  3.2741 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.005702 0.07551 
+ Residual             0.021153 0.14544 
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate
+(Intercept)                                              9.152e-02
+trial                                                   -3.051e-02
+training_phasePostTest                                  -2.484e-01
+training_phaseRetention                                 -1.435e-01
+training_phasePreTest:TrainingChaotic Non-interactive    1.323e-16
+training_phasePostTest:TrainingChaotic Non-interactive   1.538e-01
+training_phaseRetention:TrainingChaotic Non-interactive  5.305e-02
+training_phasePreTest:TrainingPeriodic Fixed             1.899e-16
+training_phasePostTest:TrainingPeriodic Fixed            1.134e-01
+training_phaseRetention:TrainingPeriodic Fixed           1.076e-03
+                                                        Std. Error t value
+(Intercept)                                              3.642e-02   2.513
+trial                                                    6.081e-03  -5.017
+training_phasePostTest                                   3.413e-02  -7.278
+training_phaseRetention                                  2.909e-02  -4.932
+training_phasePreTest:TrainingChaotic Non-interactive    4.727e-02   0.000
+training_phasePostTest:TrainingChaotic Non-interactive   5.357e-02   2.872
+training_phaseRetention:TrainingChaotic Non-interactive  4.727e-02   1.122
+training_phasePreTest:TrainingPeriodic Fixed             4.727e-02   0.000
+training_phasePostTest:TrainingPeriodic Fixed            5.357e-02   2.117
+training_phaseRetention:TrainingPeriodic Fixed           4.727e-02   0.023
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.501                                       
+trnng_phsPT       -0.430  0.178                                
+trnng_phsRt       -0.399  0.000  0.426                         
+trnng_phsPrT:TCN- -0.577  0.000  0.262  0.308                  
+trnng_phsPsT:TCN- -0.292  0.000 -0.386  0.000  0.507           
+trnn_R:TCN-       -0.331  0.000  0.000 -0.308  0.574           
+trnng_phsPrT:TPF  -0.577  0.000  0.262  0.308  0.444           
+trnng_phsPsT:TPF  -0.292  0.000 -0.386  0.000  0.225           
+trnng_R:TPF       -0.331  0.000  0.000 -0.308  0.255           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.507                                   
+trnng_phsPrT:TPF   0.225             0.255                 
+trnng_phsPsT:TPF   0.444             0.225  0.507          
+trnng_R:TPF        0.225             0.444  0.574          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.507          
+
+==========================================================================================================
+                                                         Model 1      Model 2     Model 3      Model 4    
+----------------------------------------------------------------------------------------------------------
+(Intercept)                                                -0.08 ***    -0.02        0.09 ***     0.09 *  
+                                                           (0.02)       (0.03)      (0.03)       (0.04)   
+trial                                                                   -0.02 **    -0.03 ***    -0.03 ***
+                                                                        (0.01)      (0.01)       (0.01)   
+training_phasePostTest                                                              -0.17 ***    -0.25 ***
+                                                                                    (0.02)       (0.03)   
+training_phaseRetention                                                             -0.13 ***    -0.14 ***
+                                                                                    (0.02)       (0.03)   
+training_phasePreTest:TrainingChaotic Non-interactive                                             0.00    
+                                                                                                 (0.05)   
+training_phasePostTest:TrainingChaotic Non-interactive                                            0.15 ** 
+                                                                                                 (0.05)   
+training_phaseRetention:TrainingChaotic Non-interactive                                           0.05    
+                                                                                                 (0.05)   
+training_phasePreTest:TrainingPeriodic Fixed                                                      0.00    
+                                                                                                 (0.05)   
+training_phasePostTest:TrainingPeriodic Fixed                                                     0.11 *  
+                                                                                                 (0.05)   
+training_phaseRetention:TrainingPeriodic Fixed                                                    0.00    
+                                                                                                 (0.05)   
+----------------------------------------------------------------------------------------------------------
+AIC                                                      -209.67      -217.54     -279.78      -280.98    
+BIC                                                      -198.20      -202.24     -256.84      -235.11    
+Log Likelihood                                            107.83       112.77      145.89       152.49    
+Num. obs.                                                 338          338         338          338       
+Num. groups: pp                                            26           26          26           26       
+Var: pp (Intercept)                                         0.01         0.01        0.01         0.01    
+Var: Residual                                               0.03         0.03        0.02         0.02    
+==========================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Chaotic Visual; DV: pitch_error_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -787.03 -775.57 396.52  -793.03                          
+m2    4 -795.93 -780.65 401.96  -803.93 10.8955  1   0.000964 ***
+m3    6 -800.42 -777.50 406.21  -812.42  8.4922  2   0.014320 *  
+m4   12 -793.39 -747.55 408.70  -817.39  4.9720  6   0.547404    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -787.0   -775.6    396.5   -793.0      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5466 -0.6653 -0.0132  0.5475  3.3557 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.001087 0.03297 
+ Residual             0.005021 0.07086 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) -0.01151    0.00753  -1.529
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -795.9   -780.6    402.0   -803.9      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5709 -0.6281 -0.0226  0.6156  3.6972 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.001097 0.03312 
+ Residual             0.004849 0.06963 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)  0.014068   0.010752   1.308
+trial       -0.009261   0.002781  -3.330
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.715
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -800.4   -777.5    406.2   -812.4      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5031 -0.6360  0.0111  0.6091  3.8854 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.001109 0.03330 
+ Residual             0.004718 0.06869 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                         Estimate Std. Error t value
+(Intercept)              0.031746   0.012377   2.565
+trial                   -0.010587   0.002883  -3.673
+training_phasePostTest  -0.025051   0.010252  -2.443
+training_phaseRetention -0.021298   0.008537  -2.495
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.695              
+trnng_phsPT -0.480  0.277       
+trnng_phsRt -0.342 -0.006  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -793.4   -747.5    408.7   -817.4      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.3550 -0.6803  0.0433  0.6247  3.7386 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.001058 0.03252 
+ Residual             0.004658 0.06825 
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate
+(Intercept)                                              0.0316620
+trial                                                   -0.0106094
+training_phasePostTest                                  -0.0218270
+training_phaseRetention                                 -0.0028869
+training_phasePreTest:TrainingChaotic Non-interactive    0.0001661
+training_phasePostTest:TrainingChaotic Non-interactive  -0.0144177
+training_phaseRetention:TrainingChaotic Non-interactive -0.0378519
+training_phasePreTest:TrainingPeriodic Fixed             0.0001661
+training_phasePostTest:TrainingPeriodic Fixed            0.0043593
+training_phaseRetention:TrainingPeriodic Fixed          -0.0214887
+                                                        Std. Error t value
+(Intercept)                                              0.0165131   1.917
+trial                                                    0.0028644  -3.704
+training_phasePostTest                                   0.0160603  -1.359
+training_phaseRetention                                  0.0137234  -0.210
+training_phasePreTest:TrainingChaotic Non-interactive    0.0212046   0.008
+training_phasePostTest:TrainingChaotic Non-interactive   0.0242352  -0.595
+training_phaseRetention:TrainingChaotic Non-interactive  0.0211569  -1.789
+training_phasePreTest:TrainingPeriodic Fixed             0.0212046   0.008
+training_phasePostTest:TrainingPeriodic Fixed            0.0242352   0.180
+training_phaseRetention:TrainingPeriodic Fixed           0.0211569  -1.016
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.513                                       
+trnng_phsPT       -0.446  0.171                                
+trnng_phsRt       -0.415 -0.009  0.430                         
+trnng_phsPrT:TCN- -0.571 -0.006  0.278  0.327                  
+trnng_phsPsT:TCN- -0.264  0.000 -0.399  0.000  0.463           
+trnn_R:TCN-       -0.303  0.000  0.000 -0.321  0.531           
+trnng_phsPrT:TPF  -0.571 -0.006  0.278  0.327  0.447           
+trnng_phsPsT:TPF  -0.264  0.000 -0.399  0.000  0.206           
+trnng_R:TPF       -0.303  0.000  0.000 -0.321  0.236           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.464                                   
+trnng_phsPrT:TPF   0.206             0.236                 
+trnng_phsPsT:TPF   0.444             0.206  0.463          
+trnng_R:TPF        0.206             0.444  0.531          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.464          
+
+========================================================================================================
+                                                         Model 1   Model 2      Model 3      Model 4    
+--------------------------------------------------------------------------------------------------------
+(Intercept)                                                -0.01      0.01         0.03 *       0.03    
+                                                           (0.01)    (0.01)       (0.01)       (0.02)   
+trial                                                                -0.01 ***    -0.01 ***    -0.01 ***
+                                                                     (0.00)       (0.00)       (0.00)   
+training_phasePostTest                                                            -0.03 *      -0.02    
+                                                                                  (0.01)       (0.02)   
+training_phaseRetention                                                           -0.02 *      -0.00    
+                                                                                  (0.01)       (0.01)   
+training_phasePreTest:TrainingChaotic Non-interactive                                           0.00    
+                                                                                               (0.02)   
+training_phasePostTest:TrainingChaotic Non-interactive                                         -0.01    
+                                                                                               (0.02)   
+training_phaseRetention:TrainingChaotic Non-interactive                                        -0.04    
+                                                                                               (0.02)   
+training_phasePreTest:TrainingPeriodic Fixed                                                    0.00    
+                                                                                               (0.02)   
+training_phasePostTest:TrainingPeriodic Fixed                                                   0.00    
+                                                                                               (0.02)   
+training_phaseRetention:TrainingPeriodic Fixed                                                 -0.02    
+                                                                                               (0.02)   
+--------------------------------------------------------------------------------------------------------
+AIC                                                      -787.03   -795.93      -800.42      -793.39    
+BIC                                                      -775.57   -780.65      -777.50      -747.55    
+Log Likelihood                                            396.52    401.96       406.21       408.70    
+Num. obs.                                                 337       337          337          337       
+Num. groups: pp                                            26        26           26           26       
+Var: pp (Intercept)                                         0.00      0.00         0.00         0.00    
+Var: Residual                                               0.01      0.00         0.00         0.00    
+========================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Periodic Fixed; DV: tau_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 2277.5 2288.9 -1135.7   2271.5                     
+m2    4 2278.4 2293.7 -1135.2   2270.4 1.0257  1     0.3112
+m3    6 2279.0 2301.9 -1133.5   2267.0 3.4510  2     0.1781
+m4   12 2283.9 2329.8 -1130.0   2259.9 7.0608  6     0.3153
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2277.5   2288.9  -1135.7   2271.5      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.4795 -0.3711  0.0095  0.3080  4.3150 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  0.00    0.000   
+ Residual             49.52    7.037   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  -0.8091     0.3833  -2.111
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2278.4   2293.7  -1135.2   2270.4      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.5607 -0.3646  0.0145  0.2946  4.3312 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  0.00    0.000   
+ Residual             49.37    7.026   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) -0.02344    0.86453  -0.027
+trial       -0.28440    0.28060  -1.014
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.897
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2279.0   2301.9  -1133.5   2267.0      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.5619 -0.3642 -0.0195  0.3199  4.4550 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  0.00    0.00    
+ Residual             48.87    6.99    
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                        Estimate Std. Error t value
+(Intercept)               0.9460     1.0701   0.884
+trial                    -0.3170     0.2933  -1.081
+training_phasePostTest   -1.1638     1.0434  -1.115
+training_phaseRetention  -1.5816     0.8687  -1.821
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.818              
+trnng_phsPT -0.566  0.277       
+trnng_phsRt -0.403 -0.005  0.416
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2283.9   2329.8  -1130.0   2259.9      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.3994 -0.3476 -0.0412  0.3222  4.3173 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  0.00    0.000   
+ Residual             47.85    6.918   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate
+(Intercept)                                              9.510e-01
+trial                                                   -3.170e-01
+training_phasePostTest                                  -1.124e+00
+training_phaseRetention                                 -1.086e+00
+training_phasePreTest:TrainingChaotic Non-interactive   -1.626e-02
+training_phasePostTest:TrainingChaotic Non-interactive   1.501e+00
+training_phaseRetention:TrainingChaotic Non-interactive  7.761e-01
+training_phasePreTest:TrainingPeriodic Fixed             3.966e-15
+training_phasePostTest:TrainingPeriodic Fixed           -1.647e+00
+training_phaseRetention:TrainingPeriodic Fixed          -2.403e+00
+                                                        Std. Error t value
+(Intercept)                                              1.310e+00   0.726
+trial                                                    2.903e-01  -1.092
+training_phasePostTest                                   1.624e+00  -0.692
+training_phaseRetention                                  1.384e+00  -0.785
+training_phasePreTest:TrainingChaotic Non-interactive    1.478e+00  -0.011
+training_phasePostTest:TrainingChaotic Non-interactive   1.894e+00   0.792
+training_phaseRetention:TrainingChaotic Non-interactive  1.467e+00   0.529
+training_phasePreTest:TrainingPeriodic Fixed             1.467e+00   0.000
+training_phasePostTest:TrainingPeriodic Fixed            1.894e+00  -0.869
+training_phaseRetention:TrainingPeriodic Fixed           1.467e+00  -1.637
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.665                                       
+trnng_phsPT       -0.569  0.179                                
+trnng_phsRt       -0.528  0.000  0.426                         
+trnng_phsPrT:TCN- -0.501  0.010  0.401  0.468                  
+trnng_phsPsT:TCN-  0.000  0.000 -0.519  0.000  0.000           
+trnn_R:TCN-        0.000  0.000  0.000 -0.471  0.000           
+trnng_phsPrT:TPF  -0.498  0.000  0.402  0.471  0.441           
+trnng_phsPsT:TPF   0.000  0.000 -0.519  0.000  0.000           
+trnng_R:TPF        0.000  0.000  0.000 -0.471  0.000           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.000                                   
+trnng_phsPrT:TPF   0.000             0.000                 
+trnng_phsPsT:TPF   0.444             0.000  0.000          
+trnng_R:TPF        0.000             0.444  0.000          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.000          
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+
+====================================================================================================
+                                                         Model 1     Model 2    Model 3    Model 4  
+----------------------------------------------------------------------------------------------------
+(Intercept)                                                 -0.81 *     -0.02       0.95       0.95 
+                                                            (0.38)      (0.86)     (1.07)     (1.31)
+trial                                                                   -0.28      -0.32      -0.32 
+                                                                        (0.28)     (0.29)     (0.29)
+training_phasePostTest                                                             -1.16      -1.12 
+                                                                                   (1.04)     (1.62)
+training_phaseRetention                                                            -1.58      -1.09 
+                                                                                   (0.87)     (1.38)
+training_phasePreTest:TrainingChaotic Non-interactive                                         -0.02 
+                                                                                              (1.48)
+training_phasePostTest:TrainingChaotic Non-interactive                                         1.50 
+                                                                                              (1.89)
+training_phaseRetention:TrainingChaotic Non-interactive                                        0.78 
+                                                                                              (1.47)
+training_phasePreTest:TrainingPeriodic Fixed                                                   0.00 
+                                                                                              (1.47)
+training_phasePostTest:TrainingPeriodic Fixed                                                 -1.65 
+                                                                                              (1.89)
+training_phaseRetention:TrainingPeriodic Fixed                                                -2.40 
+                                                                                              (1.47)
+----------------------------------------------------------------------------------------------------
+AIC                                                       2277.46     2278.44    2278.98    2283.92 
+BIC                                                       2288.92     2293.72    2301.91    2329.77 
+Log Likelihood                                           -1135.73    -1135.22   -1133.49   -1129.96 
+Num. obs.                                                  337         337        337        337    
+Num. groups: pp                                             26          26         26         26    
+Var: pp (Intercept)                                          0.00        0.00       0.00       0.00 
+Var: Residual                                               49.52       49.37      48.87      47.85 
+====================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Periodic Fadeout (SCT); DV: tau_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 2998.9 3010.3 -1496.4   2992.9                     
+m2    4 2999.4 3014.7 -1495.7   2991.4 1.4502  1     0.2285
+m3    6 3000.8 3023.7 -1494.4   2988.8 2.6248  2     0.2692
+m4   12 3009.3 3055.1 -1492.6   2985.3 3.5444  6     0.7381
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2998.9   3010.3  -1496.4   2992.9      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.8348 -0.0660  0.0417  0.1296  6.1083 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)   0.0     0.00   
+ Residual             421.2    20.52   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   -1.360      1.118  -1.217
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2999.4   3014.7  -1495.7   2991.4      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.8403 -0.0766  0.0370  0.1480  6.1810 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)   0.0     0.00   
+ Residual             419.4    20.48   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   1.3634     2.5198   0.541
+trial        -0.9859     0.8178  -1.206
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.897
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  3000.8   3023.7  -1494.4   2988.8      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.9490 -0.0938  0.0288  0.1542  6.1201 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)   0.0     0.0    
+ Residual             416.1    20.4    
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                        Estimate Std. Error t value
+(Intercept)               2.5329     3.1297   0.809
+trial                    -0.8443     0.8560  -0.986
+training_phasePostTest   -0.3634     3.0444  -0.119
+training_phaseRetention  -3.8577     2.5351  -1.522
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.820              
+trnng_phsPT -0.567  0.281       
+trnng_phsRt -0.408  0.005  0.416
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  3009.3   3055.1  -1492.6   2985.3      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.9909 -0.1169  0.0179  0.1695  6.1520 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)   0.0     0.00   
+ Residual             411.8    20.29   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate
+(Intercept)                                              2.514e+00
+trial                                                   -8.381e-01
+training_phasePostTest                                   1.377e+00
+training_phaseRetention                                 -2.110e+00
+training_phasePreTest:TrainingChaotic Non-interactive    2.365e-15
+training_phasePostTest:TrainingChaotic Non-interactive  -7.777e-01
+training_phaseRetention:TrainingChaotic Non-interactive -6.134e+00
+training_phasePreTest:TrainingPeriodic Fixed             1.655e-15
+training_phasePostTest:TrainingPeriodic Fixed           -4.857e+00
+training_phaseRetention:TrainingPeriodic Fixed           4.979e-01
+                                                        Std. Error t value
+(Intercept)                                              3.842e+00   0.654
+trial                                                    8.515e-01  -0.984
+training_phasePostTest                                   4.763e+00   0.289
+training_phaseRetention                                  4.079e+00  -0.517
+training_phasePreTest:TrainingChaotic Non-interactive    4.305e+00   0.000
+training_phasePostTest:TrainingChaotic Non-interactive   5.557e+00  -0.140
+training_phaseRetention:TrainingChaotic Non-interactive  4.324e+00  -1.419
+training_phasePreTest:TrainingPeriodic Fixed             4.305e+00   0.000
+training_phasePostTest:TrainingPeriodic Fixed            5.557e+00  -0.874
+training_phaseRetention:TrainingPeriodic Fixed           4.324e+00   0.115
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.665                                       
+trnng_phsPT       -0.569  0.179                                
+trnng_phsRt       -0.531  0.009  0.425                         
+trnng_phsPrT:TCN- -0.498  0.000  0.402  0.469                  
+trnng_phsPsT:TCN-  0.000  0.000 -0.519  0.000  0.000           
+trnn_R:TCN-        0.005 -0.008 -0.001 -0.476  0.000           
+trnng_phsPrT:TPF  -0.498  0.000  0.402  0.469  0.444           
+trnng_phsPsT:TPF   0.000  0.000 -0.519  0.000  0.000           
+trnng_R:TPF        0.005 -0.008 -0.001 -0.476  0.000           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.000                                   
+trnng_phsPrT:TPF   0.000             0.000                 
+trnng_phsPsT:TPF   0.444             0.000  0.000          
+trnng_R:TPF        0.000             0.449  0.000          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.000          
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+
+===================================================================================================
+                                                         Model 1    Model 2    Model 3    Model 4  
+---------------------------------------------------------------------------------------------------
+(Intercept)                                                 -1.36       1.36       2.53       2.51 
+                                                            (1.12)     (2.52)     (3.13)     (3.84)
+trial                                                                  -0.99      -0.84      -0.84 
+                                                                       (0.82)     (0.86)     (0.85)
+training_phasePostTest                                                            -0.36       1.38 
+                                                                                  (3.04)     (4.76)
+training_phaseRetention                                                           -3.86      -2.11 
+                                                                                  (2.54)     (4.08)
+training_phasePreTest:TrainingChaotic Non-interactive                                         0.00 
+                                                                                             (4.30)
+training_phasePostTest:TrainingChaotic Non-interactive                                       -0.78 
+                                                                                             (5.56)
+training_phaseRetention:TrainingChaotic Non-interactive                                      -6.13 
+                                                                                             (4.32)
+training_phasePreTest:TrainingPeriodic Fixed                                                  0.00 
+                                                                                             (4.30)
+training_phasePostTest:TrainingPeriodic Fixed                                                -4.86 
+                                                                                             (5.56)
+training_phaseRetention:TrainingPeriodic Fixed                                                0.50 
+                                                                                             (4.32)
+---------------------------------------------------------------------------------------------------
+AIC                                                       2998.88    2999.43    3000.81    3009.26 
+BIC                                                       3010.34    3014.71    3023.73    3055.11 
+Log Likelihood                                           -1496.44   -1495.72   -1494.40   -1492.63 
+Num. obs.                                                  337        337        337        337    
+Num. groups: pp                                             26         26         26         26    
+Var: pp (Intercept)                                          0.00       0.00       0.00       0.00 
+Var: Residual                                              421.19     419.38     416.13     411.77 
+===================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Chaotic; DV: tau_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 2386.0 2397.5 -1190.0   2380.0                     
+m2    4 2386.9 2402.2 -1189.4   2378.9 1.1131  1     0.2914
+m3    6 2388.5 2411.4 -1188.2   2376.5 2.3846  2     0.3035
+m4   12 2396.4 2442.3 -1186.2   2372.4 4.0689  6     0.6674
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2386.0   2397.5  -1190.0   2380.0      335 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.0285 -0.1994 -0.0137  0.1406  8.8241 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  3.042   1.744   
+ Residual             64.505   8.031   
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) -0.09907    0.55484  -0.179
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2386.9   2402.2  -1189.4   2378.9      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.9454 -0.2074 -0.0202  0.1449  8.7622 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  3.06    1.749   
+ Residual             64.27    8.017   
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   0.8335     1.0430   0.799
+trial        -0.3368     0.3189  -1.056
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.847
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2388.5   2411.4  -1188.2   2376.5      332 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.9510 -0.2173 -0.0110  0.1652  8.6861 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  3.098   1.760   
+ Residual             63.786   7.987   
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+                        Estimate Std. Error t value
+(Intercept)               1.4766     1.2702   1.163
+trial                    -0.4922     0.3339  -1.474
+training_phasePostTest   -1.4722     1.1916  -1.235
+training_phaseRetention   0.3304     0.9906   0.334
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.789              
+trnng_phsPT -0.545  0.280       
+trnng_phsRt -0.390  0.000  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  2396.4   2442.3  -1186.2   2372.4      326 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.8483 -0.2443 -0.0007  0.1868  8.5961 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  2.549   1.597   
+ Residual             63.356   7.960   
+Number of obs: 338, groups:  pp, 26
+
+Fixed effects:
+                                                          Estimate
+(Intercept)                                              1.477e+00
+trial                                                   -4.922e-01
+training_phasePostTest                                  -2.363e+00
+training_phaseRetention                                 -9.641e-02
+training_phasePreTest:TrainingChaotic Non-interactive    2.355e-15
+training_phasePostTest:TrainingChaotic Non-interactive   2.659e+00
+training_phaseRetention:TrainingChaotic Non-interactive  2.301e+00
+training_phasePreTest:TrainingPeriodic Fixed             2.402e-15
+training_phasePostTest:TrainingPeriodic Fixed            2.370e-01
+training_phaseRetention:TrainingPeriodic Fixed          -9.135e-01
+                                                        Std. Error t value
+(Intercept)                                              1.587e+00   0.930
+trial                                                    3.328e-01  -1.479
+training_phasePostTest                                   1.868e+00  -1.265
+training_phaseRetention                                  1.592e+00  -0.061
+training_phasePreTest:TrainingChaotic Non-interactive    1.851e+00   0.000
+training_phasePostTest:TrainingChaotic Non-interactive   2.308e+00   1.152
+training_phaseRetention:TrainingChaotic Non-interactive  1.851e+00   1.243
+training_phasePreTest:TrainingPeriodic Fixed             1.851e+00   0.000
+training_phasePostTest:TrainingPeriodic Fixed            2.308e+00   0.103
+training_phaseRetention:TrainingPeriodic Fixed           1.851e+00  -0.494
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.629                                       
+trnng_phsPT       -0.539  0.178                                
+trnng_phsRt       -0.502  0.000  0.426                         
+trnng_phsPrT:TCN- -0.518  0.000  0.367  0.430                  
+trnng_phsPsT:TCN- -0.070  0.000 -0.490  0.000  0.134           
+trnn_R:TCN-       -0.087  0.000  0.000 -0.430  0.167           
+trnng_phsPrT:TPF  -0.518  0.000  0.367  0.430  0.444           
+trnng_phsPsT:TPF  -0.070  0.000 -0.490  0.000  0.060           
+trnng_R:TPF       -0.087  0.000  0.000 -0.430  0.074           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.134                                   
+trnng_phsPrT:TPF   0.060             0.074                 
+trnng_phsPsT:TPF   0.444             0.060  0.134          
+trnng_R:TPF        0.060             0.444  0.167          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.134          
+
+===================================================================================================
+                                                         Model 1    Model 2    Model 3    Model 4  
+---------------------------------------------------------------------------------------------------
+(Intercept)                                                 -0.10       0.83       1.48       1.48 
+                                                            (0.55)     (1.04)     (1.27)     (1.59)
+trial                                                                  -0.34      -0.49      -0.49 
+                                                                       (0.32)     (0.33)     (0.33)
+training_phasePostTest                                                            -1.47      -2.36 
+                                                                                  (1.19)     (1.87)
+training_phaseRetention                                                            0.33      -0.10 
+                                                                                  (0.99)     (1.59)
+training_phasePreTest:TrainingChaotic Non-interactive                                         0.00 
+                                                                                             (1.85)
+training_phasePostTest:TrainingChaotic Non-interactive                                        2.66 
+                                                                                             (2.31)
+training_phaseRetention:TrainingChaotic Non-interactive                                       2.30 
+                                                                                             (1.85)
+training_phasePreTest:TrainingPeriodic Fixed                                                  0.00 
+                                                                                             (1.85)
+training_phasePostTest:TrainingPeriodic Fixed                                                 0.24 
+                                                                                             (2.31)
+training_phaseRetention:TrainingPeriodic Fixed                                               -0.91 
+                                                                                             (1.85)
+---------------------------------------------------------------------------------------------------
+AIC                                                       2385.99    2386.88    2388.49    2396.43 
+BIC                                                       2397.46    2402.17    2411.43    2442.30 
+Log Likelihood                                           -1190.00   -1189.44   -1188.25   -1186.21 
+Num. obs.                                                  338        338        338        338    
+Num. groups: pp                                             26         26         26         26    
+Var: pp (Intercept)                                          3.04       3.06       3.10       2.55 
+Var: Residual                                               64.50      64.27      63.79      63.36 
+===================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+[1] "Test: Chaotic Visual; DV: tau_delta"
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + training_phase + (1 | pp)
+m4: dv ~ 1 + trial + training_phase + training_phase:Training + (1 | pp)
+   npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 3819.2 3830.6 -1906.6   3813.2                     
+m2    4 3821.0 3836.3 -1906.5   3813.0 0.1661  1     0.6836
+m3    6 3823.4 3846.4 -1905.7   3811.4 1.5683  2     0.4565
+m4   12 3830.3 3876.1 -1903.2   3806.3 5.1465  6     0.5252
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  3819.2   3830.6  -1906.6   3813.2      334 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.9960  0.0303  0.0390  0.0455  8.7105 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  349.9   18.70   
+ Residual             4554.5   67.49   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   -5.439      5.193  -1.047
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  3821.0   3836.3  -1906.5   3813.0      333 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.9845  0.0125  0.0392  0.0605  8.6934 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  350.1   18.71   
+ Residual             4552.1   67.47   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   -8.473      9.077  -0.933
+trial          1.098      2.695   0.408
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.820
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  3823.4   3846.4  -1905.7   3811.4      331 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.9968 -0.0362  0.0468  0.1038  8.6426 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  352     18.76   
+ Residual             4529     67.30   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                        Estimate Std. Error t value
+(Intercept)               -3.380     10.940  -0.309
+trial                      1.140      2.824   0.403
+training_phasePostTest    -5.015     10.045  -0.499
+training_phaseRetention  -10.486      8.364  -1.254
+
+Correlation of Fixed Effects:
+            (Intr) trial  trn_PT
+trial       -0.770              
+trnng_phsPT -0.533  0.277       
+trnng_phsRt -0.380 -0.005  0.416
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: dv ~ 1 + trial + training_phase + training_phase:Training + (1 |  
+    pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  3830.3   3876.1  -1903.1   3806.3      325 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.9852 -0.0251  0.0036  0.0445  8.5312 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept)  299.1   17.29   
+ Residual             4486.0   66.98   
+Number of obs: 337, groups:  pp, 26
+
+Fixed effects:
+                                                         Estimate
+(Intercept)                                              -3.34287
+trial                                                     1.13078
+training_phasePostTest                                    0.77951
+training_phaseRetention                                  -1.66566
+training_phasePreTest:TrainingChaotic Non-interactive    -0.04947
+training_phasePostTest:TrainingChaotic Non-interactive  -18.79060
+training_phaseRetention:TrainingChaotic Non-interactive -30.24985
+training_phasePreTest:TrainingPeriodic Fixed             -0.04947
+training_phasePostTest:TrainingPeriodic Fixed            -0.10505
+training_phaseRetention:TrainingPeriodic Fixed            1.54750
+                                                        Std. Error t value
+(Intercept)                                               13.80734  -0.242
+trial                                                      2.81087   0.402
+training_phasePostTest                                    15.76057   0.049
+training_phaseRetention                                   13.46654  -0.124
+training_phasePreTest:TrainingChaotic Non-interactive     16.46415  -0.003
+training_phasePostTest:TrainingChaotic Non-interactive    20.09332  -0.935
+training_phaseRetention:TrainingChaotic Non-interactive   16.40613  -1.844
+training_phasePreTest:TrainingPeriodic Fixed              16.46415  -0.003
+training_phasePostTest:TrainingPeriodic Fixed             20.09332  -0.005
+training_phaseRetention:TrainingPeriodic Fixed            16.40613   0.094
+
+Correlation of Fixed Effects:
+                  (Intr) trial  trn_PT trnn_R trnng_phsPrT:TCN-
+trial             -0.602                                       
+trnng_phsPT       -0.524  0.171                                
+trnng_phsRt       -0.487 -0.009  0.430                         
+trnng_phsPrT:TCN- -0.530 -0.007  0.352  0.413                  
+trnng_phsPsT:TCN- -0.108  0.000 -0.472  0.000  0.203           
+trnn_R:TCN-       -0.132  0.000  0.000 -0.406  0.249           
+trnng_phsPrT:TPF  -0.530 -0.007  0.352  0.413  0.448           
+trnng_phsPsT:TPF  -0.108  0.000 -0.472  0.000  0.090           
+trnng_R:TPF       -0.132  0.000  0.000 -0.406  0.111           
+                  trnng_phsPsT:TCN- t_R:TN trnng_phsPrT:TPF
+trial                                                      
+trnng_phsPT                                                
+trnng_phsRt                                                
+trnng_phsPrT:TCN-                                          
+trnng_phsPsT:TCN-                                          
+trnn_R:TCN-        0.204                                   
+trnng_phsPrT:TPF   0.090             0.111                 
+trnng_phsPsT:TPF   0.444             0.091  0.203          
+trnng_R:TPF        0.091             0.444  0.249          
+                  trnng_phsPsT:TPF
+trial                             
+trnng_phsPT                       
+trnng_phsRt                       
+trnng_phsPrT:TCN-                 
+trnng_phsPsT:TCN-                 
+trnn_R:TCN-                       
+trnng_phsPrT:TPF                  
+trnng_phsPsT:TPF                  
+trnng_R:TPF        0.204          
+
+===================================================================================================
+                                                         Model 1    Model 2    Model 3    Model 4  
+---------------------------------------------------------------------------------------------------
+(Intercept)                                                 -5.44      -8.47      -3.38      -3.34 
+                                                            (5.19)     (9.08)    (10.94)    (13.81)
+trial                                                                   1.10       1.14       1.13 
+                                                                       (2.69)     (2.82)     (2.81)
+training_phasePostTest                                                            -5.01       0.78 
+                                                                                 (10.05)    (15.76)
+training_phaseRetention                                                          -10.49      -1.67 
+                                                                                  (8.36)    (13.47)
+training_phasePreTest:TrainingChaotic Non-interactive                                        -0.05 
+                                                                                            (16.46)
+training_phasePostTest:TrainingChaotic Non-interactive                                      -18.79 
+                                                                                            (20.09)
+training_phaseRetention:TrainingChaotic Non-interactive                                     -30.25 
+                                                                                            (16.41)
+training_phasePreTest:TrainingPeriodic Fixed                                                 -0.05 
+                                                                                            (16.46)
+training_phasePostTest:TrainingPeriodic Fixed                                                -0.11 
+                                                                                            (20.09)
+training_phaseRetention:TrainingPeriodic Fixed                                                1.55 
+                                                                                            (16.41)
+---------------------------------------------------------------------------------------------------
+AIC                                                       3819.18    3821.01    3823.44    3830.29 
+BIC                                                       3830.64    3836.29    3846.36    3876.14 
+Log Likelihood                                           -1906.59   -1906.50   -1905.72   -1903.15 
+Num. obs.                                                  337        337        337        337    
+Num. groups: pp                                             26         26         26         26    
+Var: pp (Intercept)                                        349.85     350.12     352.05     299.07 
+Var: Residual                                             4554.53    4552.06    4529.08    4486.02 
+===================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
