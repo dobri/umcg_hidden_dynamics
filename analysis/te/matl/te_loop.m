@@ -102,13 +102,19 @@ for task = 1 %:numel(TGA_results)
     counter = 0;
     for tr1 = 1:ntrials
         trials2 = [1:tr1-1 tr1+1:ntrials];
-        trials2 = trials2(randperm(numel(trials2),cfgTESS2.trial_shuffle_surr_n_per_trial)');
+        trials2 = trials2(randperm(numel(trials2),TGA_results{task}.trial_shuffle_surr_n_per_trial)');
         for tr2 = trials2
             counter = counter + 1;
             cfgTEP2 = cfgTEP;
-            cfgTEP2.ragdim = max(TGA_results{task}.cfg.dim);
-            cfgTEP2.minnrtrials = 0;   % minimum acceptable number of trials
+            % cfgTEP2 = rmfield(cfgTEP2,'ragdim');
+            % cfgTEP2.ragdim = max(TGA_results{task}.cfg.dim);
+            % cfgTEP2.dim = TGA_results{task}.cfg.dim;
+            % cfgTEP2.tau = TGA_results{task}.cfg.tau';
+            cfgTEP2.actthrvalue = 1;   % threshold for ACT
+            cfgTEP2.minnrtrials = 1;
+
             cfgTESS2 = cfgTESS;
+            % cfgTESS2.optdimusage = 'indivdim';
             cfgTESS2.numpermutation = 50;
             cfgTESS2.surrogatetype = 'blockreverse2';
 
