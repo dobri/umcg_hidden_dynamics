@@ -72,7 +72,7 @@ for p = pps
 
             % Don't search but decide the embedding dimension: 2 or 3,
             % depending on the task space (oscillator or nonlinear sys)
-            if A{c,14} >= 20
+            if A{c,5} >= 20
                 m_stim = 3;
                 m_pp = 3;
             else
