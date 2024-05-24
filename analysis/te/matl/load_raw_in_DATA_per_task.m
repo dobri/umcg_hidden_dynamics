@@ -38,7 +38,7 @@ for p = pps
             fname = scores.rawDataFile{s};
             x = dlmread(fullfile(dag{d}(1).folder,fname),',',1,0);
             t = x(:,1); % time
-            if(x(end,1)<=59);continue;end
+            if(x(end,1)<59);continue;end
 
             % Trial conditions and parameters. Same as in performance loop
             trial_counter = trial_counter + 1;
@@ -110,10 +110,10 @@ for p = pps
             [x_stim, t] = resample(x_stim, t, Fs);
 
             % Crop the first 10 seconds of the trial and the last 59+ seconds of the trial.
-            x_user = x_user((t>10) & (t<59),:);
-            x_stim = x_stim((t>10) & (t<59),:);
-            t = t((t>10) & (t<59),:); % Crop the last 59+ seconds of the trial!
-            
+            x_user = x_user((t>10) & (t<=59),:);
+            x_stim = x_stim((t>10) & (t<=59),:);
+            t = t((t>10) & (t<=59),:); % Crop the last 59+ seconds of the trial!
+
             % plot(t,x_stim,'--b')
             % plot(t,x_user,'--m')
 
@@ -146,16 +146,26 @@ for p = pps
             counter_trial(celln) = counter_trial(celln) + 1;
             trialn = counter_trial(celln);
 
-            DATA{celln}.trial{trialn} = [x x]';
+            DATA{celln}.trial_name{trialn} = A{c,1};
+            DATA{celln}.pp{trialn} = A{c,2};
+            DATA{celln}.day{trialn} = A{c,3};
+            DATA{celln}.date{trialn} = A{c,4};
+            DATA{celln}.task{trialn} = A{c,5};
+            DATA{celln}.training_phase{trialn} = A{c,14};
+            DATA{celln}.training_phase_label{trialn} = A{c,6};
+            DATA{celln}.visual{trialn} = A{c,7};
+            DATA{celln}.duration{trialn} = A{c,8};
+
             DATA{celln}.scores(:,trialn) = A{c,10:13}';
             DATA{celln}.pp{trialn} = A{c,2};
             DATA{celln}.file_name{trialn} = A{c,1};
             DATA{celln}.conditions(:,trialn) = A{c,[5 7 14]}';
             DATA{celln}.time{trialn} = t';
-            DATA{celln}.fsample(trialn) = 1/mean(diff(t));
+            DATA{celln}.fsample = 1/mean(diff(t));
             DATA{celln}.label = {'Stim','User'};
             DATA{celln}.tau(:,trialn) = [tau_stim; tau_pp];
             DATA{celln}.dim(:,trialn) = [m_stim; m_pp];
+            DATA{celln}.trial{trialn} = [x_stim x_user]';
         end
     end
 end
