@@ -23,19 +23,15 @@ end
 %%
 TGA_results = cell(1,numel(DATA));
 %parfor task = 1:numel(TGA_results)
-for task = 1:numel(TGA_results)
+for task = 1 %:numel(TGA_results)
     data = DATA{task};
-    %     data.trial = DATA{task}.trial(1:10);
-    %     data.time = DATA{task}.time(1:10);
-    %     data.fsample = DATA{task}.fsample;
-    %     data.label = DATA{task}.label;
 
     %% define cfg for TEprepare.m
     cfgTEP = [];
 
-    cfgTEP.toi                 = [min(DATA{task}.time{1,1}),max(DATA{task}.time{1,1})]; % time of interest
+    cfgTEP.toi                 = [min(data.time{1,1}),max(data.time{1,1})]; % time of interest
     %cfgTEP.sgncmb              = {'A1' 'A2';'A2' 'A1'};  % channels to be analyzed
-    cfgTEP.channel             = DATA{task}.label;
+    cfgTEP.channel             = data.label;
 
     % scanning of interaction delays u
     cfgTEP.predicttimemin_u    = 0;      % minimum u to be scanned
@@ -46,19 +42,19 @@ for task = 1:numel(TGA_results)
     cfgTEP.TEcalctype  = 'VW_ds'; % use the new TE estimator (Wibral, 2013)
 
     % ACT estimation and constraints on allowed ACT(autocorelation time)
-    cfgTEP.trialselect = 'no';
     cfgTEP.actthrvalue = 10;   % threshold for ACT
     cfgTEP.maxlag      = 10;
-    cfgTEP.minnrtrials = 1;   % minimum acceptable number of trials
+    cfgTEP.minnrtrials = 15;   % minimum acceptable number of trials
 
     % optimizing embedding
-    cfgTEP.optimizemethod = 'ragwitz';  % criterion used
-    cfgTEP.ragdim         = DATA{task}.dim(1,1):DATA{task}.dim(1,1)*3;       % criterion dimension
+    cfgTEP.optimizemethod ='ragwitz';  % criterion used
+    % cfgTEP.ragdim         = 2:9;       % criterion dimension
+    cfgTEP.ragdim         = data.dim(1,1):data.dim(1,1)*3;       % criterion dimension
     % cfgTEP.ragtaurange    = [0.2 .4];  % range for tau
     % cfgTEP.ragtausteps    = 5;         % steps for ragwitz tau steps
     cfgTEP.ragtaurange    = [.25 .5];
-    cfgTEP.ragtausteps    = 5;         % steps for ragwitz tau steps
-    cfgTEP.repPred        = 1e3; % size(data.trial{1,1},2)*(1/2);
+    cfgTEP.ragtausteps    = 2;         % steps for ragwitz tau steps
+    cfgTEP.repPred        = size(data.trial{1,1},2)*(1/2);
 
     % kernel-based TE estimation
     cfgTEP.flagNei = 'Mass';            % neigbour analyse type
@@ -75,19 +71,16 @@ for task = 1:numel(TGA_results)
     cfgTESS.optdimusage = 'maxdim';
     % cfgTESS.optdimusage = 'indivdim';
 
-    % cfgTESS.dim = DATA{task}.dim(1,1);
-    % cfgTESS.tau = DATA{task}.tau(1,1);
+    % cfgTESS.dim = data.dim(1,1);
+    % cfgTESS.tau = data.tau(1,1);
     % cfgTESS.dim and cfgTESS.tau
 
     % statistical and shift testing
     cfgTESS.tail           = 1;
-    % cfgTESS.numpermutation = 'findDelay';
-    cfgTESS.numpermutation = 1e3;
-    % cfgTESS.numpermutation = 1e2;
+    cfgTESS.numpermutation = 1e3; % 'findDelay';
     cfgTESS.shifttest      = 'no';
 
     cfgTESS.surrogatetype = 'trialshuffling'; % 'trialreverse','blockreverse2','swapneighbors';
-    % cfgTESS.surrogatetype = 'blockreverse2'; % 'blockreverse2','swapneighbors';
 
     % don't calculate MI additionally to TE
     cfgTESS.MIcalc = 0;
@@ -97,37 +90,46 @@ for task = 1:numel(TGA_results)
 
     %% TE compuation, scanning over specified values of u
     TGA_results{task} = InteractionDelayReconstruction_calculate(cfgTEP,cfgTESS,data);
-
+    TGA_results{task}.ntrials = size(TGA_results{task}.TEmat,2);
 
     %% Null distribution from surrogate pairs
-    % # repetitions of re-analyzing the full data w/ shifted (surrogate) pairs.
-    TGA_results{task}.ntrials = size(TGA_results{task}.TEmat,2);
+    % # repetitions of surrogate pairing per trial * # trial, or max possible
+    ntrials = TGA_results{task}.ntrials;
     TGA_results{task}.trial_shuffle_surr_n_per_trial = 3;
-    TGA_results{task}.TEmat_sur2 = nan(numel(cfgTEP.channel),0);
+    nsurrs = min([ntrials*TGA_results{task}.trial_shuffle_surr_n_per_trial ntrials^2-ntrials]);
+    TGA_results{task}.TEmat_sur2 = nan(numel(cfgTEP.channel),nsurrs);
 
-    for repeats = 1:TGA_results{task}.trial_shuffle_surr_n_per_trial
-        trials2 = randperm(TGA_results{task}.ntrials);
-        data2 = data;
-        for tr = 1:numel(trials2)
-            data2.trial{tr}(2,:) = data.trial{trials2(tr)}(2,:);
+    counter = 0;
+    for tr1 = 1:ntrials
+        trials2 = [1:tr1-1 tr1+1:ntrials];
+        trials2 = trials2(randperm(numel(trials2),TGA_results{task}.trial_shuffle_surr_n_per_trial)');
+        for tr2 = trials2
+            counter = counter + 1;
+            cfgTEP2 = cfgTEP;
+            % cfgTEP2 = rmfield(cfgTEP2,'ragdim');
+            % cfgTEP2.ragdim = max(TGA_results{task}.cfg.dim);
+            % cfgTEP2.dim = TGA_results{task}.cfg.dim;
+            % cfgTEP2.tau = TGA_results{task}.cfg.tau';
+            cfgTEP2.actthrvalue = 1;   % threshold for ACT
+            cfgTEP2.minnrtrials = 1;
+
+            cfgTESS2 = cfgTESS;
+            % cfgTESS2.optdimusage = 'indivdim';
+            cfgTESS2.numpermutation = 50;
+            cfgTESS2.surrogatetype = 'blockreverse2';
+
+            data2 = data;
+            data2.trial = data.trial(tr1);
+            data2.trial{1}(2,:) = data.trial{tr2}(2,:);
+            data2.time = data.time(tr1);
+
+            TGAtemp = InteractionDelayReconstruction_calculate(cfgTEP2,cfgTESS2,data2);
+            TGA_results{task}.TEmat_sur2(:,counter) = TGAtemp.TEmat(:,1);
+            if mod(counter,10)==0;fprintf('%6.2f%% surrogates done.\n',counter/nsurrs*1e2);end
         end
-
-        cfgTEP2 = cfgTEP;
-        cfgTEP2.predicttimemin_u    = min(TGA_results{task}.cfg.predicttime_u);      % minimum u to be scanned
-        cfgTEP2.predicttimemax_u    = max(TGA_results{task}.cfg.predicttime_u);	  % maximum u to be scanned
-        if cfgTEP2.predicttimemin_u == cfgTEP2.predicttimemax_u
-            cfgTEP2.predicttimemax_u = cfgTEP2.predicttimemin_u + 100;
-        end
-        cfgTEP2.predicttimestepsize = (cfgTEP2.predicttimemax_u - cfgTEP2.predicttimemin_u); 	  % time steps between u's to be scanned
-        cfgTEP2.ragdim = max(TGA_results{task}.cfg.dim);
-
-        TGAtemp = InteractionDelayReconstruction_calculate(cfgTEP2,cfgTESS,data2);
-        TGA_results{task}.TGA_surrogate_n{repeats} = TGAtemp;
-        TGA_results{task}.TEmat_sur2 = [TGA_results{task}.TEmat_sur2 TGAtemp.TEmat];
-        fprintf('%6.2f%% surrogates done.\n',repeats/TGA_results{task}.trial_shuffle_surr_n_per_trial*1e2)
     end
 end
-save([OutputDataPath 'out_TGA_results_' char(datetime('now','Format','yyyy-MM-dd')) '.mat'],'TGA_results','A','OutputDataPath','InputDataPath');
+%save([OutputDataPath 'out_TGA_results.mat'],'TGA_results','DATA','A','OutputDataPath','InputDataPath','TEtable');
 
 
 return
