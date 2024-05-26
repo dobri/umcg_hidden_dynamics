@@ -8,6 +8,7 @@ ft_defaults;
 
 %% define data paths
 base_folder = '~/biomech/projects/side_projects/umcg/data/';
+% base_folder = 'C:\Users\ddotov\biomech\projects\side_projects\umcg\data\';
 OutputDataPath = fullfile(base_folder,'results/');
 InputDataPath  = fullfile(base_folder,'raw_data/');
 
@@ -25,16 +26,11 @@ TGA_results = cell(1,numel(DATA));
 %parfor task = 1:numel(TGA_results)
 for task = 1:numel(TGA_results)
     data = DATA{task};
-    %     data.trial = DATA{task}.trial(1:10);
-    %     data.time = DATA{task}.time(1:10);
-    %     data.fsample = DATA{task}.fsample;
-    %     data.label = DATA{task}.label;
 
     %% define cfg for TEprepare.m
     cfgTEP = [];
 
     cfgTEP.toi                 = [min(DATA{task}.time{1,1}),max(DATA{task}.time{1,1})]; % time of interest
-    %cfgTEP.sgncmb              = {'A1' 'A2';'A2' 'A1'};  % channels to be analyzed
     cfgTEP.channel             = DATA{task}.label;
 
     % scanning of interaction delays u
@@ -54,11 +50,11 @@ for task = 1:numel(TGA_results)
     % optimizing embedding
     cfgTEP.optimizemethod = 'ragwitz';  % criterion used
     cfgTEP.ragdim         = DATA{task}.dim(1,1):DATA{task}.dim(1,1)*3;       % criterion dimension
-    % cfgTEP.ragtaurange    = [0.2 .4];  % range for tau
-    % cfgTEP.ragtausteps    = 5;         % steps for ragwitz tau steps
     cfgTEP.ragtaurange    = [.25 .5];
     cfgTEP.ragtausteps    = 5;         % steps for ragwitz tau steps
     cfgTEP.repPred        = 1e3; % size(data.trial{1,1},2)*(1/2);
+    % cfgTESS.dim = DATA{task}.dim(1,1);
+    % cfgTESS.tau = DATA{task}.tau(1,1);
 
     % kernel-based TE estimation
     cfgTEP.flagNei = 'Mass';            % neigbour analyse type
@@ -75,19 +71,13 @@ for task = 1:numel(TGA_results)
     cfgTESS.optdimusage = 'maxdim';
     % cfgTESS.optdimusage = 'indivdim';
 
-    % cfgTESS.dim = DATA{task}.dim(1,1);
-    % cfgTESS.tau = DATA{task}.tau(1,1);
-    % cfgTESS.dim and cfgTESS.tau
-
     % statistical and shift testing
     cfgTESS.tail           = 1;
     % cfgTESS.numpermutation = 'findDelay';
     cfgTESS.numpermutation = 1e3;
-    % cfgTESS.numpermutation = 1e2;
     cfgTESS.shifttest      = 'no';
 
     cfgTESS.surrogatetype = 'trialshuffling'; % 'trialreverse','blockreverse2','swapneighbors';
-    % cfgTESS.surrogatetype = 'blockreverse2'; % 'blockreverse2','swapneighbors';
 
     % don't calculate MI additionally to TE
     cfgTESS.MIcalc = 0;
@@ -127,89 +117,62 @@ for task = 1:numel(TGA_results)
         fprintf('%6.2f%% surrogates done.\n',repeats/TGA_results{task}.trial_shuffle_surr_n_per_trial*1e2)
     end
 end
-save([OutputDataPath 'out_TGA_results_' char(datetime('now','Format','yyyy-MM-dd')) '.mat'],'TGA_results','A','OutputDataPath','InputDataPath');
 
+for task = 1:numel(TGA_results)
+    m = mean(TGA_results{task}.TEmat_sur2,2);
+    sd = std(TGA_results{task}.TEmat_sur2,[],2);
+    TGA_results{task}.TEmat_rescaled = (TGA_results{task}.TEmat - m)./sd;
 
-return
-
-%% Collect in long table for stats.
-TEtable = [];
-for task=1:numel(TGA_results)
-    TEtable = vertcat(TEtable,[DATA{task}.conditions,...
-        TGA_results{task}.TEmat' ...
-        DATA{task}.dim',...
-        DATA{task}.tau'./DATA{task}.fsample,...
-        TGA_results{task}.cfg.dim'.*ones(size(TGA_results{task}.TEmat,2),1) ...
-        (squeeze(TGA_results{task}.ACT.actvalue(1,:,:))'.*TGA_results{task}.cfg.tau')./DATA{task}.fsample ...
-        TGA_results{task}.TEpermvalues(:,1)'.*ones(size(TGA_results{task}.TEmat,2),1) ...
-        TGA_results{task}.TEpermvalues(:,6)'.*ones(size(TGA_results{task}.TEmat,2),1) ]);
-end
-%TGA_results{pp}.cfg.tau.*ones(size(TGA_results{pp}.TEmat,2),1) ...
-column_labels = {'Date','Time','Task','Auditory','Visual','epsilon','TEstim','TEpp',...
-    'dimstim','dimpp','taustim','taupp','dimhatstim','dimhatpp','tauhatstim','tauhatpp',...
-    'permtest12','permtest21','interactdelay12','interactdelay21'};
-TEtable = array2table(TEtable,'VariableNames',column_labels);
-TEtable.Task(TEtable.Task==10)=1;
-TEtable.Task(TEtable.Task==30)=2;
-TEtable.Task(TEtable.Task==25)=3;
-%{
-boxplot(TEtable.interactdelay12,TEtable.Task)
-boxplot(TEtable.interactdelay21,TEtable.Task)
-boxplot(TEtable.dimhatpp,TEtable.Task)
-boxplot(TEtable.dimhatstim,TEtable.Task)
-boxplot(TEtable.taupp,TEtable.Task)
-boxplot(TEtable.tauhatpp,TEtable.Task)
-boxplot(TEtable.permtest12,TEtable.Task)
-boxplot(TEtable.permtest21,TEtable.Task)
-%}
-
-
-%% Visually check the TE and surrogate distibutions and stats.
-for task=1:numel(TGA_results)
-    for d=1:size(TGA_results{task}.TEmat_sur,1)
-        [c0,n0]=hist(TGA_results{task}.TEmat_sur(d,:));
-        [c,n]=hist(TGA_results{task}.TEmat(d,:));
-        subplot(2,1,1)
-        plot(n0,c0,'--',n,c,'-')
+    colorvec = hsv(2);
+    for d = 1:2
+        subplot(4,2,task)
+        [n,edges] = histcounts(TGA_results{task}.TEmat(d,:)','Normalization','probability');
+        [n0,edges0] = histcounts(TGA_results{task}.TEmat_sur2(d,:)','Normalization','probability');
+        plot(edges(2:end)+diff(edges(1:2))/2,n,'-','Color',colorvec(d,:).*.8,'linewidth',1.5)
         hold on
+        plot(edges0(2:end)+diff(edges0(1:2))/2,n0,'--','linewidth',2,'Color',colorvec(d,:))
     end
+    title(['Task ' num2str(DATA{task}.task{1})])
     hold off
-    legend('stim0->user0','stim->user','user0->stim0','user->stim')
-    subplot(2,1,2)
-    plot(TGA_results{task}.TEmat')
-    fprintf('%8.0f%8.0f%8.0f%8.0f%8.0f%8.3f\n',mean(DATA{task}.conditions))
-    fprintf('\n')
-    disp(TGA_results{task}.TEpermvalues)
-    disp(TGA_results{task}.cfg.dim')
-    pause
-end
+    legend('TE_{Stim->Human}','TE_{Surrogate,Stim->Human}','TE_{Human->Stim}','TE_{Surrogate,Human->Stim}')
+    legend('boxoff')
 
-%% Check trends. Average TE across pps per training trial.
-TE = zeros(40,2,3);
-TEcount= zeros(40,1,3);
-for f=1:numel(DATA)
-    switch DATA{f}.conditions(1,3)
-        case 10
-            task = 1;
-        case 30
-            task = 2;
-        case 25
-            task = 3;
+    DATA{task}.te = TGA_results{task}.TEmat_rescaled;
+end
+% f = fullfile(OutputDataPath,['PDF_TE_rescaled_' char(datetime('now','TimeZone','local','Format','y-MM-d-hhmmss')) '.jpeg']);
+% print('-djpeg','-r300',f)
+
+
+T = table('Size',[3000,14],'VariableTypes',{'string','int8','int8','string',...
+    'int8','string','string','int8',...
+    'double','double','double','double','double','double'});
+T.Properties.VariableNames = {'FileName','PP','Day','Date',...
+    'TaskCode','TrainingPhase','TrainingPhaseLabel','Visual',...
+    'Score','C','tau','PitchError','TE12rescaled','TE21rescaled'};
+counter = 0;
+for task = 1:numel(TGA_results)
+    for tr = 1:TGA_results{task}.ntrials
+        counter = counter + 1;
+        T{counter,1} = DATA{task}.trial_name{1,tr};
+        T{counter,2} = DATA{task}.pp{1,tr};
+        T{counter,3} = DATA{task}.day{1,tr};
+        T{counter,4} = DATA{task}.date{1,tr};
+        T{counter,5} = DATA{task}.task{1,tr};
+        T{counter,6} = DATA{task}.training_phase{1,tr};
+        T{counter,7} = DATA{task}.training_phase_label{1,tr};
+        T{counter,8} = DATA{task}.visual{1,tr};
+        T{counter,9} = DATA{task}.scores(1,tr);
+        T{counter,10} = DATA{task}.scores(2,tr);
+        T{counter,11} = DATA{task}.scores(3,tr);
+        T{counter,12} = DATA{task}.scores(4,tr);
+        T{counter,13} = TGA_results{task}.TEmat_rescaled(1,tr);
+        T{counter,14} = TGA_results{task}.TEmat_rescaled(2,tr);
     end
-    TEcount(1:numel(TGA_results{f}.TEmat(1,:)'),1,task) = TEcount(1:numel(TGA_results{f}.TEmat(1,:)'),1,task)+1;
-    TE(1:numel(TGA_results{f}.TEmat(1,:)'),1,task) = TE(1:numel(TGA_results{f}.TEmat(1,:)'),1,task)+TGA_results{f}.TEmat(1,:)';
-    TE(1:numel(TGA_results{f}.TEmat(1,:)'),2,task) = TE(1:numel(TGA_results{f}.TEmat(1,:)'),2,task)+TGA_results{f}.TEmat(2,:)';
 end
-for task=1:3
-    TE(:,1,task) = TE(:,1,task)./TEcount(:,1,task);
-    TE(:,2,task) = TE(:,2,task)./TEcount(:,1,task);
-    TE(:,3,task) = task;
-end
-TE = reshape(permute(TE,[1 3 2]),[],3);
-for task=1:3
-    subplot(1,3,task)
-    plot(TE(TE(:,3)==task,1),'-ob')
-    hold on
-    plot(TE(TE(:,3)==task,2),'-or')
-    hold off
-end
+T(counter+1:end,:) = [];
+
+
+%{
+save(fullfile(OutputDataPath,['out_TGA_results_' char(datetime('now','Format','yyyy-MM-dd')) '.mat']),'TGA_results','T','OutputDataPath','InputDataPath');
+writetable(T,fullfile(OutputDataPath,['Scores_TE_' char(datetime('now','Format','yyyy-MM-dd')) '.csv']))
+%}
