@@ -165,7 +165,7 @@ for (dv in c('te12rescaled','te21rescaled')) {
   if (FALSE){
     filename = paste("te_lines_ave",dv,Sys.Date(),'.png',sep='_')
     filename <- sub(" ", "_", filename)
-    ggsave(filename, width=7, height=6, units='in', dpi=600)
+    ggsave(filename, width=7, height=7, units='in', dpi=600)
   }
 }
 
