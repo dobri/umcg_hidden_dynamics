@@ -8,14 +8,68 @@ library(rstatix)
 
 
 #----------------------------------------------
-# Part A. Scores ~ Trial
-# Step 1. Plot performance scores ~ trial
+# Part 0. Training scores ~ Trial
+# Step 1. Plot
 #----------------------------------------------
 
 rm(list=ls())
 # setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
 # setwd('C:\\Users\\ddotov\\Downloads')
-filename_scores_in <- 'Scores_2024-05-09.csv_cleaned_.csv'
+filename_scores_in <- 'Scores_TE_2024-05-26.csv_cleaned_.csv'
+x <- read.csv(filename_scores_in,sep=',')
+x$training_phase_label <- factor(x$training_phase_label)
+x$training_phase_label <- relevel(x$training_phase_label, ref='PreTest')
+x$training_condition <- factor(x$training_condition)
+x$Training <- factor(x$Training)
+x$task_label <- factor(x$task_label)
+x$task_code <- factor(x$task_code)
+x$pp <- factor(x$pp)
+
+# Visualize
+colors<-ghibli_palette("PonyoMedium",7,type=("continuous"))[c(3,5,6)]
+colors[1]<-ghibli_palette("MarnieMedium2",7,type=("continuous"))[6]
+colors[2]<-ghibli_palette("MononokeMedium",7,type=("continuous"))[5]
+colors[3]<-ghibli_palette("YesterdayMedium",7,type=("continuous"))[6]
+
+for (dv in c('te12rescaled','te21rescaled')) {
+  xs <- x[(x$training_phase_label=='Training'),]
+  xs$dv <- xs[,dv]
+  
+  if (dv=='te12rescaled') {dv_lab = 'TE Stimulus-to-User'}
+  if (dv=='te21rescaled') {dv_lab = 'TE User-to-Stimulus'}
+  
+  g<-ggplot(data=xs, aes(x=trial, y=dv, colour=Training)) +
+    facet_grid(~Training) +
+    geom_jitter(size=1, alpha=.2, width=.1, height=0) +
+    geom_line(aes(x=trial, y=0), col='white', linewidth=1.2, alpha=.7) +
+    stat_summary(aes(x=trial, y=dv, colour=Training), geom="ribbon", fun.data=mean_cl_boot, alpha=.7) +
+    stat_summary(aes(x=trial, y=dv, colour=Training), fun='mean', geom='line', linewidth=2.2, alpha=1) +
+    theme_classic() +
+    theme(panel.background = element_rect(fill = "#111111",
+                                          colour = "#000000", linewidth = 1, linetype = "solid")) +
+    theme(legend.position="none") +
+    labs(y = dv_lab) +
+    labs(x = "Trial") + 
+    scale_colour_manual(values=colors)
+  print(g)
+  
+  if (TRUE){
+    filename = paste("te_training_trials_all",dv,Sys.Date(),'.png',sep='_')
+    filename <- sub(" ", "_", filename)
+    ggsave(filename, width=10, height=4, units='in', dpi=600)
+  }
+}
+
+
+#----------------------------------------------
+# Part A. Test scores ~ Trial
+# Step 1. Plot
+#----------------------------------------------
+
+rm(list=ls())
+# setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
+# setwd('C:\\Users\\ddotov\\Downloads')
+filename_scores_in <- 'Scores_TE_2024-05-26.csv_cleaned_.csv'
 x <- read.csv(filename_scores_in,sep=',')
 x$training_phase <- factor(x$training_phase)
 x$training_phase <- relevel(x$training_phase, ref='PreTest')
@@ -74,7 +128,7 @@ for (dv in c('score_delta','c_delta','pitch_error_delta','tau_delta')) {
 
 
 #----------------------------------------------
-# Step 2. Stats delta scores ~ trial
+# Step 2. Stats test delta scores ~ trial
 #----------------------------------------------
 sink("performance_scores_stats.txt")
 print(Sys.Date())
@@ -114,10 +168,10 @@ for (dv in c('score_delta','c_delta','pitch_error_delta','tau_delta')) {
 
 
 #----------------------------------------------
-# Part B. Plot test data only, averaged per task. Line plots
+# Part B. Plot test data, averaged per task. Line plots
 #----------------------------------------------
 rm(list=ls())
-filename = 'Scores_2024-05-09.csv_cleaned_.csv__ave_.csv'
+filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv__ave_.csv'
 x_test_ave <- read.csv(filename,sep=',')
 
 x_test_ave$training_phase <- factor(x_test_ave$training_phase)
@@ -154,11 +208,11 @@ for (dv in c('score','c','pitch_error')) {
 
 
 #----------------------------------------------
-# Part C. Plot test data only, deltas averaged per task. Violins.
+# Part C. Plot test data, deltas averaged per task. Violins.
 #----------------------------------------------
 
 rm(list=ls())
-filename = 'Scores_2024-05-09.csv_cleaned_.csv__delta_ave_.csv'
+filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv__delta_ave_.csv'
 x_delta <- read.csv(filename,sep=',')
 x_delta$TrainingPhase <- factor(x_delta$TrainingPhase)
 x_delta$Training <- factor(x_delta$Training)
