@@ -7,7 +7,7 @@ save_files = TRUE
 # Part A. Import, re-label, clean, conditions, % improvement
 #----------------------------------------------
 
-# setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
+# setwd('~/logos/umcg_hidden_dynamics/analysis/te/stats')
 # setwd('C:\\Users\\ddotov\\Downloads')
 
 filename_scores_in <- 'Scores_TE_2024-05-26.csv'
@@ -106,7 +106,7 @@ if(save_files){
 #----------------------------------------------
 
 # rm(list=ls())
-# setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
+# setwd('~/logos/umcg_hidden_dynamics/analysis/te/stats')
 # setwd('C:\\Users\\ddotov\\Downloads')
 # filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv'
 # w/out the training conditions
@@ -125,8 +125,11 @@ x_test_ave <- x_test %>%
   inner_join(select(x_test, pp, task_label, Training), relationship = "many-to-many") %>%
   # Get rid of duplicated rows
   distinct(pp, task_label, training_phase_label, .keep_all = TRUE)
-# filename_ave = paste(filename,'_ave','.csv',sep='_')
-# write.csv(x_test_ave, file=filename_ave, row.names=FALSE)
+
+if(save_files){
+  filename_ave = paste(filename,'_ave','.csv',sep='_')
+  write.csv(x_test_ave, file=filename_ave, row.names=FALSE)
+}
 
 x_test_ave_wide <- x_test_ave %>%
   pivot_wider(names_from = training_phase_label, values_from = c('score','c','pitch_error','te12rescaled','te21rescaled'))
