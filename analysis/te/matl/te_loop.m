@@ -119,8 +119,10 @@ for task = 1:numel(TGA_results)
 end
 
 for task = 1:numel(TGA_results)
-    m = mean(TGA_results{task}.TEmat_sur2,2);
-    sd = std(TGA_results{task}.TEmat_sur2,[],2);
+    % m = mean(TGA_results{task}.TEmat_sur2,2);
+    % sd = std(TGA_results{task}.TEmat_sur2,[],2);
+    m = mean(TGA_results{task}.TEmat_sur2(:));
+    sd = std(TGA_results{task}.TEmat_sur2(:));
     TGA_results{task}.TEmat_rescaled = (TGA_results{task}.TEmat - m)./sd;
 
     colorvec = hsv(2);

@@ -101,33 +101,39 @@ for (dv in c('testimtouser_delta','teusertostim_delta')) {
 
 
 #----------------------------------------------
-# Step 2. Stats test delta scores ~ trial
+# Step 2. Stats training TE ~ trial
 #----------------------------------------------
-sink("te_scores_stats.txt")
+sink("te_training_stats.txt")
 print(Sys.Date())
 sink()
-# Plot performance scores and stats ~ trial
-for (dv in c('testimtouser_delta','teusertostim_delta')) {
-  for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
-    xs <- x[(x$task_label==task) & (x$training_phase_label!='Training'),]
+for (dv in c('te12rescaled','te21rescaled')) {
+  for (group in c('Periodic Fixed','Chaotic Interactive','Chaotic Non-interactive')) {
+    xs <- x[(x$Training==group) & (x$training_phase_label=='Training'),]
     xs$dv <- xs[,dv]
     
-    if (dv=='testimtouser_delta') {dv_lab = 'TE Stimulus-to-User'}
-    if (dv=='teusertostim_delta') {dv_lab = 'TE User-to-Stimulus'}
+    if (dv=='te12rescaled') {dv_lab = 'TE Stimulus-to-User'}
+    if (dv=='te21rescaled') {dv_lab = 'TE User-to-Stimulus'}
     
-    m1=lmer(dv ~ 1 + (1|pp),data=xs,REML=0)
-    m2=lmer(dv ~ 1 + trial + (1|pp),data=xs,REML=0)
-    m3=lmer(dv ~ 1 + trial + training_phase_label + (1|pp),data=xs,REML=0)
-    m4=lmer(dv ~ 1 + trial + training_phase_label + training_phase_label:Training + (1|pp),data=xs,REML=0)
-    sink("te_scores_stats.txt", append = T)
+    m1=lmer(I(dv-2) ~ 1 + (1|pp),data=xs,REML=0)
+    m2=lmer(I(dv-2) ~ 1 + trial + (1|pp),data=xs,REML=0)
+    #m3=lmer(I(dv-2) ~ 1 + trial + Training + (1|pp),data=xs,REML=0)
+    #m4=lmer(I(dv-2) ~ 1 + trial * Training + (1|pp),data=xs,REML=0)
+    sink("te_training_stats.txt", append = T)
     cat("\n###########\n\n")
-    cat(paste('Test: ',task,'; DV: ',dv,sep=''))
-    print(anova(m1,m2,m3,m4))
+    cat(paste(phase))
+    cat("\n")
+    cat('DV: ',dv,sep='')
+    cat("\n")
+    cat('Group: ',group,sep='')
+    cat("\n")
+    # print(anova(m1,m2,m3,m4))
+    print(anova(m1,m2))
     print(summary(m1))
     print(summary(m2))
-    print(summary(m3))
-    print(summary(m4))
-    print(screenreg(list(m1,m2,m3,m4)))
+    # print(summary(m3))
+    # print(summary(m4))
+    # print(screenreg(list(m1,m2,m3,m4)))
+    print(screenreg(list(m1,m2)))
     sink()
   }
 }
@@ -217,22 +223,24 @@ for (dv in c('te12_Delta','te21_Delta')) {
 # Part D. Stats on test data.
 #----------------------------------------------
 
-sink("te_deltas_stats.txt")
+sink("te_stats.txt")
 sink()
-for (dv in c('te12_Delta','te21_Delta')) {
-  x_delta$dv <- as.numeric(unlist(as.data.frame(x_delta[,dv])))
-  if (dv=='te12_Delta') {dv_lab = 'TE Stimulus-to-User Δ%'}
-  if (dv=='te21_Delta') {dv_lab = 'TE User-to-Stimulus Δ%'}
-  sink("te_deltas_stats.txt", append = T)
+for (dv in c('te12rescaled','te21rescaled')) {
+  x_test_ave$dv <- as.numeric(unlist(as.data.frame(x_test_ave[,dv])))
+  if (dv=='te12rescaled') {dv_lab = 'TE Stimulus-to-User Δ%'}
+  if (dv=='te21rescaled') {dv_lab = 'TE User-to-Stimulus Δ%'}
+  sink("te_stats.txt", append = T)
   for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
     cat("\n###########\n\n")
     cat(paste('DV: ',dv_lab,sep=''))
+    cat("\n")
     cat(paste('Test: ',task,sep=''))
-    xs <- x_delta[x_delta$task_label==task,]
+    cat("\n")
+    xs <- x_test_ave[x_test_ave$task_label==task,]
     m1=lmer(dv ~ 1 + (1|pp),data=xs,REML=0)
-    m2=lmer(dv ~ 1 + TrainingPhase + (1|pp),data=xs,REML=0)
-    m3=lmer(dv ~ 1 + TrainingPhase + Training + (1|pp),data=xs,REML=0)
-    m4=lmer(dv ~ 1 + TrainingPhase * Training + (1|pp),data=xs,REML=0)
+    m2=lmer(dv ~ 1 + training_phase_label + (1|pp),data=xs,REML=0)
+    m3=lmer(dv ~ 1 + training_phase_label + Training + (1|pp),data=xs,REML=0)
+    m4=lmer(dv ~ 1 + training_phase_label * Training + (1|pp),data=xs,REML=0)
     print(anova(m1,m2,m3,m4))
     print(summary(m1))
     print(summary(m2))
@@ -244,22 +252,27 @@ for (dv in c('te12_Delta','te21_Delta')) {
 }
 
 
-sink("te_deltas_stats_ttests.txt")
+rm(list=ls())
+filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv__ave_.csv'
+x_test_ave <- read.csv(filename,sep=',')
+
+sink("te_stats_ttests.txt")
 sink()
-for (dv in c('te12_Delta','te21_Delta')) {
-  x_delta$dv <- as.numeric(unlist(as.data.frame(x_delta[,dv])))
-  if (dv=='te12_Delta') {dv_lab = 'TE Stimulus-to-User Δ%'}
-  if (dv=='te21_Delta') {dv_lab = 'TE User-to-Stimulus Δ%'}
-  sink("te_deltas_stats_ttests.txt", append = T)
+for (dv in c('te12rescaled','te21rescaled')) {
+  x_test_ave$dv <- as.numeric(unlist(as.data.frame(x_test_ave[,dv])))
+  if (dv=='te12rescaled') {dv_lab = 'TE Stimulus-to-User Δ%'}
+  if (dv=='te21rescaled') {dv_lab = 'TE User-to-Stimulus Δ%'}
+  sink("te_stats_ttests.txt", append = T)
   for (task in c('Periodic Fixed','Periodic Fadeout (SCT)','Chaotic','Chaotic Visual')) {
     cat("\n########### t-tests ~ 0 \n\n")
     cat(paste('DV: ',dv_lab,sep=''))
+    cat("\n")
     cat(paste('Test: ',task,sep=''))
-
-    xs <- x_delta[x_delta$task_label==task,]
+    cat("\n")
+    xs <- x_test_ave[x_test_ave$task_label==task,]
     stat.test <- xs %>%
-      group_by(Training,TrainingPhase) %>%
-      t_test(dv ~ 1, mu = 0) %>%
+      group_by(Training,training_phase_label) %>%
+      t_test(dv ~ 1, mu = 2) %>%
       adjust_pvalue(method = "fdr") %>%
       add_significance()
     print(stat.test)
