@@ -92,13 +92,18 @@ for p = pps
                 x_stim = x(:,11); % the stimulus
                 x_user = x(:,12); % the participant
             end
-
-            % plot(t,x_stim,'-k');hold on
-            % plot(t,x_user,'-k')
+            if A{c,5} >= 20
+                x_gen = x(:,7:9); % the generator
+            else
+                x_gen = x(:,8);
+            end
 
             % A little bit of pre-processing: smooth and detrend.
             x_stim = smooth(x_stim,10,'sgolay');
             x_user = smooth(x_user,10,'sgolay');
+            for kk = 1:size(x_gen,2)
+                x_gen(:,kk) = smooth(x_gen(:,kk),10,'sgolay');
+            end
             % linear detrend the participant movement because this can
             % mess up several of the parameters (inf corr time).
             b = [ones(size(x_user)) t]\x_user;
@@ -107,24 +112,20 @@ for p = pps
             % Resample to an uniform timeframe.
             Fs = 50;
             [x_user, ~] = resample(x_user, t, Fs);
-            [x_stim, t] = resample(x_stim, t, Fs);
+            [x_stim, ~] = resample(x_stim, t, Fs);
+            [x_gen, t] = resample(x_gen, t, Fs);
 
             % Crop the first 10 seconds of the trial and the last 59+ seconds of the trial.
             x_user = x_user((t>10) & (t<=59),:);
             x_stim = x_stim((t>10) & (t<=59),:);
+            x_gen = x_gen((t>10) & (t<=59),:);
             t = t((t>10) & (t<=59),:); % Crop the last 59+ seconds of the trial!
-
-            % plot(t,x_stim,'--b')
-            % plot(t,x_user,'--m')
-
-            % hold off
 
             if sum(isnan(x_stim)) > 0 ; keyboard ; end
 
 
             t = t - min(t); % for simplicity, shift back to zero.
             fprintf('%10.0f%10.4f%10.0f\n',[min(t) max(t) numel(t)])
-
 
             x_stim = (x_stim-mean(x_stim))./std(x_stim);
             x_user = (x_user-mean(x_stim))./std(x_stim);
@@ -166,6 +167,7 @@ for p = pps
             DATA{celln}.tau(:,trialn) = [tau_stim; tau_pp];
             DATA{celln}.dim(:,trialn) = [m_stim; m_pp];
             DATA{celln}.trial{trialn} = [x_stim x_user]';
+            DATA{celln}.generator{trialn} = x_gen';
         end
     end
 end

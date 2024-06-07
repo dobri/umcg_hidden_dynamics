@@ -3,7 +3,7 @@ function [lleshort,llelonger]=max_lyapunov_script(x,meanperiod_samples,dt,plot_f
 %% init pars
 sr=1/dt;
 tau=round(1/4*meanperiod_samples);
-maxiter=round(5*sr);
+maxiter=round(6*sr);
 handtimevec=(1:maxiter)'.*dt;
 
 %% div, this where the analysis forks into psr phase space, and manually reconstructed (embedded) phase space
