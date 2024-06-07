@@ -151,8 +151,8 @@ if(save_files){
 # setwd('C:\\Users\\ddotov\\Downloads')
 # filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv'
 # w/out the training conditions
-# x_test <- filter(read.csv(filename,sep=','), training_phase != "Training")
-x_test <- filter(x, training_phase_label != "Training")
+x <- read.csv(filename,sep=',')
+x_test <- filter(x, x$training_phase_label != "Training")
 
 
 #----------------------------------------------
@@ -221,6 +221,15 @@ names(x_delta_wider) <- c("pp","Task Label","Training","c Delta% PostTest","c De
                         "Score Delta% PostTest","Score Delta% Retention",
                         "TE S-U Delta% PostTest","TE S-U Delta% Retention",
                         "TE U-S Delta% PostTest","TE U-S Delta% Retention")
+
+xd <- x[x$training_phase_label=='Training',] %>%
+  group_by(pp) %>%
+  summarise(testimtouser = mean(te12rescaled),
+            teusertostim = mean(te21rescaled)) %>%
+  ungroup()
+names(xd) <- c("pp","TE S-U Training","TE U-S Training")
+
+x_delta_wider <- x_delta_wider %>% left_join(., xd, by = c("pp"))
 
 if(save_files){
   filename_delta = paste(filename,'_delta_ave_wide','.csv',sep='_')
