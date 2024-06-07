@@ -1,7 +1,8 @@
 library(janitor)
 library(tidyverse)
 
-save_files = TRUE
+rm(list=ls())
+save_files = FALSE
 
 #----------------------------------------------
 # Part A. Import, re-label, clean, conditions, % improvement
@@ -112,10 +113,10 @@ if(save_files){
 # rm(list=ls())
 # setwd('~/logos/umcg_hidden_dynamics/analysis/te/stats')
 # setwd('C:\\Users\\ddotov\\Downloads')
-# filename = 'Scores_MaxLyap_2024-06-07.csv_cleaned_.csv'
 # w/out the training conditions
-# x_test <- filter(x, training_phase_label != "Training")
-x_test <- filter(read.csv(filename,sep=','), training_phase_label != "Training")
+# filename = 'Scores_MaxLyap_2024-06-07.csv_cleaned_.csv'
+# x_test <- filter(read.csv(filename,sep=','), training_phase_label != "Training") # Bad idea
+x_test <- filter(x, training_phase_label != "Training")
 
 x_test_ave <- x_test %>%
   group_by(pp,task_label,training_phase_label) %>%
@@ -158,9 +159,9 @@ if(save_files){
 # rm(list=ls())
 # setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
 # setwd('C:\\Users\\ddotov\\Downloads')
-# filename = 'Scores_MaxLyap_2024-06-07.csv_cleaned_.csv'
 # w/out the training conditions
-# x <- read.csv(filename,sep=',')
+# filename = 'Scores_MaxLyap_2024-06-07.csv_cleaned_.csv'
+# x <- read.csv(filename,sep=',') # Bad idea.
 x_test <- filter(x, x$training_phase_label != "Training")
 
 
@@ -244,10 +245,10 @@ names(x_delta_wider) <- c("pp","Task Label","Training","c Delta% PostTest","c De
 
 xd <- x[x$training_phase_label=='Training',] %>%
   group_by(pp) %>%
-  summarise(mlssd = mean(max_lyap_stim_short_delta),
-            mlsld = mean(max_lyap_stim_long_delta),
-            mlusd = mean(max_lyap_user_short_delta),
-            mluld = mean(max_lyap_user_long_delta)) %>%
+  summarise(mlssd = mean(max_lyap_stim_short),
+            mlsld = mean(max_lyap_stim_long),
+            mlusd = mean(max_lyap_user_short),
+            mluld = mean(max_lyap_user_long)) %>%
   ungroup()
 names(xd) <- c("pp","MLS Stimulus Training","MLL Stimulus Training",
                "MLS User Training","MLL User Training")

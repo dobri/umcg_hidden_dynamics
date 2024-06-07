@@ -9,6 +9,8 @@ library(tidyverse)
 # setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
 # setwd('C:\\Users\\ddotov\\Downloads')
 
+rm(list=ls())
+
 filename_scores_in <- 'Scores_2024-05-09.csv'
 x<-read.csv(filename_scores_in) %>%
   clean_names()

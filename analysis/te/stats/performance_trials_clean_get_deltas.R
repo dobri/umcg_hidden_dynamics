@@ -1,7 +1,8 @@
 library(janitor)
 library(tidyverse)
 
-save_files = TRUE
+rm(list=ls())
+save_files = FALSE
 
 #----------------------------------------------
 # Part A. Import, re-label, clean, conditions, % improvement
@@ -111,7 +112,7 @@ if(save_files){
 # filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv'
 # w/out the training conditions
 x_test <- filter(x, training_phase_label != "Training")
-# x_test <- filter(read.csv(filename,sep=','), training_phase != "Training")
+# x_test <- filter(read.csv(filename,sep=','), training_phase != "Training") # This turns out to be a bad idea.
 
 x_test_ave <- x_test %>%
   group_by(pp,task_label,training_phase_label) %>%
@@ -147,11 +148,11 @@ if(save_files){
 #----------------------------------------------
 
 # rm(list=ls())
-# setwd('~/logos/umcg_hidden_dynamics/analysis/performance')
+# setwd('~/logos/umcg_hidden_dynamics/analysis/te/stats/')
 # setwd('C:\\Users\\ddotov\\Downloads')
 # filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv'
 # w/out the training conditions
-x <- read.csv(filename,sep=',')
+# x <- read.csv(filename,sep=',') # This turns out to be a bad idea.
 x_test <- filter(x, x$training_phase_label != "Training")
 
 
@@ -196,6 +197,8 @@ rm(diff_data)
 # Sanity check
 # head(x_delta, 20)
 
+# Careful here. If you arrived at x following the pipeline, PreTest would have been set as reference. 
+# If you imported from the spreadsheet, then Pre and Post end up being switched :o
 names(x_delta) <- c("pp","task_label",
                   "score_PreTest","score_PostTest","score_Retention",
                   "Training","TrainingPhase",
