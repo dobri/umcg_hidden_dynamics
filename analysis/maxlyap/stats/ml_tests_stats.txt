@@ -1,0 +1,3007 @@
+
+###########
+
+DV: Max Lyapunov Short, Stimulus
+Test: Periodic Fixed
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -368.79 -361.72 187.40  -374.79                     
+m2    5 -367.02 -355.24 188.51  -377.02 2.2310  2     0.3278
+m3    7 -366.91 -350.42 190.46  -380.91 3.8933  2     0.1428
+m4   11 -360.82 -334.90 191.41  -382.82 1.9074  4     0.7528
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -368.8   -361.7    187.4   -374.8       75 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.94880 -0.58978  0.07153  0.62105  2.20725 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0001754 0.01324 
+ Residual             0.0003539 0.01881 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  0.203272   0.003359 26.000000   60.51   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -367.0   -355.2    188.5   -377.0       73 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.76594 -0.50976  0.08607  0.57959  2.04742 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0001804 0.01343 
+ Residual             0.0003390 0.01841 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    0.203653   0.004469 62.840697  45.565   <2e-16 ***
+training_phase_labelPostTest  -0.004413   0.005107 52.000000  -0.864    0.391    
+training_phase_labelRetention  0.003269   0.005107 52.000000   0.640    0.525    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.571       
+trnng_phs_R -0.571  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -366.9   -350.4    190.5   -380.9       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.6726 -0.5743  0.1367  0.6278  1.9715 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0001396 0.01181 
+ Residual             0.0003390 0.01841 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                      0.2091764  0.0063455 40.7428680  32.965   <2e-16 ***
+training_phase_labelPostTest    -0.0044129  0.0051066 52.0000033  -0.864   0.3915    
+training_phase_labelRetention    0.0032687  0.0051066 52.0000033   0.640   0.5249    
+TrainingChaotic Interactive     -0.0135890  0.0075386 25.9999959  -1.803   0.0831 .  
+TrainingChaotic Non-interactive -0.0009651  0.0079464 25.9999959  -0.121   0.9043    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.402                     
+trnng_phs_R -0.402  0.500              
+TrnngChtcIn -0.660  0.000  0.000       
+TrnngChtNn- -0.626  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -360.8   -334.9    191.4   -382.8       67 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.49690 -0.59925  0.07762  0.65875  1.94738 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0001437 0.01199 
+ Residual             0.0003268 0.01808 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                               Estimate Std. Error        df t value
+(Intercept)                                                    0.211067   0.007668 65.740671  27.524
+training_phase_labelPostTest                                  -0.005676   0.009039 52.000000  -0.628
+training_phase_labelRetention                                 -0.001140   0.009039 52.000000  -0.126
+TrainingChaotic Interactive                                   -0.012982   0.010288 65.740671  -1.262
+TrainingChaotic Non-interactive                               -0.007868   0.010845 65.740671  -0.726
+training_phase_labelPostTest:TrainingChaotic Interactive      -0.004945   0.012127 52.000000  -0.408
+training_phase_labelRetention:TrainingChaotic Interactive      0.003124   0.012127 52.000000   0.258
+training_phase_labelPostTest:TrainingChaotic Non-interactive   0.010285   0.012783 52.000000   0.805
+training_phase_labelRetention:TrainingChaotic Non-interactive  0.010424   0.012783 52.000000   0.815
+                                                              Pr(>|t|)    
+(Intercept)                                                     <2e-16 ***
+training_phase_labelPostTest                                     0.533    
+training_phase_labelRetention                                    0.900    
+TrainingChaotic Interactive                                      0.211    
+TrainingChaotic Non-interactive                                  0.471    
+training_phase_labelPostTest:TrainingChaotic Interactive         0.685    
+training_phase_labelRetention:TrainingChaotic Interactive        0.798    
+training_phase_labelPostTest:TrainingChaotic Non-interactive     0.425    
+training_phase_labelRetention:TrainingChaotic Non-interactive    0.419    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.589                                                 
+trnng_phs_R -0.589  0.500                                          
+TrnngChtcIn -0.745  0.439  0.439                                   
+TrnngChtNn- -0.707  0.417  0.417  0.527                            
+trn__PT:TCI  0.439 -0.745 -0.373 -0.589 -0.311                     
+trnn__R:TCI  0.439 -0.373 -0.745 -0.589 -0.311  0.500              
+tr__PT:TCN-  0.417 -0.707 -0.354 -0.311 -0.589  0.527  0.264       
+trn__R:TCN-  0.417 -0.354 -0.707 -0.311 -0.589  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.20 ***     0.20 ***     0.21 ***     0.21 ***
+                                                                 (0.00)       (0.00)       (0.01)       (0.01)   
+training_phase_labelPostTest                                                  -0.00        -0.00        -0.01    
+                                                                              (0.01)       (0.01)       (0.01)   
+training_phase_labelRetention                                                  0.00         0.00        -0.00    
+                                                                              (0.01)       (0.01)       (0.01)   
+TrainingChaotic Interactive                                                                -0.01        -0.01    
+                                                                                           (0.01)       (0.01)   
+TrainingChaotic Non-interactive                                                            -0.00        -0.01    
+                                                                                           (0.01)       (0.01)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                -0.00    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Interactive                                                0.00    
+                                                                                                        (0.01)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.01    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.01    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -368.79      -367.02      -366.91      -360.82    
+BIC                                                            -361.72      -355.24      -350.42      -334.90    
+Log Likelihood                                                  187.39       188.51       190.46       191.41    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Short, Stimulus
+Test: Periodic Fadeout (SCT)
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -310.89 -303.82 158.45  -316.89                     
+m2    5 -307.20 -295.41 158.60  -317.20 0.3050  2     0.8586
+m3    7 -306.66 -290.16 160.33  -320.66 3.4588  2     0.1774
+m4   11 -302.51 -276.58 162.25  -324.51 3.8511  4     0.4265
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -310.9   -303.8    158.4   -316.9       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0791 -0.6954  0.1845  0.6797  1.9833 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0006980 0.02642 
+ Residual             0.0006142 0.02478 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  0.359157   0.005892 25.999999   60.95   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -307.2   -295.4    158.6   -317.2       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9937 -0.7170  0.1384  0.6839  1.9475 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0006992 0.02644 
+ Residual             0.0006106 0.02471 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                    0.3601194  0.0070976 49.6855173  50.738   <2e-16 ***
+training_phase_labelPostTest  -0.0031459  0.0068536 52.0000004  -0.459    0.648    
+training_phase_labelRetention  0.0002582  0.0068536 52.0000004   0.038    0.970    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.483       
+trnng_phs_R -0.483  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -306.7   -290.2    160.3   -320.7       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.1320 -0.7521  0.1118  0.6550  1.9511 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0005867 0.02422 
+ Residual             0.0006106 0.02471 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                      0.3706893  0.0106976 34.4623904  34.651   <2e-16 ***
+training_phase_labelPostTest    -0.0031459  0.0068536 52.0000000  -0.459   0.6481    
+training_phase_labelRetention    0.0002582  0.0068536 52.0000000   0.038   0.9701    
+TrainingChaotic Interactive     -0.0237856  0.0133345 25.9999999  -1.784   0.0861 .  
+TrainingChaotic Non-interactive -0.0046203  0.0140558 25.9999999  -0.329   0.7450    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.320                     
+trnng_phs_R -0.320  0.500              
+TrnngChtcIn -0.692  0.000  0.000       
+TrnngChtNn- -0.657  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -302.5   -276.6    162.3   -324.5       67 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.00421 -0.66184  0.00814  0.60883  1.82228 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0006012 0.02452 
+ Residual             0.0005670 0.02381 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                               Estimate Std. Error        df t value
+(Intercept)                                                    0.366047   0.012085 50.990204  30.291
+training_phase_labelPostTest                                   0.001191   0.011906 52.000000   0.100
+training_phase_labelRetention                                  0.009849   0.011906 52.000000   0.827
+TrainingChaotic Interactive                                   -0.024227   0.016213 50.990204  -1.494
+TrainingChaotic Non-interactive                                0.011021   0.017090 50.990204   0.645
+training_phase_labelPostTest:TrainingChaotic Interactive       0.004006   0.015974 52.000000   0.251
+training_phase_labelRetention:TrainingChaotic Interactive     -0.002680   0.015974 52.000000  -0.168
+training_phase_labelPostTest:TrainingChaotic Non-interactive  -0.019104   0.016838 52.000000  -1.135
+training_phase_labelRetention:TrainingChaotic Non-interactive -0.027819   0.016838 52.000000  -1.652
+                                                              Pr(>|t|)    
+(Intercept)                                                     <2e-16 ***
+training_phase_labelPostTest                                     0.921    
+training_phase_labelRetention                                    0.412    
+TrainingChaotic Interactive                                      0.141    
+TrainingChaotic Non-interactive                                  0.522    
+training_phase_labelPostTest:TrainingChaotic Interactive         0.803    
+training_phase_labelRetention:TrainingChaotic Interactive        0.867    
+training_phase_labelPostTest:TrainingChaotic Non-interactive     0.262    
+training_phase_labelRetention:TrainingChaotic Non-interactive    0.105    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.493                                                 
+trnng_phs_R -0.493  0.500                                          
+TrnngChtcIn -0.745  0.367  0.367                                   
+TrnngChtNn- -0.707  0.348  0.348  0.527                            
+trn__PT:TCI  0.367 -0.745 -0.373 -0.493 -0.260                     
+trnn__R:TCI  0.367 -0.373 -0.745 -0.493 -0.260  0.500              
+tr__PT:TCN-  0.348 -0.707 -0.354 -0.260 -0.493  0.527  0.264       
+trn__R:TCN-  0.348 -0.354 -0.707 -0.260 -0.493  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.36 ***     0.36 ***     0.37 ***     0.37 ***
+                                                                 (0.01)       (0.01)       (0.01)       (0.01)   
+training_phase_labelPostTest                                                  -0.00        -0.00         0.00    
+                                                                              (0.01)       (0.01)       (0.01)   
+training_phase_labelRetention                                                  0.00         0.00         0.01    
+                                                                              (0.01)       (0.01)       (0.01)   
+TrainingChaotic Interactive                                                                -0.02        -0.02    
+                                                                                           (0.01)       (0.02)   
+TrainingChaotic Non-interactive                                                            -0.00         0.01    
+                                                                                           (0.01)       (0.02)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.00    
+                                                                                                        (0.02)   
+training_phase_labelRetention:TrainingChaotic Interactive                                               -0.00    
+                                                                                                        (0.02)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                            -0.02    
+                                                                                                        (0.02)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                           -0.03    
+                                                                                                        (0.02)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -310.89      -307.20      -306.66      -302.51    
+BIC                                                            -303.82      -295.41      -290.16      -276.58    
+Log Likelihood                                                  158.45       158.60       160.33       162.25    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Short, Stimulus
+Test: Chaotic
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -398.80 -391.73 202.40  -404.80                     
+m2    5 -396.84 -385.06 203.42  -406.84 2.0394  2     0.3607
+m3    7 -395.65 -379.16 204.83  -409.65 2.8113  2     0.2452
+m4   11 -393.49 -367.56 207.74  -415.49 5.8312  4     0.2121
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -398.8   -391.7    202.4   -404.8       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.0936 -0.7774 -0.1556  0.4663  2.3318 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0003263 0.01806 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  1.864429   0.002045 78.000000   911.5   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -396.8   -385.1    203.4   -406.8       73 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-3.13172 -0.58959  0.04043  0.67046  2.36501 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0003179 0.01783 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    1.868005   0.003497 78.000000 534.230   <2e-16 ***
+training_phase_labelPostTest  -0.003622   0.004945 78.000000  -0.732    0.466    
+training_phase_labelRetention -0.007108   0.004945 78.000000  -1.437    0.155    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.707       
+trnng_phs_R -0.707  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -395.7   -379.2    204.8   -409.7       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9805 -0.6019  0.1427  0.6186  2.1529 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0003066 0.01751 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                      1.872472   0.004543 78.000000 412.167   <2e-16 ***
+training_phase_labelPostTest    -0.003622   0.004857 78.000000  -0.746   0.4581    
+training_phase_labelRetention   -0.007108   0.004857 78.000000  -1.463   0.1473    
+TrainingChaotic Interactive     -0.008112   0.004796 78.000000  -1.692   0.0947 .  
+TrainingChaotic Non-interactive -0.004377   0.005055 78.000000  -0.866   0.3892    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.535                     
+trnng_phs_R -0.535  0.500              
+TrnngChtcIn -0.586  0.000  0.000       
+TrnngChtNn- -0.556  0.000  0.000  0.527
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -393.5   -367.6    207.7   -415.5       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.8861 -0.5065  0.2142  0.7040  1.8139 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0002845 0.01687 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    1.8684866  0.0059639 78.0000000
+training_phase_labelPostTest                                   0.0099811  0.0084342 78.0000000
+training_phase_labelRetention                                 -0.0087544  0.0084342 78.0000000
+TrainingChaotic Interactive                                   -0.0013737  0.0080014 78.0000000
+TrainingChaotic Non-interactive                                0.0001523  0.0084342 78.0000000
+training_phase_labelPostTest:TrainingChaotic Interactive      -0.0198626  0.0113157 78.0000000
+training_phase_labelRetention:TrainingChaotic Interactive     -0.0003538  0.0113157 78.0000000
+training_phase_labelPostTest:TrainingChaotic Non-interactive  -0.0193814  0.0119278 78.0000000
+training_phase_labelRetention:TrainingChaotic Non-interactive  0.0057939  0.0119278 78.0000000
+                                                              t value Pr(>|t|)    
+(Intercept)                                                   313.299   <2e-16 ***
+training_phase_labelPostTest                                    1.183   0.2402    
+training_phase_labelRetention                                  -1.038   0.3025    
+TrainingChaotic Interactive                                    -0.172   0.8641    
+TrainingChaotic Non-interactive                                 0.018   0.9856    
+training_phase_labelPostTest:TrainingChaotic Interactive       -1.755   0.0831 .  
+training_phase_labelRetention:TrainingChaotic Interactive      -0.031   0.9751    
+training_phase_labelPostTest:TrainingChaotic Non-interactive   -1.625   0.1082    
+training_phase_labelRetention:TrainingChaotic Non-interactive   0.486   0.6285    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.707                                                 
+trnng_phs_R -0.707  0.500                                          
+TrnngChtcIn -0.745  0.527  0.527                                   
+TrnngChtNn- -0.707  0.500  0.500  0.527                            
+trn__PT:TCI  0.527 -0.745 -0.373 -0.707 -0.373                     
+trnn__R:TCI  0.527 -0.373 -0.745 -0.707 -0.373  0.500              
+tr__PT:TCN-  0.500 -0.707 -0.354 -0.373 -0.707  0.527  0.264       
+trn__R:TCN-  0.500 -0.354 -0.707 -0.373 -0.707  0.264  0.527  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       1.86 ***     1.87 ***     1.87 ***     1.87 ***
+                                                                 (0.00)       (0.00)       (0.00)       (0.01)   
+training_phase_labelPostTest                                                  -0.00        -0.00         0.01    
+                                                                              (0.00)       (0.00)       (0.01)   
+training_phase_labelRetention                                                 -0.01        -0.01        -0.01    
+                                                                              (0.00)       (0.00)       (0.01)   
+TrainingChaotic Interactive                                                                -0.01        -0.00    
+                                                                                           (0.00)       (0.01)   
+TrainingChaotic Non-interactive                                                            -0.00         0.00    
+                                                                                           (0.01)       (0.01)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                -0.02    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Interactive                                               -0.00    
+                                                                                                        (0.01)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                            -0.02    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.01    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -398.80      -396.84      -395.65      -393.49    
+BIC                                                            -391.73      -385.06      -379.16      -367.56    
+Log Likelihood                                                  202.40       203.42       204.83       207.74    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Short, Stimulus
+Test: Chaotic Visual
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -432.85 -425.78 219.42  -438.85                     
+m2    5 -432.21 -420.43 221.10  -442.21 3.3602  2     0.1864
+m3    7 -428.64 -412.14 221.32  -442.64 0.4313  2     0.8060
+m4   11 -422.60 -396.68 222.30  -444.60 1.9645  4     0.7423
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -432.8   -425.8    219.4   -438.8       75 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.34933 -0.54591  0.01905  0.28686  2.69713 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0002109 0.01452 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  1.667750   0.001644 78.000000    1014   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -432.2   -420.4    221.1   -442.2       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.5409 -0.7200  0.1450  0.3157  3.0521 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.000000 0.00000 
+ Residual             0.000202 0.01421 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                    1.6696559  0.0027874 78.0000000 599.009   <2e-16 ***
+training_phase_labelPostTest  -0.0061166  0.0039419 78.0000000  -1.552    0.125    
+training_phase_labelRetention  0.0003996  0.0039419 78.0000000   0.101    0.920    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.707       
+trnng_phs_R -0.707  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -428.6   -412.1    221.3   -442.6       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.6277 -0.7463  0.1512  0.4139  3.1579 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0002009 0.01417 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                      1.6695729  0.0036772 78.0000000 454.039   <2e-16 ***
+training_phase_labelPostTest    -0.0061166  0.0039310 78.0000000  -1.556    0.124    
+training_phase_labelRetention    0.0003996  0.0039310 78.0000000   0.102    0.919    
+TrainingChaotic Interactive      0.0012529  0.0038816 78.0000000   0.323    0.748    
+TrainingChaotic Non-interactive -0.0012964  0.0040916 78.0000000  -0.317    0.752    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.535                     
+trnng_phs_R -0.535  0.500              
+TrnngChtcIn -0.586  0.000  0.000       
+TrnngChtNn- -0.556  0.000  0.000  0.527
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -422.6   -396.7    222.3   -444.6       67 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.69671 -0.83676  0.04771  0.52988  2.93952 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 1.157e-06 0.001076
+ Residual             1.947e-04 0.013955
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                               Estimate Std. Error        df t value
+(Intercept)                                                    1.673321   0.004948 77.994555 338.148
+training_phase_labelPostTest                                  -0.012587   0.006978 51.999969  -1.804
+training_phase_labelRetention                                 -0.004375   0.006978 51.999968  -0.627
+TrainingChaotic Interactive                                   -0.002572   0.006639 77.994555  -0.387
+TrainingChaotic Non-interactive                               -0.008697   0.006998 77.994555  -1.243
+training_phase_labelPostTest:TrainingChaotic Interactive       0.005975   0.009361 51.999969   0.638
+training_phase_labelRetention:TrainingChaotic Interactive      0.005499   0.009361 51.999969   0.587
+training_phase_labelPostTest:TrainingChaotic Non-interactive   0.013559   0.009868 51.999969   1.374
+training_phase_labelRetention:TrainingChaotic Non-interactive  0.008644   0.009868 51.999968   0.876
+                                                              Pr(>|t|)    
+(Intercept)                                                     <2e-16 ***
+training_phase_labelPostTest                                     0.077 .  
+training_phase_labelRetention                                    0.533    
+TrainingChaotic Interactive                                      0.700    
+TrainingChaotic Non-interactive                                  0.218    
+training_phase_labelPostTest:TrainingChaotic Interactive         0.526    
+training_phase_labelRetention:TrainingChaotic Interactive        0.559    
+training_phase_labelPostTest:TrainingChaotic Non-interactive     0.175    
+training_phase_labelRetention:TrainingChaotic Non-interactive    0.385    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.705                                                 
+trnng_phs_R -0.705  0.500                                          
+TrnngChtcIn -0.745  0.525  0.525                                   
+TrnngChtNn- -0.707  0.499  0.499  0.527                            
+trn__PT:TCI  0.525 -0.745 -0.373 -0.705 -0.372                     
+trnn__R:TCI  0.525 -0.373 -0.745 -0.705 -0.372  0.500              
+tr__PT:TCN-  0.499 -0.707 -0.354 -0.372 -0.705  0.527  0.264       
+trn__R:TCN-  0.499 -0.354 -0.707 -0.372 -0.705  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       1.67 ***     1.67 ***     1.67 ***     1.67 ***
+                                                                 (0.00)       (0.00)       (0.00)       (0.00)   
+training_phase_labelPostTest                                                  -0.01        -0.01        -0.01    
+                                                                              (0.00)       (0.00)       (0.01)   
+training_phase_labelRetention                                                  0.00         0.00        -0.00    
+                                                                              (0.00)       (0.00)       (0.01)   
+TrainingChaotic Interactive                                                                 0.00        -0.00    
+                                                                                           (0.00)       (0.01)   
+TrainingChaotic Non-interactive                                                            -0.00        -0.01    
+                                                                                           (0.00)       (0.01)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.01    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Interactive                                                0.01    
+                                                                                                        (0.01)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.01    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.01    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -432.85      -432.21      -428.64      -422.60    
+BIC                                                            -425.78      -420.43      -412.14      -396.68    
+Log Likelihood                                                  219.42       221.10       221.32       222.30    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Long, Stimulus
+Test: Periodic Fixed
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -533.00 -525.93 269.50  -539.00                     
+m2    5 -532.65 -520.87 271.32  -542.65 3.6486  2     0.1613
+m3    7 -529.43 -512.94 271.72  -543.43 0.7861  2     0.6750
+m4   11 -522.00 -496.08 272.00  -544.00 0.5689  4     0.9665
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -533.0   -525.9    269.5   -539.0       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9723 -0.5577  0.1215  0.7293  2.2337 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.00e+00 0.000000
+ Residual             5.84e-05 0.007642
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept) 3.602e-02  8.653e-04 7.800e+01   41.63   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -532.6   -520.9    271.3   -542.6       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.7502 -0.5856  0.0996  0.6915  2.5789 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.000e+00 0.000000
+ Residual             5.573e-05 0.007466
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    0.037771   0.001464 78.000000  25.798   <2e-16 ***
+training_phase_labelPostTest  -0.003930   0.002071 78.000000  -1.898   0.0614 .  
+training_phase_labelRetention -0.001311   0.002071 78.000000  -0.633   0.5285    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.707       
+trnng_phs_R -0.707  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -529.4   -512.9    271.7   -543.4       71 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.65931 -0.58833  0.07809  0.62469  2.69677 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.000e+00 0.000000
+ Residual             5.518e-05 0.007428
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                      0.038840   0.001927 78.000000  20.155   <2e-16 ***
+training_phase_labelPostTest    -0.003930   0.002060 78.000000  -1.908   0.0601 .  
+training_phase_labelRetention   -0.001311   0.002060 78.000000  -0.636   0.5264    
+TrainingChaotic Interactive     -0.001301   0.002034 78.000000  -0.640   0.5242    
+TrainingChaotic Non-interactive -0.001847   0.002144 78.000000  -0.862   0.3916    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.535                     
+trnng_phs_R -0.535  0.500              
+TrnngChtcIn -0.586  0.000  0.000       
+TrnngChtNn- -0.556  0.000  0.000  0.527
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -522.0   -496.1    272.0   -544.0       67 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.71972 -0.61074  0.07878  0.66082  2.65593 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.000e+00 0.000000
+ Residual             5.477e-05 0.007401
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    0.0397257  0.0026166 78.0000000
+training_phase_labelPostTest                                  -0.0047843  0.0037005 78.0000000
+training_phase_labelRetention                                 -0.0031130  0.0037005 78.0000000
+TrainingChaotic Interactive                                   -0.0019720  0.0035106 78.0000000
+TrainingChaotic Non-interactive                               -0.0038870  0.0037005 78.0000000
+training_phase_labelPostTest:TrainingChaotic Interactive       0.0003145  0.0049647 78.0000000
+training_phase_labelRetention:TrainingChaotic Interactive      0.0016970  0.0049647 78.0000000
+training_phase_labelPostTest:TrainingChaotic Non-interactive   0.0023837  0.0052333 78.0000000
+training_phase_labelRetention:TrainingChaotic Non-interactive  0.0037350  0.0052333 78.0000000
+                                                              t value Pr(>|t|)    
+(Intercept)                                                    15.182   <2e-16 ***
+training_phase_labelPostTest                                   -1.293    0.200    
+training_phase_labelRetention                                  -0.841    0.403    
+TrainingChaotic Interactive                                    -0.562    0.576    
+TrainingChaotic Non-interactive                                -1.050    0.297    
+training_phase_labelPostTest:TrainingChaotic Interactive        0.063    0.950    
+training_phase_labelRetention:TrainingChaotic Interactive       0.342    0.733    
+training_phase_labelPostTest:TrainingChaotic Non-interactive    0.455    0.650    
+training_phase_labelRetention:TrainingChaotic Non-interactive   0.714    0.478    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.707                                                 
+trnng_phs_R -0.707  0.500                                          
+TrnngChtcIn -0.745  0.527  0.527                                   
+TrnngChtNn- -0.707  0.500  0.500  0.527                            
+trn__PT:TCI  0.527 -0.745 -0.373 -0.707 -0.373                     
+trnn__R:TCI  0.527 -0.373 -0.745 -0.707 -0.373  0.500              
+tr__PT:TCN-  0.500 -0.707 -0.354 -0.373 -0.707  0.527  0.264       
+trn__R:TCN-  0.500 -0.354 -0.707 -0.373 -0.707  0.264  0.527  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.04 ***     0.04 ***     0.04 ***     0.04 ***
+                                                                 (0.00)       (0.00)       (0.00)       (0.00)   
+training_phase_labelPostTest                                                  -0.00        -0.00        -0.00    
+                                                                              (0.00)       (0.00)       (0.00)   
+training_phase_labelRetention                                                 -0.00        -0.00        -0.00    
+                                                                              (0.00)       (0.00)       (0.00)   
+TrainingChaotic Interactive                                                                -0.00        -0.00    
+                                                                                           (0.00)       (0.00)   
+TrainingChaotic Non-interactive                                                            -0.00        -0.00    
+                                                                                           (0.00)       (0.00)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.00    
+                                                                                                        (0.00)   
+training_phase_labelRetention:TrainingChaotic Interactive                                                0.00    
+                                                                                                        (0.00)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.00    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.00    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -533.00      -532.65      -529.43      -522.00    
+BIC                                                            -525.93      -520.87      -512.94      -496.08    
+Log Likelihood                                                  269.50       271.32       271.72       272.00    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Long, Stimulus
+Test: Periodic Fadeout (SCT)
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)   
+m1    3 -478.32 -471.25 242.16  -484.32                         
+m2    5 -475.46 -463.68 242.73  -485.46  1.1427  2    0.56476   
+m3    7 -481.52 -465.03 247.76  -495.52 10.0628  2    0.00653 **
+m4   11 -476.58 -450.65 249.29  -498.58  3.0520  4    0.54916   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -478.3   -471.2    242.2   -484.3       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.5323 -0.5869  0.1291  0.7008  2.2157 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0001177 0.01085 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  0.063787   0.001229 78.000000   51.92   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -475.5   -463.7    242.7   -485.5       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3828 -0.6969  0.2127  0.7400  2.1785 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.000000 0.00000 
+ Residual             0.000116 0.01077 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                    0.0643621  0.0021124 78.0000000  30.468   <2e-16 ***
+training_phase_labelPostTest  -0.0023864  0.0029874 78.0000000  -0.799    0.427    
+training_phase_labelRetention  0.0006598  0.0029874 78.0000000   0.221    0.826    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.707       
+trnng_phs_R -0.707  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -481.5   -465.0    247.8   -495.5       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0783 -0.7568  0.0006  0.7798  1.9580 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.000000 0.0000  
+ Residual             0.000102 0.0101  
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                      0.0665171  0.0026199 78.0000000  25.389   <2e-16 ***
+training_phase_labelPostTest    -0.0023864  0.0028008 78.0000000  -0.852   0.3968    
+training_phase_labelRetention    0.0006598  0.0028008 78.0000000   0.236   0.8144    
+TrainingChaotic Interactive     -0.0068332  0.0027656 78.0000000  -2.471   0.0157 *  
+TrainingChaotic Non-interactive  0.0015379  0.0029152 78.0000000   0.528   0.5993    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.535                     
+trnng_phs_R -0.535  0.500              
+TrnngChtcIn -0.586  0.000  0.000       
+TrnngChtNn- -0.556  0.000  0.000  0.527
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -476.6   -450.7    249.3   -498.6       67 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.19999 -0.63548  0.09027  0.73146  1.87817 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.000e+00 0.000000
+ Residual             9.806e-05 0.009903
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    6.928e-02  3.501e-03  7.800e+01
+training_phase_labelPostTest                                  -5.111e-03  4.951e-03  7.800e+01
+training_phase_labelRetention                                 -4.907e-03  4.951e-03  7.800e+01
+TrainingChaotic Interactive                                   -1.275e-02  4.697e-03  7.800e+01
+TrainingChaotic Non-interactive                               -4.741e-05  4.951e-03  7.800e+01
+training_phase_labelPostTest:TrainingChaotic Interactive       6.678e-03  6.643e-03  7.800e+01
+training_phase_labelRetention:TrainingChaotic Interactive      1.108e-02  6.643e-03  7.800e+01
+training_phase_labelPostTest:TrainingChaotic Non-interactive   5.081e-04  7.002e-03  7.800e+01
+training_phase_labelRetention:TrainingChaotic Non-interactive  4.248e-03  7.002e-03  7.800e+01
+                                                              t value Pr(>|t|)    
+(Intercept)                                                    19.788  < 2e-16 ***
+training_phase_labelPostTest                                   -1.032  0.30513    
+training_phase_labelRetention                                  -0.991  0.32469    
+TrainingChaotic Interactive                                    -2.715  0.00817 ** 
+TrainingChaotic Non-interactive                                -0.010  0.99238    
+training_phase_labelPostTest:TrainingChaotic Interactive        1.005  0.31788    
+training_phase_labelRetention:TrainingChaotic Interactive       1.667  0.09944 .  
+training_phase_labelPostTest:TrainingChaotic Non-interactive    0.073  0.94234    
+training_phase_labelRetention:TrainingChaotic Non-interactive   0.607  0.54586    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.707                                                 
+trnng_phs_R -0.707  0.500                                          
+TrnngChtcIn -0.745  0.527  0.527                                   
+TrnngChtNn- -0.707  0.500  0.500  0.527                            
+trn__PT:TCI  0.527 -0.745 -0.373 -0.707 -0.373                     
+trnn__R:TCI  0.527 -0.373 -0.745 -0.707 -0.373  0.500              
+tr__PT:TCN-  0.500 -0.707 -0.354 -0.373 -0.707  0.527  0.264       
+trn__R:TCN-  0.500 -0.354 -0.707 -0.373 -0.707  0.264  0.527  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.06 ***     0.06 ***     0.07 ***     0.07 ***
+                                                                 (0.00)       (0.00)       (0.00)       (0.00)   
+training_phase_labelPostTest                                                  -0.00        -0.00        -0.01    
+                                                                              (0.00)       (0.00)       (0.00)   
+training_phase_labelRetention                                                  0.00         0.00        -0.00    
+                                                                              (0.00)       (0.00)       (0.00)   
+TrainingChaotic Interactive                                                                -0.01 *      -0.01 ** 
+                                                                                           (0.00)       (0.00)   
+TrainingChaotic Non-interactive                                                             0.00        -0.00    
+                                                                                           (0.00)       (0.00)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.01    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Interactive                                                0.01    
+                                                                                                        (0.01)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.00    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.00    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -478.32      -475.46      -481.52      -476.58    
+BIC                                                            -471.25      -463.68      -465.03      -450.65    
+Log Likelihood                                                  242.16       242.73       247.76       249.29    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Long, Stimulus
+Test: Chaotic
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -469.22 -462.15 237.61  -475.22                     
+m2    5 -467.26 -455.48 238.63  -477.26 2.0421  2     0.3602
+m3    7 -466.01 -449.51 240.00  -480.01 2.7425  2     0.2538
+m4   11 -463.92 -438.00 242.96  -485.92 5.9164  4     0.2055
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -469.2   -462.2    237.6   -475.2       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.2026 -0.7372 -0.1342  0.4689  2.2781 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.0000  
+ Residual             0.0001323 0.0115  
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  0.423014   0.001302 78.000000   324.8   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -467.3   -455.5    238.6   -477.3       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.2338 -0.5532  0.0578  0.6688  2.3191 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0001289 0.01135 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    0.425338   0.002226 78.000000 191.043   <2e-16 ***
+training_phase_labelPostTest  -0.002448   0.003149 78.000000  -0.778    0.439    
+training_phase_labelRetention -0.004524   0.003149 78.000000  -1.437    0.155    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.707       
+trnng_phs_R -0.707  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -466.0   -449.5    240.0   -480.0       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.0852 -0.5626  0.1588  0.6075  2.1088 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0001244 0.01115 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                      0.428142   0.002894 78.000000 147.945   <2e-16 ***
+training_phase_labelPostTest    -0.002448   0.003094 78.000000  -0.791   0.4311    
+training_phase_labelRetention   -0.004524   0.003094 78.000000  -1.462   0.1477    
+TrainingChaotic Interactive     -0.005103   0.003055 78.000000  -1.670   0.0989 .  
+TrainingChaotic Non-interactive -0.002737   0.003220 78.000000  -0.850   0.3980    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.535                     
+trnng_phs_R -0.535  0.500              
+TrnngChtcIn -0.586  0.000  0.000       
+TrnngChtNn- -0.556  0.000  0.000  0.527
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -463.9   -438.0    243.0   -485.9       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9951 -0.4577  0.2263  0.7218  1.7982 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0000000 0.00000 
+ Residual             0.0001153 0.01074 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    0.4255873  0.0037970 78.0000000
+training_phase_labelPostTest                                   0.0062880  0.0053698 78.0000000
+training_phase_labelRetention                                 -0.0055950  0.0053698 78.0000000
+TrainingChaotic Interactive                                   -0.0008234  0.0050942 78.0000000
+TrainingChaotic Non-interactive                                0.0002185  0.0053698 78.0000000
+training_phase_labelPostTest:TrainingChaotic Interactive      -0.0127084  0.0072043 78.0000000
+training_phase_labelRetention:TrainingChaotic Interactive     -0.0001291  0.0072043 78.0000000
+training_phase_labelPostTest:TrainingChaotic Non-interactive  -0.0125078  0.0075940 78.0000000
+training_phase_labelRetention:TrainingChaotic Non-interactive  0.0036423  0.0075940 78.0000000
+                                                              t value Pr(>|t|)    
+(Intercept)                                                   112.085   <2e-16 ***
+training_phase_labelPostTest                                    1.171   0.2452    
+training_phase_labelRetention                                  -1.042   0.3007    
+TrainingChaotic Interactive                                    -0.162   0.8720    
+TrainingChaotic Non-interactive                                 0.041   0.9676    
+training_phase_labelPostTest:TrainingChaotic Interactive       -1.764   0.0816 .  
+training_phase_labelRetention:TrainingChaotic Interactive      -0.018   0.9858    
+training_phase_labelPostTest:TrainingChaotic Non-interactive   -1.647   0.1036    
+training_phase_labelRetention:TrainingChaotic Non-interactive   0.480   0.6328    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.707                                                 
+trnng_phs_R -0.707  0.500                                          
+TrnngChtcIn -0.745  0.527  0.527                                   
+TrnngChtNn- -0.707  0.500  0.500  0.527                            
+trn__PT:TCI  0.527 -0.745 -0.373 -0.707 -0.373                     
+trnn__R:TCI  0.527 -0.373 -0.745 -0.707 -0.373  0.500              
+tr__PT:TCN-  0.500 -0.707 -0.354 -0.373 -0.707  0.527  0.264       
+trn__R:TCN-  0.500 -0.354 -0.707 -0.373 -0.707  0.264  0.527  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.42 ***     0.43 ***     0.43 ***     0.43 ***
+                                                                 (0.00)       (0.00)       (0.00)       (0.00)   
+training_phase_labelPostTest                                                  -0.00        -0.00         0.01    
+                                                                              (0.00)       (0.00)       (0.01)   
+training_phase_labelRetention                                                 -0.00        -0.00        -0.01    
+                                                                              (0.00)       (0.00)       (0.01)   
+TrainingChaotic Interactive                                                                -0.01        -0.00    
+                                                                                           (0.00)       (0.01)   
+TrainingChaotic Non-interactive                                                            -0.00         0.00    
+                                                                                           (0.00)       (0.01)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                -0.01    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Interactive                                               -0.00    
+                                                                                                        (0.01)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                            -0.01    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.00    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -469.22      -467.26      -466.01      -463.92    
+BIC                                                            -462.15      -455.48      -449.51      -438.00    
+Log Likelihood                                                  237.61       238.63       240.00       242.96    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Long, Stimulus
+Test: Chaotic Visual
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -648.86 -641.79 327.43  -654.86                     
+m2    5 -648.86 -637.08 329.43  -658.86 3.9982  2     0.1355
+m3    7 -645.21 -628.71 329.60  -659.21 0.3496  2     0.8396
+m4   11 -639.42 -613.49 330.71  -661.42 2.2091  4     0.6974
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -648.9   -641.8    327.4   -654.9       75 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.34493 -0.54047 -0.00417  0.51388  2.67735 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.000e+00 0.000000
+ Residual             1.322e-05 0.003636
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept) 3.457e-01  4.117e-04 7.800e+01   839.7   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -648.9   -637.1    329.4   -658.9       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.5763 -0.7510  0.1456  0.4449  3.0686 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.000e+00 0.000000
+ Residual             1.256e-05 0.003544
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                    0.3461918  0.0006951 78.0000000 498.042   <2e-16 ***
+training_phase_labelPostTest  -0.0015843  0.0009830 78.0000000  -1.612    0.111    
+training_phase_labelRetention  0.0002523  0.0009830 78.0000000   0.257    0.798    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.707       
+trnng_phs_R -0.707  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -645.2   -628.7    329.6   -659.2       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.6513 -0.7539  0.1446  0.4676  3.1661 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.000e+00 0.000000
+ Residual             1.251e-05 0.003536
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                      0.3461964  0.0009175 78.0000000 377.334   <2e-16 ***
+training_phase_labelPostTest    -0.0015843  0.0009808 78.0000000  -1.615    0.110    
+training_phase_labelRetention    0.0002523  0.0009808 78.0000000   0.257    0.798    
+TrainingChaotic Interactive      0.0002482  0.0009685 78.0000000   0.256    0.798    
+TrainingChaotic Non-interactive -0.0003250  0.0010209 78.0000000  -0.318    0.751    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.535                     
+trnng_phs_R -0.535  0.500              
+TrnngChtcIn -0.586  0.000  0.000       
+TrnngChtNn- -0.556  0.000  0.000  0.527
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -639.4   -613.5    330.7   -661.4       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.7127 -0.8442  0.0839  0.5244  2.9714 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.000e+00 0.000000
+ Residual             1.216e-05 0.003487
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    0.3472249  0.0012327 78.0000000
+training_phase_labelPostTest                                  -0.0033205  0.0017433 78.0000000
+training_phase_labelRetention                                 -0.0010970  0.0017433 78.0000000
+TrainingChaotic Interactive                                   -0.0008096  0.0016539 78.0000000
+TrainingChaotic Non-interactive                               -0.0023454  0.0017433 78.0000000
+training_phase_labelPostTest:TrainingChaotic Interactive       0.0016629  0.0023389 78.0000000
+training_phase_labelRetention:TrainingChaotic Interactive      0.0015107  0.0023389 78.0000000
+training_phase_labelPostTest:TrainingChaotic Non-interactive   0.0035643  0.0024655 78.0000000
+training_phase_labelRetention:TrainingChaotic Non-interactive  0.0024969  0.0024655 78.0000000
+                                                              t value Pr(>|t|)    
+(Intercept)                                                   281.671   <2e-16 ***
+training_phase_labelPostTest                                   -1.905   0.0605 .  
+training_phase_labelRetention                                  -0.629   0.5310    
+TrainingChaotic Interactive                                    -0.490   0.6258    
+TrainingChaotic Non-interactive                                -1.345   0.1824    
+training_phase_labelPostTest:TrainingChaotic Interactive        0.711   0.4792    
+training_phase_labelRetention:TrainingChaotic Interactive       0.646   0.5203    
+training_phase_labelPostTest:TrainingChaotic Non-interactive    1.446   0.1523    
+training_phase_labelRetention:TrainingChaotic Non-interactive   1.013   0.3143    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.707                                                 
+trnng_phs_R -0.707  0.500                                          
+TrnngChtcIn -0.745  0.527  0.527                                   
+TrnngChtNn- -0.707  0.500  0.500  0.527                            
+trn__PT:TCI  0.527 -0.745 -0.373 -0.707 -0.373                     
+trnn__R:TCI  0.527 -0.373 -0.745 -0.707 -0.373  0.500              
+tr__PT:TCN-  0.500 -0.707 -0.354 -0.373 -0.707  0.527  0.264       
+trn__R:TCN-  0.500 -0.354 -0.707 -0.373 -0.707  0.264  0.527  0.500
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.35 ***     0.35 ***     0.35 ***     0.35 ***
+                                                                 (0.00)       (0.00)       (0.00)       (0.00)   
+training_phase_labelPostTest                                                  -0.00        -0.00        -0.00    
+                                                                              (0.00)       (0.00)       (0.00)   
+training_phase_labelRetention                                                  0.00         0.00        -0.00    
+                                                                              (0.00)       (0.00)       (0.00)   
+TrainingChaotic Interactive                                                                 0.00        -0.00    
+                                                                                           (0.00)       (0.00)   
+TrainingChaotic Non-interactive                                                            -0.00        -0.00    
+                                                                                           (0.00)       (0.00)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.00    
+                                                                                                        (0.00)   
+training_phase_labelRetention:TrainingChaotic Interactive                                                0.00    
+                                                                                                        (0.00)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.00    
+                                                                                                        (0.00)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.00    
+                                                                                                        (0.00)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -648.86      -648.86      -645.21      -639.42    
+BIC                                                            -641.79      -637.08      -628.71      -613.49    
+Log Likelihood                                                  327.43       329.43       329.60       330.71    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Short, User
+Test: Periodic Fixed
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -204.83 -197.76 105.42  -210.83                     
+m2    5 -200.92 -189.14 105.46  -210.92 0.0907  2     0.9557
+m3    7 -199.24 -182.74 106.62  -213.24 2.3160  2     0.3141
+m4   11 -192.06 -166.14 107.03  -214.06 0.8221  4     0.9355
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -204.8   -197.8    105.4   -210.8       75 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.83631 -0.48603 -0.03936  0.50207  2.21421 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004429 0.06655 
+ Residual             0.001988 0.04459 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)  0.37395    0.01399 26.00000   26.72   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -200.9   -189.1    105.5   -210.9       73 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.79944 -0.51580 -0.05862  0.51408  2.22210 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004430 0.06656 
+ Residual             0.001985 0.04455 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    0.372243   0.015707 39.920884  23.698   <2e-16 ***
+training_phase_labelPostTest   0.003692   0.012356 52.000000   0.299    0.766    
+training_phase_labelRetention  0.001438   0.012356 52.000000   0.116    0.908    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.393       
+trnng_phs_R -0.393  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -199.2   -182.7    106.6   -213.2       71 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.84129 -0.51424 -0.03997  0.49681  2.32917 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.003996 0.06322 
+ Residual             0.001985 0.04455 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                      0.388896   0.025162 30.626861  15.456 5.21e-16 ***
+training_phase_labelPostTest     0.003692   0.012356 52.000001   0.299    0.766    
+training_phase_labelRetention    0.001438   0.012356 52.000001   0.116    0.908    
+TrainingChaotic Interactive     -0.005107   0.032373 25.999998  -0.158    0.876    
+TrainingChaotic Non-interactive -0.047739   0.034124 25.999998  -1.399    0.174    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.246                     
+trnng_phs_R -0.246  0.500              
+TrnngChtcIn -0.715  0.000  0.000       
+TrnngChtNn- -0.678  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -192.1   -166.1    107.0   -214.1       67 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.83218 -0.48127  0.00338  0.51639  2.32787 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004007 0.0633  
+ Residual             0.001954 0.0442  
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                               Estimate Std. Error        df t value
+(Intercept)                                                    0.394972   0.027295 40.971388  14.470
+training_phase_labelPostTest                                  -0.011486   0.022100 52.000001  -0.520
+training_phase_labelRetention                                 -0.001613   0.022100 52.000001  -0.073
+TrainingChaotic Interactive                                   -0.012165   0.036620 40.971388  -0.332
+TrainingChaotic Non-interactive                               -0.058664   0.038601 40.971388  -1.520
+training_phase_labelPostTest:TrainingChaotic Interactive       0.020154   0.029650 52.000001   0.680
+training_phase_labelRetention:TrainingChaotic Interactive      0.001019   0.029650 52.000001   0.034
+training_phase_labelPostTest:TrainingChaotic Non-interactive   0.024136   0.031254 52.000001   0.772
+training_phase_labelRetention:TrainingChaotic Non-interactive  0.008639   0.031254 52.000001   0.276
+                                                              Pr(>|t|)    
+(Intercept)                                                     <2e-16 ***
+training_phase_labelPostTest                                     0.605    
+training_phase_labelRetention                                    0.942    
+TrainingChaotic Interactive                                      0.741    
+TrainingChaotic Non-interactive                                  0.136    
+training_phase_labelPostTest:TrainingChaotic Interactive         0.500    
+training_phase_labelRetention:TrainingChaotic Interactive        0.973    
+training_phase_labelPostTest:TrainingChaotic Non-interactive     0.443    
+training_phase_labelRetention:TrainingChaotic Non-interactive    0.783    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.405                                                 
+trnng_phs_R -0.405  0.500                                          
+TrnngChtcIn -0.745  0.302  0.302                                   
+TrnngChtNn- -0.707  0.286  0.286  0.527                            
+trn__PT:TCI  0.302 -0.745 -0.373 -0.405 -0.213                     
+trnn__R:TCI  0.302 -0.373 -0.745 -0.405 -0.213  0.500              
+tr__PT:TCN-  0.286 -0.707 -0.354 -0.213 -0.405  0.527  0.264       
+trn__R:TCN-  0.286 -0.354 -0.707 -0.213 -0.405  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.37 ***     0.37 ***     0.39 ***     0.39 ***
+                                                                 (0.01)       (0.02)       (0.03)       (0.03)   
+training_phase_labelPostTest                                                   0.00         0.00        -0.01    
+                                                                              (0.01)       (0.01)       (0.02)   
+training_phase_labelRetention                                                  0.00         0.00        -0.00    
+                                                                              (0.01)       (0.01)       (0.02)   
+TrainingChaotic Interactive                                                                -0.01        -0.01    
+                                                                                           (0.03)       (0.04)   
+TrainingChaotic Non-interactive                                                            -0.05        -0.06    
+                                                                                           (0.03)       (0.04)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.02    
+                                                                                                        (0.03)   
+training_phase_labelRetention:TrainingChaotic Interactive                                                0.00    
+                                                                                                        (0.03)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.02    
+                                                                                                        (0.03)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.01    
+                                                                                                        (0.03)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -204.83      -200.92      -199.24      -192.06    
+BIC                                                            -197.76      -189.14      -182.74      -166.14    
+Log Likelihood                                                  105.42       105.46       106.62       107.03    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Short, User
+Test: Periodic Fadeout (SCT)
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)   
+m1    3 -139.51 -132.44 72.758  -145.51                         
+m2    5 -145.53 -133.75 77.766  -155.53 10.0165  2   0.006683 **
+m3    7 -144.07 -127.58 79.037  -158.07  2.5430  2   0.280415   
+m4   11 -140.56 -114.63 81.278  -162.56  4.4814  4   0.344761   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -139.5   -132.4     72.8   -145.5       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.6718 -0.5966 -0.1236  0.4953  3.3523 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.005019 0.07085 
+ Residual             0.005953 0.07716 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)  0.50473    0.01641 26.00000   30.75   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -145.5   -133.7     77.8   -155.5       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9722 -0.5643 -0.0365  0.4903  3.2323 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.005367 0.07326 
+ Residual             0.004910 0.07007 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                              Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)                    0.53364    0.01988 50.47103  26.841  < 2e-16 ***
+training_phase_labelPostTest  -0.02295    0.01943 52.00000  -1.181  0.24293    
+training_phase_labelRetention -0.06376    0.01943 52.00000  -3.281  0.00185 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.489       
+trnng_phs_R -0.489  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -144.1   -127.6     79.0   -158.1       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0359 -0.5862 -0.0521  0.5011  3.1686 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004714 0.06866 
+ Residual             0.004910 0.07007 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)                      0.54144    0.03033 34.46701  17.853  < 2e-16 ***
+training_phase_labelPostTest    -0.02295    0.01943 52.00000  -1.181  0.24293    
+training_phase_labelRetention   -0.06376    0.01943 52.00000  -3.281  0.00185 ** 
+TrainingChaotic Interactive      0.01561    0.03780 26.00000   0.413  0.68309    
+TrainingChaotic Non-interactive -0.04488    0.03985 26.00000  -1.126  0.27029    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.320                     
+trnng_phs_R -0.320  0.500              
+TrnngChtcIn -0.692  0.000  0.000       
+TrnngChtNn- -0.657  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -140.6   -114.6     81.3   -162.6       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0745 -0.5392 -0.0759  0.5604  3.1945 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004850 0.06964 
+ Residual             0.004505 0.06712 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    0.5644613  0.0341947 50.7301948
+training_phase_labelPostTest                                  -0.0650985  0.0335584 52.0000005
+training_phase_labelRetention                                 -0.0906709  0.0335584 52.0000005
+TrainingChaotic Interactive                                   -0.0006783  0.0458770 50.7301948
+TrainingChaotic Non-interactive                               -0.0993314  0.0483586 50.7301948
+training_phase_labelPostTest:TrainingChaotic Interactive       0.0310900  0.0450234 52.0000005
+training_phase_labelRetention:TrainingChaotic Interactive      0.0177658  0.0450234 52.0000005
+training_phase_labelPostTest:TrainingChaotic Non-interactive   0.0981063  0.0474588 52.0000005
+training_phase_labelRetention:TrainingChaotic Non-interactive  0.0652387  0.0474588 52.0000005
+                                                              t value Pr(>|t|)    
+(Intercept)                                                    16.507  < 2e-16 ***
+training_phase_labelPostTest                                   -1.940  0.05783 .  
+training_phase_labelRetention                                  -2.702  0.00929 ** 
+TrainingChaotic Interactive                                    -0.015  0.98826    
+TrainingChaotic Non-interactive                                -2.054  0.04514 *  
+training_phase_labelPostTest:TrainingChaotic Interactive        0.691  0.49293    
+training_phase_labelRetention:TrainingChaotic Interactive       0.395  0.69476    
+training_phase_labelPostTest:TrainingChaotic Non-interactive    2.067  0.04371 *  
+training_phase_labelRetention:TrainingChaotic Non-interactive   1.375  0.17514    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.491                                                 
+trnng_phs_R -0.491  0.500                                          
+TrnngChtcIn -0.745  0.366  0.366                                   
+TrnngChtNn- -0.707  0.347  0.347  0.527                            
+trn__PT:TCI  0.366 -0.745 -0.373 -0.491 -0.259                     
+trnn__R:TCI  0.366 -0.373 -0.745 -0.491 -0.259  0.500              
+tr__PT:TCN-  0.347 -0.707 -0.354 -0.259 -0.491  0.527  0.264       
+trn__R:TCN-  0.347 -0.354 -0.707 -0.259 -0.491  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.50 ***     0.53 ***     0.54 ***     0.56 ***
+                                                                 (0.02)       (0.02)       (0.03)       (0.03)   
+training_phase_labelPostTest                                                  -0.02        -0.02        -0.07    
+                                                                              (0.02)       (0.02)       (0.03)   
+training_phase_labelRetention                                                 -0.06 **     -0.06 **     -0.09 ** 
+                                                                              (0.02)       (0.02)       (0.03)   
+TrainingChaotic Interactive                                                                 0.02        -0.00    
+                                                                                           (0.04)       (0.05)   
+TrainingChaotic Non-interactive                                                            -0.04        -0.10 *  
+                                                                                           (0.04)       (0.05)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.03    
+                                                                                                        (0.05)   
+training_phase_labelRetention:TrainingChaotic Interactive                                                0.02    
+                                                                                                        (0.05)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.10 *  
+                                                                                                        (0.05)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                            0.07    
+                                                                                                        (0.05)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -139.52      -145.53      -144.07      -140.56    
+BIC                                                            -132.45      -133.75      -127.58      -114.63    
+Log Likelihood                                                   72.76        77.77        79.04        81.28    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.01         0.01         0.00         0.00    
+Var: Residual                                                     0.01         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Short, User
+Test: Chaotic
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -196.50 -189.43 101.25  -202.50                     
+m2    5 -196.66 -184.88 103.33  -206.66 4.1621  2     0.1248
+m3    7 -194.28 -177.78 104.14  -208.28 1.6174  2     0.4454
+m4   11 -187.98 -162.05 104.99  -209.98 1.6957  4     0.7915
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -196.5   -189.4    101.3   -202.5       75 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.80774 -0.81926 -0.00335  0.64208  1.90236 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002507 0.05007 
+ Residual             0.002834 0.05324 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)  0.43676    0.01152 26.00000   37.91   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -196.7   -184.9    103.3   -206.7       73 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.60484 -0.78787  0.03384  0.58419  2.22534 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002579 0.05079 
+ Residual             0.002616 0.05115 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                              Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)                    0.42166    0.01414 52.24622  29.828   <2e-16 ***
+training_phase_labelPostTest   0.02951    0.01419 52.00000   2.080   0.0425 *  
+training_phase_labelRetention  0.01578    0.01419 52.00000   1.113   0.2710    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.502       
+trnng_phs_R -0.502  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -194.3   -177.8    104.1   -208.3       71 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.68622 -0.77585  0.01619  0.59614  2.12767 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002371 0.04870 
+ Residual             0.002616 0.05115 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                      0.411883   0.021737 34.839295  18.948   <2e-16 ***
+training_phase_labelPostTest     0.029507   0.014187 52.000000   2.080   0.0425 *  
+training_phase_labelRetention    0.015783   0.014187 52.000000   1.113   0.2710    
+TrainingChaotic Interactive      0.027960   0.027014 26.000000   1.035   0.3102    
+TrainingChaotic Non-interactive -0.003172   0.028476 26.000000  -0.111   0.9122    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.326                     
+trnng_phs_R -0.326  0.500              
+TrnngChtcIn -0.690  0.000  0.000       
+TrnngChtNn- -0.655  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -188.0   -162.1    105.0   -210.0       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.7639 -0.6491  0.1285  0.5320  2.1215 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002399 0.04898 
+ Residual             0.002532 0.05032 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    0.4090423  0.0248287 52.9396757
+training_phase_labelPostTest                                   0.0217981  0.0251615 52.0000001
+training_phase_labelRetention                                  0.0320132  0.0251615 52.0000001
+TrainingChaotic Interactive                                    0.0330846  0.0333112 52.9396757
+TrainingChaotic Non-interactive                               -0.0003471  0.0351131 52.9396757
+training_phase_labelPostTest:TrainingChaotic Interactive       0.0051828  0.0337577 52.0000001
+training_phase_labelRetention:TrainingChaotic Interactive     -0.0205569  0.0337577 52.0000001
+training_phase_labelPostTest:TrainingChaotic Non-interactive   0.0185757  0.0355838 52.0000001
+training_phase_labelRetention:TrainingChaotic Non-interactive -0.0270515  0.0355838 52.0000001
+                                                              t value Pr(>|t|)    
+(Intercept)                                                    16.475   <2e-16 ***
+training_phase_labelPostTest                                    0.866    0.390    
+training_phase_labelRetention                                   1.272    0.209    
+TrainingChaotic Interactive                                     0.993    0.325    
+TrainingChaotic Non-interactive                                -0.010    0.992    
+training_phase_labelPostTest:TrainingChaotic Interactive        0.154    0.879    
+training_phase_labelRetention:TrainingChaotic Interactive      -0.609    0.545    
+training_phase_labelPostTest:TrainingChaotic Non-interactive    0.522    0.604    
+training_phase_labelRetention:TrainingChaotic Non-interactive  -0.760    0.451    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.507                                                 
+trnng_phs_R -0.507  0.500                                          
+TrnngChtcIn -0.745  0.378  0.378                                   
+TrnngChtNn- -0.707  0.358  0.358  0.527                            
+trn__PT:TCI  0.378 -0.745 -0.373 -0.507 -0.267                     
+trnn__R:TCI  0.378 -0.373 -0.745 -0.507 -0.267  0.500              
+tr__PT:TCN-  0.358 -0.707 -0.354 -0.267 -0.507  0.527  0.264       
+trn__R:TCN-  0.358 -0.354 -0.707 -0.267 -0.507  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.44 ***     0.42 ***     0.41 ***     0.41 ***
+                                                                 (0.01)       (0.01)       (0.02)       (0.02)   
+training_phase_labelPostTest                                                   0.03 *       0.03 *       0.02    
+                                                                              (0.01)       (0.01)       (0.03)   
+training_phase_labelRetention                                                  0.02         0.02         0.03    
+                                                                              (0.01)       (0.01)       (0.03)   
+TrainingChaotic Interactive                                                                 0.03         0.03    
+                                                                                           (0.03)       (0.03)   
+TrainingChaotic Non-interactive                                                            -0.00        -0.00    
+                                                                                           (0.03)       (0.04)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.01    
+                                                                                                        (0.03)   
+training_phase_labelRetention:TrainingChaotic Interactive                                               -0.02    
+                                                                                                        (0.03)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.02    
+                                                                                                        (0.04)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                           -0.03    
+                                                                                                        (0.04)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -196.50      -196.66      -194.28      -187.98    
+BIC                                                            -189.43      -184.88      -177.78      -162.05    
+Log Likelihood                                                  101.25       103.33       104.14       104.99    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Short, User
+Test: Chaotic Visual
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC  logLik deviance  Chisq Df Pr(>Chisq)  
+m1    3 -181.56 -174.49  93.778  -187.56                       
+m2    5 -183.88 -172.10  96.942  -193.88 6.3282  2    0.04225 *
+m3    7 -186.26 -169.76 100.128  -200.26 6.3721  2    0.04134 *
+m4   11 -184.95 -159.02 103.474  -206.95 6.6919  4    0.15310  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -181.6   -174.5     93.8   -187.6       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9131 -0.5251 -0.1383  0.5792  2.9462 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.005250 0.07246 
+ Residual             0.002821 0.05311 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)  0.51750    0.01543 26.00000   33.54   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -183.9   -172.1     96.9   -193.9       73 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-1.84245 -0.61804 -0.09239  0.59512  2.71648 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.005358 0.07320 
+ Residual             0.002498 0.04998 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                              Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)                    0.49839    0.01738 40.40671  28.671   <2e-16 ***
+training_phase_labelPostTest   0.03569    0.01386 52.00000   2.575   0.0129 *  
+training_phase_labelRetention  0.02165    0.01386 52.00000   1.562   0.1244    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.399       
+trnng_phs_R -0.399  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -186.3   -169.8    100.1   -200.3       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0849 -0.6021 -0.1003  0.5978  2.7436 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004013 0.06334 
+ Residual             0.002498 0.04998 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)                      0.48630    0.02588 31.61304  18.792   <2e-16 ***
+training_phase_labelPostTest     0.03569    0.01386 52.00000   2.575   0.0129 *  
+training_phase_labelRetention    0.02165    0.01386 52.00000   1.562   0.1244    
+TrainingChaotic Interactive      0.05593    0.03302 26.00000   1.694   0.1023    
+TrainingChaotic Non-interactive -0.03063    0.03480 26.00000  -0.880   0.3868    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.268                     
+trnng_phs_R -0.268  0.500              
+TrnngChtcIn -0.709  0.000  0.000       
+TrnngChtNn- -0.672  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -184.9   -159.0    103.5   -206.9       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.5223 -0.5930  0.0247  0.6346  2.4674 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.004113 0.06413 
+ Residual             0.002196 0.04686 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                               Estimate Std. Error        df t value
+(Intercept)                                                    0.476673   0.028083 42.162963  16.974
+training_phase_labelPostTest                                   0.038781   0.023432 52.000001   1.655
+training_phase_labelRetention                                  0.047442   0.023432 52.000001   2.025
+TrainingChaotic Interactive                                    0.053187   0.037678 42.162963   1.412
+TrainingChaotic Non-interactive                                0.004084   0.039716 42.162963   0.103
+training_phase_labelPostTest:TrainingChaotic Interactive       0.026735   0.031437 52.000001   0.850
+training_phase_labelRetention:TrainingChaotic Interactive     -0.018520   0.031437 52.000001  -0.589
+training_phase_labelPostTest:TrainingChaotic Non-interactive  -0.043468   0.033138 52.000001  -1.312
+training_phase_labelRetention:TrainingChaotic Non-interactive -0.060680   0.033138 52.000001  -1.831
+                                                              Pr(>|t|)    
+(Intercept)                                                     <2e-16 ***
+training_phase_labelPostTest                                    0.1039    
+training_phase_labelRetention                                   0.0481 *  
+TrainingChaotic Interactive                                     0.1654    
+TrainingChaotic Non-interactive                                 0.9186    
+training_phase_labelPostTest:TrainingChaotic Interactive        0.3990    
+training_phase_labelRetention:TrainingChaotic Interactive       0.5583    
+training_phase_labelPostTest:TrainingChaotic Non-interactive    0.1954    
+training_phase_labelRetention:TrainingChaotic Non-interactive   0.0728 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.417                                                 
+trnng_phs_R -0.417  0.500                                          
+TrnngChtcIn -0.745  0.311  0.311                                   
+TrnngChtNn- -0.707  0.295  0.295  0.527                            
+trn__PT:TCI  0.311 -0.745 -0.373 -0.417 -0.220                     
+trnn__R:TCI  0.311 -0.373 -0.745 -0.417 -0.220  0.500              
+tr__PT:TCN-  0.295 -0.707 -0.354 -0.220 -0.417  0.527  0.264       
+trn__R:TCN-  0.295 -0.354 -0.707 -0.220 -0.417  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.52 ***     0.50 ***     0.49 ***     0.48 ***
+                                                                 (0.02)       (0.02)       (0.03)       (0.03)   
+training_phase_labelPostTest                                                   0.04 *       0.04 *       0.04    
+                                                                              (0.01)       (0.01)       (0.02)   
+training_phase_labelRetention                                                  0.02         0.02         0.05 *  
+                                                                              (0.01)       (0.01)       (0.02)   
+TrainingChaotic Interactive                                                                 0.06         0.05    
+                                                                                           (0.03)       (0.04)   
+TrainingChaotic Non-interactive                                                            -0.03         0.00    
+                                                                                           (0.03)       (0.04)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.03    
+                                                                                                        (0.03)   
+training_phase_labelRetention:TrainingChaotic Interactive                                               -0.02    
+                                                                                                        (0.03)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                            -0.04    
+                                                                                                        (0.03)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                           -0.06    
+                                                                                                        (0.03)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -181.56      -183.88      -186.26      -184.95    
+BIC                                                            -174.49      -172.10      -169.76      -159.02    
+Log Likelihood                                                   93.78        96.94       100.13       103.47    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.01         0.01         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Long, User
+Test: Periodic Fixed
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -374.54 -367.47 190.27  -380.54                     
+m2    5 -371.59 -359.80 190.79  -381.59 1.0524  2     0.5909
+m3    7 -368.77 -352.27 191.38  -382.77 1.1799  2     0.5543
+m4   11 -367.89 -341.97 194.95  -389.89 7.1245  4     0.1295
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -374.5   -367.5    190.3   -380.5       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3885 -0.5402 -0.0445  0.5854  1.8424 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0002738 0.01655 
+ Residual             0.0002829 0.01682 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  0.122178   0.003763 26.000000   32.47   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -371.6   -359.8    190.8   -381.6       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.2874 -0.5120 -0.1363  0.6355  1.8957 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0002757 0.01660 
+ Residual             0.0002772 0.01665 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    0.120119   0.004611 52.095936  26.048   <2e-16 ***
+training_phase_labelPostTest   0.001511   0.004618 52.000000   0.327    0.745    
+training_phase_labelRetention  0.004666   0.004618 52.000000   1.010    0.317    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.501       
+trnng_phs_R -0.501  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -368.8   -352.3    191.4   -382.8       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3420 -0.5291 -0.1355  0.6786  1.8411 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0002593 0.01610 
+ Residual             0.0002772 0.01665 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                      1.233e-01  7.147e-03  3.463e+01  17.257   <2e-16 ***
+training_phase_labelPostTest     1.511e-03  4.618e-03  5.200e+01   0.327    0.745    
+training_phase_labelRetention    4.666e-03  4.618e-03  5.200e+01   1.010    0.317    
+TrainingChaotic Interactive     -8.327e-03  8.896e-03  2.600e+01  -0.936    0.358    
+TrainingChaotic Non-interactive -4.093e-05  9.378e-03  2.600e+01  -0.004    0.997    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.323                     
+trnng_phs_R -0.323  0.500              
+TrnngChtcIn -0.692  0.000  0.000       
+TrnngChtNn- -0.656  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -367.9   -342.0    194.9   -389.9       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.1057 -0.5634 -0.1166  0.6574  1.7271 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0002712 0.01647 
+ Residual             0.0002417 0.01555 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    1.174e-01  8.007e-03  5.003e+01
+training_phase_labelPostTest                                   1.762e-02  7.774e-03  5.200e+01
+training_phase_labelRetention                                  6.439e-03  7.774e-03  5.200e+01
+TrainingChaotic Interactive                                    1.492e-05  1.074e-02  5.003e+01
+TrainingChaotic Non-interactive                                8.904e-03  1.132e-02  5.003e+01
+training_phase_labelPostTest:TrainingChaotic Interactive      -2.381e-02  1.043e-02  5.200e+01
+training_phase_labelRetention:TrainingChaotic Interactive     -1.216e-03  1.043e-02  5.200e+01
+training_phase_labelPostTest:TrainingChaotic Non-interactive  -2.259e-02  1.099e-02  5.200e+01
+training_phase_labelRetention:TrainingChaotic Non-interactive -4.245e-03  1.099e-02  5.200e+01
+                                                              t value Pr(>|t|)    
+(Intercept)                                                    14.659   <2e-16 ***
+training_phase_labelPostTest                                    2.267   0.0276 *  
+training_phase_labelRetention                                   0.828   0.4113    
+TrainingChaotic Interactive                                     0.001   0.9989    
+TrainingChaotic Non-interactive                                 0.786   0.4354    
+training_phase_labelPostTest:TrainingChaotic Interactive       -2.283   0.0266 *  
+training_phase_labelRetention:TrainingChaotic Interactive      -0.117   0.9077    
+training_phase_labelPostTest:TrainingChaotic Non-interactive   -2.055   0.0449 *  
+training_phase_labelRetention:TrainingChaotic Non-interactive  -0.386   0.7010    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.485                                                 
+trnng_phs_R -0.485  0.500                                          
+TrnngChtcIn -0.745  0.362  0.362                                   
+TrnngChtNn- -0.707  0.343  0.343  0.527                            
+trn__PT:TCI  0.362 -0.745 -0.373 -0.485 -0.256                     
+trnn__R:TCI  0.362 -0.373 -0.745 -0.485 -0.256  0.500              
+tr__PT:TCN-  0.343 -0.707 -0.354 -0.256 -0.485  0.527  0.264       
+trn__R:TCN-  0.343 -0.354 -0.707 -0.256 -0.485  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.12 ***     0.12 ***     0.12 ***     0.12 ***
+                                                                 (0.00)       (0.00)       (0.01)       (0.01)   
+training_phase_labelPostTest                                                   0.00         0.00         0.02 *  
+                                                                              (0.00)       (0.00)       (0.01)   
+training_phase_labelRetention                                                  0.00         0.00         0.01    
+                                                                              (0.00)       (0.00)       (0.01)   
+TrainingChaotic Interactive                                                                -0.01         0.00    
+                                                                                           (0.01)       (0.01)   
+TrainingChaotic Non-interactive                                                            -0.00         0.01    
+                                                                                           (0.01)       (0.01)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                -0.02 *  
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Interactive                                               -0.00    
+                                                                                                        (0.01)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                            -0.02 *  
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                           -0.00    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -374.54      -371.59      -368.77      -367.89    
+BIC                                                            -367.47      -359.80      -352.27      -341.97    
+Log Likelihood                                                  190.27       190.79       191.38       194.95    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Long, User
+Test: Periodic Fadeout (SCT)
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)  
+m1    3 -323.22 -316.15 164.61  -329.22                       
+m2    5 -323.33 -311.55 166.66  -333.33 4.1127  2    0.12792  
+m3    7 -324.09 -307.59 169.04  -338.09 4.7570  2    0.09269 .
+m4   11 -318.88 -292.95 170.44  -340.88 2.7931  4    0.59302  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -323.2   -316.1    164.6   -329.2       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9495 -0.5385 -0.0956  0.4320  2.5076 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0003676 0.01917 
+ Residual             0.0006095 0.02469 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  0.137812   0.004685 25.999999   29.41   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -323.3   -311.5    166.7   -333.3       73 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.25096 -0.49066 -0.08914  0.42915  2.37547 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0003830 0.01957 
+ Residual             0.0005631 0.02373 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    0.140191   0.006032 58.746978  23.240   <2e-16 ***
+training_phase_labelPostTest   0.002920   0.006582 52.000000   0.444    0.659    
+training_phase_labelRetention -0.010057   0.006582 52.000000  -1.528    0.133    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.546       
+trnng_phs_R -0.546  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -324.1   -307.6    169.0   -338.1       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0530 -0.5032 -0.1013  0.4493  2.3116 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0002876 0.01696 
+ Residual             0.0005631 0.02373 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                      0.144570   0.008594 39.021592  16.823   <2e-16 ***
+training_phase_labelPostTest     0.002920   0.006582 52.000000   0.444    0.659    
+training_phase_labelRetention   -0.010057   0.006582 52.000000  -1.528    0.133    
+TrainingChaotic Interactive     -0.016345   0.010341 26.000000  -1.581    0.126    
+TrainingChaotic Non-interactive  0.006202   0.010901 26.000000   0.569    0.574    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.383                     
+trnng_phs_R -0.383  0.500              
+TrnngChtcIn -0.669  0.000  0.000       
+TrnngChtNn- -0.634  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -318.9   -293.0    170.4   -340.9       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.8191 -0.5588 -0.1139  0.4148  2.4609 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0002974 0.01725 
+ Residual             0.0005337 0.02310 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                               Estimate Std. Error        df t value
+(Intercept)                                                    0.139150   0.010192 62.097214  13.652
+training_phase_labelPostTest                                   0.013596   0.011551 52.000001   1.177
+training_phase_labelRetention                                 -0.004473   0.011551 52.000001  -0.387
+TrainingChaotic Interactive                                   -0.004335   0.013675 62.097214  -0.317
+TrainingChaotic Non-interactive                                0.008805   0.014414 62.097214   0.611
+training_phase_labelPostTest:TrainingChaotic Interactive      -0.024197   0.015497 52.000001  -1.561
+training_phase_labelRetention:TrainingChaotic Interactive     -0.011832   0.015497 52.000001  -0.764
+training_phase_labelPostTest:TrainingChaotic Non-interactive  -0.004449   0.016335 52.000001  -0.272
+training_phase_labelRetention:TrainingChaotic Non-interactive -0.003359   0.016335 52.000001  -0.206
+                                                              Pr(>|t|)    
+(Intercept)                                                     <2e-16 ***
+training_phase_labelPostTest                                     0.245    
+training_phase_labelRetention                                    0.700    
+TrainingChaotic Interactive                                      0.752    
+TrainingChaotic Non-interactive                                  0.544    
+training_phase_labelPostTest:TrainingChaotic Interactive         0.124    
+training_phase_labelRetention:TrainingChaotic Interactive        0.449    
+training_phase_labelPostTest:TrainingChaotic Non-interactive     0.786    
+training_phase_labelRetention:TrainingChaotic Non-interactive    0.838    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.567                                                 
+trnng_phs_R -0.567  0.500                                          
+TrnngChtcIn -0.745  0.422  0.422                                   
+TrnngChtNn- -0.707  0.401  0.401  0.527                            
+trn__PT:TCI  0.422 -0.745 -0.373 -0.567 -0.299                     
+trnn__R:TCI  0.422 -0.373 -0.745 -0.567 -0.299  0.500              
+tr__PT:TCN-  0.401 -0.707 -0.354 -0.299 -0.567  0.527  0.264       
+trn__R:TCN-  0.401 -0.354 -0.707 -0.299 -0.567  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.14 ***     0.14 ***     0.14 ***     0.14 ***
+                                                                 (0.00)       (0.01)       (0.01)       (0.01)   
+training_phase_labelPostTest                                                   0.00         0.00         0.01    
+                                                                              (0.01)       (0.01)       (0.01)   
+training_phase_labelRetention                                                 -0.01        -0.01        -0.00    
+                                                                              (0.01)       (0.01)       (0.01)   
+TrainingChaotic Interactive                                                                -0.02        -0.00    
+                                                                                           (0.01)       (0.01)   
+TrainingChaotic Non-interactive                                                             0.01         0.01    
+                                                                                           (0.01)       (0.01)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                -0.02    
+                                                                                                        (0.02)   
+training_phase_labelRetention:TrainingChaotic Interactive                                               -0.01    
+                                                                                                        (0.02)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                            -0.00    
+                                                                                                        (0.02)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                           -0.00    
+                                                                                                        (0.02)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -323.22      -323.33      -324.09      -318.88    
+BIC                                                            -316.15      -311.55      -307.59      -292.95    
+Log Likelihood                                                  164.61       166.66       169.04       170.44    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Long, User
+Test: Chaotic
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)   
+m1    3 -372.83 -365.76 189.42  -378.83                         
+m2    5 -379.86 -368.08 194.93  -389.86 11.0281  2   0.004030 **
+m3    7 -386.36 -369.86 200.18  -400.36 10.5001  2   0.005247 **
+m4   11 -385.61 -359.69 203.81  -407.61  7.2525  4   0.123133   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -372.8   -365.8    189.4   -378.8       75 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.0367 -0.5372 -0.2511  0.2784  2.2968 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0002250 0.01500 
+ Residual             0.0003096 0.01759 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  0.041230   0.003553 26.000000   11.61 8.76e-12 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -379.9   -368.1    194.9   -389.9       73 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9659 -0.5169 -0.1271  0.4369  2.7252 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0002447 0.01564 
+ Residual             0.0002504 0.01582 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    0.035372   0.004364 52.401044   8.106 8.21e-11 ***
+training_phase_labelPostTest   0.014568   0.004389 52.000000   3.319  0.00165 ** 
+training_phase_labelRetention  0.003006   0.004389 52.000000   0.685  0.49647    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.503       
+trnng_phs_R -0.503  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -386.4   -369.9    200.2   -400.4       71 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.1257 -0.6372 -0.1106  0.3815  2.9153 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0001357 0.01165 
+ Residual             0.0002504 0.01582 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                      0.024454   0.005815 38.558633   4.205  0.00015 ***
+training_phase_labelPostTest     0.014568   0.004389 52.000000   3.319  0.00165 ** 
+training_phase_labelRetention    0.003006   0.004389 52.000000   0.685  0.49647    
+TrainingChaotic Interactive      0.023819   0.007022 26.000000   3.392  0.00223 ** 
+TrainingChaotic Non-interactive  0.005710   0.007401 26.000000   0.772  0.44736    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.377                     
+trnng_phs_R -0.377  0.500              
+TrnngChtcIn -0.671  0.000  0.000       
+TrnngChtNn- -0.636  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -385.6   -359.7    203.8   -407.6       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.8917 -0.6371 -0.1299  0.4717  2.6010 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 0.0001465 0.01210 
+ Residual             0.0002178 0.01476 
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    0.0248831  0.0067484 58.9354503
+training_phase_labelPostTest                                   0.0165854  0.0073792 52.0000000
+training_phase_labelRetention                                 -0.0002996  0.0073792 52.0000000
+TrainingChaotic Interactive                                    0.0173758  0.0090540 58.9354503
+TrainingChaotic Non-interactive                                0.0123685  0.0095437 58.9354503
+training_phase_labelPostTest:TrainingChaotic Interactive       0.0087410  0.0099002 52.0000000
+training_phase_labelRetention:TrainingChaotic Interactive      0.0105873  0.0099002 52.0000000
+training_phase_labelPostTest:TrainingChaotic Non-interactive  -0.0174829  0.0104357 52.0000000
+training_phase_labelRetention:TrainingChaotic Non-interactive -0.0024918  0.0104357 52.0000000
+                                                              t value Pr(>|t|)    
+(Intercept)                                                     3.687 0.000496 ***
+training_phase_labelPostTest                                    2.248 0.028870 *  
+training_phase_labelRetention                                  -0.041 0.967770    
+TrainingChaotic Interactive                                     1.919 0.059813 .  
+TrainingChaotic Non-interactive                                 1.296 0.200033    
+training_phase_labelPostTest:TrainingChaotic Interactive        0.883 0.381346    
+training_phase_labelRetention:TrainingChaotic Interactive       1.069 0.289827    
+training_phase_labelPostTest:TrainingChaotic Non-interactive   -1.675 0.099879 .  
+training_phase_labelRetention:TrainingChaotic Non-interactive  -0.239 0.812219    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.547                                                 
+trnng_phs_R -0.547  0.500                                          
+TrnngChtcIn -0.745  0.408  0.408                                   
+TrnngChtNn- -0.707  0.387  0.387  0.527                            
+trn__PT:TCI  0.408 -0.745 -0.373 -0.547 -0.288                     
+trnn__R:TCI  0.408 -0.373 -0.745 -0.547 -0.288  0.500              
+tr__PT:TCN-  0.387 -0.707 -0.354 -0.288 -0.547  0.527  0.264       
+trn__R:TCN-  0.387 -0.354 -0.707 -0.288 -0.547  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.04 ***     0.04 ***     0.02 ***     0.02 ***
+                                                                 (0.00)       (0.00)       (0.01)       (0.01)   
+training_phase_labelPostTest                                                   0.01 ***     0.01 ***     0.02 *  
+                                                                              (0.00)       (0.00)       (0.01)   
+training_phase_labelRetention                                                  0.00         0.00        -0.00    
+                                                                              (0.00)       (0.00)       (0.01)   
+TrainingChaotic Interactive                                                                 0.02 ***     0.02    
+                                                                                           (0.01)       (0.01)   
+TrainingChaotic Non-interactive                                                             0.01         0.01    
+                                                                                           (0.01)       (0.01)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                 0.01    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Interactive                                                0.01    
+                                                                                                        (0.01)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                            -0.02    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                           -0.00    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -372.83      -379.86      -386.36      -385.61    
+BIC                                                            -365.76      -368.08      -369.86      -359.69    
+Log Likelihood                                                  189.42       194.93       200.18       203.81    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+DV: Max Lyapunov Long, User
+Test: Chaotic Visual
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + training_phase_label + (1 | pp)
+m3: dv ~ 1 + training_phase_label + Training + (1 | pp)
+m4: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance  Chisq Df Pr(>Chisq)
+m1    3 -444.29 -437.22 225.14  -450.29                     
+m2    5 -441.99 -430.21 226.00  -451.99 1.7052  2     0.4263
+m3    7 -441.59 -425.09 227.79  -455.59 3.5956  2     0.1657
+m4   11 -437.75 -411.82 229.87  -459.75 4.1599  4     0.3848
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -444.3   -437.2    225.1   -450.3       75 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.25834 -0.55880 -0.04187  0.59317  2.74839 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 6.769e-05 0.008227
+ Residual             1.339e-04 0.011572
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)  0.037664   0.002078 26.000000   18.12 2.87e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -442.0   -430.2    226.0   -452.0       73 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.07777 -0.62150 -0.06761  0.58787  2.63673 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 6.913e-05 0.008314
+ Residual             1.296e-04 0.011383
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                               Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                    0.035346   0.002765 62.799998  12.786   <2e-16 ***
+training_phase_labelPostTest   0.004016   0.003157 52.000000   1.272    0.209    
+training_phase_labelRetention  0.002936   0.003157 52.000000   0.930    0.357    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT
+trnng_ph_PT -0.571       
+trnng_phs_R -0.571  0.500
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -441.6   -425.1    227.8   -455.6       71 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.30928 -0.62864  0.02315  0.46729  2.85948 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 5.462e-05 0.007391
+ Residual             1.296e-04 0.011383
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                      0.034777   0.003943 40.553689   8.819 5.63e-11 ***
+training_phase_labelPostTest     0.004016   0.003157 52.000000   1.272    0.209    
+training_phase_labelRetention    0.002936   0.003157 52.000000   0.930    0.357    
+TrainingChaotic Interactive      0.004896   0.004691 26.000000   1.044    0.306    
+TrainingChaotic Non-interactive -0.004270   0.004945 26.000000  -0.863    0.396    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI
+trnng_ph_PT -0.400                     
+trnng_phs_R -0.400  0.500              
+TrnngChtcIn -0.661  0.000  0.000       
+TrnngChtNn- -0.627  0.000  0.000  0.527
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: dv ~ 1 + training_phase_label * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -437.7   -411.8    229.9   -459.7       67 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3974 -0.6443  0.1106  0.5748  2.6154 
+
+Random effects:
+ Groups   Name        Variance  Std.Dev.
+ pp       (Intercept) 5.794e-05 0.007612
+ Residual             1.196e-04 0.010937
+Number of obs: 78, groups:  pp, 26
+
+Fixed effects:
+                                                                Estimate Std. Error         df
+(Intercept)                                                    0.0326058  0.0047112 64.3053426
+training_phase_labelPostTest                                   0.0052994  0.0054685 52.0000000
+training_phase_labelRetention                                  0.0081665  0.0054685 52.0000000
+TrainingChaotic Interactive                                    0.0075790  0.0063207 64.3053426
+TrainingChaotic Non-interactive                               -0.0005673  0.0066626 64.3053426
+training_phase_labelPostTest:TrainingChaotic Interactive      -0.0039198  0.0073368 52.0000000
+training_phase_labelRetention:TrainingChaotic Interactive     -0.0041283  0.0073368 52.0000000
+training_phase_labelPostTest:TrainingChaotic Non-interactive   0.0007295  0.0077337 52.0000000
+training_phase_labelRetention:TrainingChaotic Non-interactive -0.0118375  0.0077337 52.0000000
+                                                              t value Pr(>|t|)    
+(Intercept)                                                     6.921 2.51e-09 ***
+training_phase_labelPostTest                                    0.969    0.337    
+training_phase_labelRetention                                   1.493    0.141    
+TrainingChaotic Interactive                                     1.199    0.235    
+TrainingChaotic Non-interactive                                -0.085    0.932    
+training_phase_labelPostTest:TrainingChaotic Interactive       -0.534    0.595    
+training_phase_labelRetention:TrainingChaotic Interactive      -0.563    0.576    
+training_phase_labelPostTest:TrainingChaotic Non-interactive    0.094    0.925    
+training_phase_labelRetention:TrainingChaotic Non-interactive  -1.531    0.132    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) tr__PT trn__R TrnnCI TrnCN- t__PTI t__R:I t__PTN
+trnng_ph_PT -0.580                                                 
+trnng_phs_R -0.580  0.500                                          
+TrnngChtcIn -0.745  0.433  0.433                                   
+TrnngChtNn- -0.707  0.410  0.410  0.527                            
+trn__PT:TCI  0.433 -0.745 -0.373 -0.580 -0.306                     
+trnn__R:TCI  0.433 -0.373 -0.745 -0.580 -0.306  0.500              
+tr__PT:TCN-  0.410 -0.707 -0.354 -0.306 -0.580  0.527  0.264       
+trn__R:TCN-  0.410 -0.354 -0.707 -0.306 -0.580  0.264  0.527  0.500
+
+=================================================================================================================
+                                                               Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------------------------------
+(Intercept)                                                       0.04 ***     0.04 ***     0.03 ***     0.03 ***
+                                                                 (0.00)       (0.00)       (0.00)       (0.00)   
+training_phase_labelPostTest                                                   0.00         0.00         0.01    
+                                                                              (0.00)       (0.00)       (0.01)   
+training_phase_labelRetention                                                  0.00         0.00         0.01    
+                                                                              (0.00)       (0.00)       (0.01)   
+TrainingChaotic Interactive                                                                 0.00         0.01    
+                                                                                           (0.00)       (0.01)   
+TrainingChaotic Non-interactive                                                            -0.00        -0.00    
+                                                                                           (0.00)       (0.01)   
+training_phase_labelPostTest:TrainingChaotic Interactive                                                -0.00    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Interactive                                               -0.00    
+                                                                                                        (0.01)   
+training_phase_labelPostTest:TrainingChaotic Non-interactive                                             0.00    
+                                                                                                        (0.01)   
+training_phase_labelRetention:TrainingChaotic Non-interactive                                           -0.01    
+                                                                                                        (0.01)   
+-----------------------------------------------------------------------------------------------------------------
+AIC                                                            -444.29      -441.99      -441.59      -437.75    
+BIC                                                            -437.22      -430.21      -425.09      -411.82    
+Log Likelihood                                                  225.14       226.00       227.79       229.87    
+Num. obs.                                                        78           78           78           78       
+Num. groups: pp                                                  26           26           26           26       
+Var: pp (Intercept)                                               0.00         0.00         0.00         0.00    
+Var: Residual                                                     0.00         0.00         0.00         0.00    
+=================================================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
