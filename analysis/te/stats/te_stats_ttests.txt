@@ -1,136 +1,138 @@
 
+> sink()
+
 ########### t-tests ~ 0 
 
 DV: TE Stimulus-to-User Δ%
 Test: Periodic Fixed
 # A tibble: 9 × 11
-  training_phase_label Training     .y.   group1 group2     n statistic    df       p   p.adj p.adj.signif
-  <chr>                <chr>        <chr> <chr>  <chr>  <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
-1 PostTest             Chaotic Int… dv    1      null …    10     -7.05     9 5.98e-5 8.97e-5 ****        
-2 PreTest              Chaotic Int… dv    1      null …    10     -8.80     9 1.03e-5 3.09e-5 ****        
-3 Retention            Chaotic Int… dv    1      null …    10     -8.40     9 1.5 e-5 3.38e-5 ****        
-4 PostTest             Chaotic Non… dv    1      null …     8     -4.18     7 4.12e-3 4.12e-3 **          
-5 PreTest              Chaotic Non… dv    1      null …     8    -14.6      7 1.72e-6 7.74e-6 ****        
-6 Retention            Chaotic Non… dv    1      null …     8     -6.68     7 2.82e-4 3.17e-4 ***         
-7 PostTest             Periodic Fi… dv    1      null …     8     -8.58     7 5.82e-5 8.97e-5 ****        
-8 PreTest              Periodic Fi… dv    1      null …     8     -7.59     7 1.28e-4 1.65e-4 ***         
-9 Retention            Periodic Fi… dv    1      null …     8    -22.7      7 8.09e-8 7.28e-7 ****        
+  training_phase_label Training                .y.   group1 group2       n statistic    df       p   p.adj p.adj.signif
+  <chr>                <chr>                   <chr> <chr>  <chr>    <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
+1 PostTest             Chaotic Interactive     dv    1      null mo…    10     -7.05     9 5.98e-5 8.97e-5 ****        
+2 PreTest              Chaotic Interactive     dv    1      null mo…    10     -8.80     9 1.03e-5 3.09e-5 ****        
+3 Retention            Chaotic Interactive     dv    1      null mo…    10     -8.40     9 1.5 e-5 3.38e-5 ****        
+4 PostTest             Chaotic Non-interactive dv    1      null mo…     8     -4.18     7 4.12e-3 4.12e-3 **          
+5 PreTest              Chaotic Non-interactive dv    1      null mo…     8    -14.6      7 1.72e-6 7.74e-6 ****        
+6 Retention            Chaotic Non-interactive dv    1      null mo…     8     -6.68     7 2.82e-4 3.17e-4 ***         
+7 PostTest             Periodic Fixed          dv    1      null mo…     8     -8.58     7 5.82e-5 8.97e-5 ****        
+8 PreTest              Periodic Fixed          dv    1      null mo…     8     -7.59     7 1.28e-4 1.65e-4 ***         
+9 Retention            Periodic Fixed          dv    1      null mo…     8    -22.7      7 8.09e-8 7.28e-7 ****        
 
 ########### t-tests ~ 0 
 
 DV: TE Stimulus-to-User Δ%
 Test: Periodic Fadeout (SCT)
 # A tibble: 9 × 11
-  training_phase_label Training     .y.   group1 group2     n statistic    df       p   p.adj p.adj.signif
-  <chr>                <chr>        <chr> <chr>  <chr>  <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
-1 PostTest             Chaotic Int… dv    1      null …    10     -7.29     9 4.62e-5 5.94e-5 ****        
-2 PreTest              Chaotic Int… dv    1      null …    10     -8.59     9 1.25e-5 2.02e-5 ****        
-3 Retention            Chaotic Int… dv    1      null …    10    -10.7      9 2.02e-6 9.09e-6 ****        
-4 PostTest             Chaotic Non… dv    1      null …     8    -17.5      7 4.95e-7 4.46e-6 ****        
-5 PreTest              Chaotic Non… dv    1      null …     8    -10.8      7 1.31e-5 2.02e-5 ****        
-6 Retention            Chaotic Non… dv    1      null …     8    -10.7      7 1.35e-5 2.02e-5 ****        
-7 PostTest             Periodic Fi… dv    1      null …     8     -6.03     7 5.24e-4 5.24e-4 ***         
-8 PreTest              Periodic Fi… dv    1      null …     8    -12.1      7 6.09e-6 1.83e-5 ****        
-9 Retention            Periodic Fi… dv    1      null …     8     -8.12     7 8.3 e-5 9.34e-5 ****        
+  training_phase_label Training                .y.   group1 group2       n statistic    df       p   p.adj p.adj.signif
+  <chr>                <chr>                   <chr> <chr>  <chr>    <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
+1 PostTest             Chaotic Interactive     dv    1      null mo…    10     -7.29     9 4.62e-5 5.94e-5 ****        
+2 PreTest              Chaotic Interactive     dv    1      null mo…    10     -8.59     9 1.25e-5 2.02e-5 ****        
+3 Retention            Chaotic Interactive     dv    1      null mo…    10    -10.7      9 2.02e-6 9.09e-6 ****        
+4 PostTest             Chaotic Non-interactive dv    1      null mo…     8    -17.5      7 4.95e-7 4.46e-6 ****        
+5 PreTest              Chaotic Non-interactive dv    1      null mo…     8    -10.8      7 1.31e-5 2.02e-5 ****        
+6 Retention            Chaotic Non-interactive dv    1      null mo…     8    -10.7      7 1.35e-5 2.02e-5 ****        
+7 PostTest             Periodic Fixed          dv    1      null mo…     8     -6.03     7 5.24e-4 5.24e-4 ***         
+8 PreTest              Periodic Fixed          dv    1      null mo…     8    -12.1      7 6.09e-6 1.83e-5 ****        
+9 Retention            Periodic Fixed          dv    1      null mo…     8     -8.12     7 8.3 e-5 9.34e-5 ****        
 
 ########### t-tests ~ 0 
 
 DV: TE Stimulus-to-User Δ%
 Test: Chaotic
 # A tibble: 9 × 11
-  training_phase_label Training      .y.   group1 group2     n statistic    df       p  p.adj p.adj.signif
-  <chr>                <chr>         <chr> <chr>  <chr>  <int>     <dbl> <dbl>   <dbl>  <dbl> <chr>       
-1 PostTest             Chaotic Inte… dv    1      null …    10   1.74        9 0.116   0.209  ns          
-2 PreTest              Chaotic Inte… dv    1      null …    10   1.07        9 0.312   0.351  ns          
-3 Retention            Chaotic Inte… dv    1      null …    10   2.87        9 0.0184  0.0414 *           
-4 PostTest             Chaotic Non-… dv    1      null …     8   4.37        7 0.00328 0.0148 *           
-5 PreTest              Chaotic Non-… dv    1      null …     8   3.41        7 0.0113  0.0339 *           
-6 Retention            Chaotic Non-… dv    1      null …     8   5.24        7 0.0012  0.0108 *           
-7 PostTest             Periodic Fix… dv    1      null …     8   1.52        7 0.173   0.248  ns          
-8 PreTest              Periodic Fix… dv    1      null …     8   0.00527     7 0.996   0.996  ns          
-9 Retention            Periodic Fix… dv    1      null …     8   1.44        7 0.193   0.248  ns          
+  training_phase_label Training                .y.   group1 group2        n statistic    df       p  p.adj p.adj.signif
+  <chr>                <chr>                   <chr> <chr>  <chr>     <int>     <dbl> <dbl>   <dbl>  <dbl> <chr>       
+1 PostTest             Chaotic Interactive     dv    1      null mod…    10   1.74        9 0.116   0.209  ns          
+2 PreTest              Chaotic Interactive     dv    1      null mod…    10   1.07        9 0.312   0.351  ns          
+3 Retention            Chaotic Interactive     dv    1      null mod…    10   2.87        9 0.0184  0.0414 *           
+4 PostTest             Chaotic Non-interactive dv    1      null mod…     8   4.37        7 0.00328 0.0148 *           
+5 PreTest              Chaotic Non-interactive dv    1      null mod…     8   3.41        7 0.0113  0.0339 *           
+6 Retention            Chaotic Non-interactive dv    1      null mod…     8   5.24        7 0.0012  0.0108 *           
+7 PostTest             Periodic Fixed          dv    1      null mod…     8   1.52        7 0.173   0.248  ns          
+8 PreTest              Periodic Fixed          dv    1      null mod…     8   0.00527     7 0.996   0.996  ns          
+9 Retention            Periodic Fixed          dv    1      null mod…     8   1.44        7 0.193   0.248  ns          
 
 ########### t-tests ~ 0 
 
 DV: TE Stimulus-to-User Δ%
 Test: Chaotic Visual
 # A tibble: 9 × 11
-  training_phase_label Training     .y.   group1 group2     n statistic    df       p   p.adj p.adj.signif
-  <chr>                <chr>        <chr> <chr>  <chr>  <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
-1 PostTest             Chaotic Int… dv    1      null …    10      7.29     9 4.63e-5 1.04e-4 ***         
-2 PreTest              Chaotic Int… dv    1      null …    10      4.25     9 2.15e-3 3.23e-3 **          
-3 Retention            Chaotic Int… dv    1      null …    10      8.29     9 1.66e-5 6.96e-5 ****        
-4 PostTest             Chaotic Non… dv    1      null …     8     14.4      7 1.86e-6 1.67e-5 ****        
-5 PreTest              Chaotic Non… dv    1      null …     8      5.84     7 6.36e-4 1.14e-3 **          
-6 Retention            Chaotic Non… dv    1      null …     8      9.88     7 2.32e-5 6.96e-5 ****        
-7 PostTest             Periodic Fi… dv    1      null …     8      3.23     7 1.44e-2 1.44e-2 *           
-8 PreTest              Periodic Fi… dv    1      null …     8      4.17     7 4.21e-3 5.41e-3 **          
-9 Retention            Periodic Fi… dv    1      null …     8      4.04     7 4.96e-3 5.58e-3 **          
+  training_phase_label Training                .y.   group1 group2       n statistic    df       p   p.adj p.adj.signif
+  <chr>                <chr>                   <chr> <chr>  <chr>    <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
+1 PostTest             Chaotic Interactive     dv    1      null mo…    10      7.29     9 4.63e-5 1.04e-4 ***         
+2 PreTest              Chaotic Interactive     dv    1      null mo…    10      4.25     9 2.15e-3 3.23e-3 **          
+3 Retention            Chaotic Interactive     dv    1      null mo…    10      8.29     9 1.66e-5 6.96e-5 ****        
+4 PostTest             Chaotic Non-interactive dv    1      null mo…     8     14.4      7 1.86e-6 1.67e-5 ****        
+5 PreTest              Chaotic Non-interactive dv    1      null mo…     8      5.84     7 6.36e-4 1.14e-3 **          
+6 Retention            Chaotic Non-interactive dv    1      null mo…     8      9.88     7 2.32e-5 6.96e-5 ****        
+7 PostTest             Periodic Fixed          dv    1      null mo…     8      3.23     7 1.44e-2 1.44e-2 *           
+8 PreTest              Periodic Fixed          dv    1      null mo…     8      4.17     7 4.21e-3 5.41e-3 **          
+9 Retention            Periodic Fixed          dv    1      null mo…     8      4.04     7 4.96e-3 5.58e-3 **          
 
 ########### t-tests ~ 0 
 
 DV: TE User-to-Stimulus Δ%
 Test: Periodic Fixed
 # A tibble: 9 × 11
-  training_phase_label Training     .y.   group1 group2     n statistic    df       p   p.adj p.adj.signif
-  <chr>                <chr>        <chr> <chr>  <chr>  <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
-1 PostTest             Chaotic Int… dv    1      null …    10     -8.72     9 1.10e-5 3.30e-5 ****        
-2 PreTest              Chaotic Int… dv    1      null …    10    -10.9      9 1.78e-6 8.01e-6 ****        
-3 Retention            Chaotic Int… dv    1      null …    10    -20.7      9 6.81e-9 6.13e-8 ****        
-4 PostTest             Chaotic Non… dv    1      null …     8     -5.76     7 6.92e-4 6.92e-4 ***         
-5 PreTest              Chaotic Non… dv    1      null …     8    -10.4      7 1.64e-5 3.69e-5 ****        
-6 Retention            Chaotic Non… dv    1      null …     8     -9.95     7 2.21e-5 3.98e-5 ****        
-7 PostTest             Periodic Fi… dv    1      null …     8     -7.15     7 1.85e-4 2.38e-4 ***         
-8 PreTest              Periodic Fi… dv    1      null …     8     -8.30     7 7.22e-5 1.08e-4 ***         
-9 Retention            Periodic Fi… dv    1      null …     8     -6.86     7 2.41e-4 2.71e-4 ***         
+  training_phase_label Training                .y.   group1 group2       n statistic    df       p   p.adj p.adj.signif
+  <chr>                <chr>                   <chr> <chr>  <chr>    <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
+1 PostTest             Chaotic Interactive     dv    1      null mo…    10     -8.72     9 1.10e-5 3.30e-5 ****        
+2 PreTest              Chaotic Interactive     dv    1      null mo…    10    -10.9      9 1.78e-6 8.01e-6 ****        
+3 Retention            Chaotic Interactive     dv    1      null mo…    10    -20.7      9 6.81e-9 6.13e-8 ****        
+4 PostTest             Chaotic Non-interactive dv    1      null mo…     8     -5.76     7 6.92e-4 6.92e-4 ***         
+5 PreTest              Chaotic Non-interactive dv    1      null mo…     8    -10.4      7 1.64e-5 3.69e-5 ****        
+6 Retention            Chaotic Non-interactive dv    1      null mo…     8     -9.95     7 2.21e-5 3.98e-5 ****        
+7 PostTest             Periodic Fixed          dv    1      null mo…     8     -7.15     7 1.85e-4 2.38e-4 ***         
+8 PreTest              Periodic Fixed          dv    1      null mo…     8     -8.30     7 7.22e-5 1.08e-4 ***         
+9 Retention            Periodic Fixed          dv    1      null mo…     8     -6.86     7 2.41e-4 2.71e-4 ***         
 
 ########### t-tests ~ 0 
 
 DV: TE User-to-Stimulus Δ%
 Test: Periodic Fadeout (SCT)
 # A tibble: 9 × 11
-  training_phase_label Training    .y.   group1 group2     n statistic    df        p   p.adj p.adj.signif
-  <chr>                <chr>       <chr> <chr>  <chr>  <int>     <dbl> <dbl>    <dbl>   <dbl> <chr>       
-1 PostTest             Chaotic In… dv    1      null …    10     -7.34     9 4.38e- 5 4.93e-5 ****        
-2 PreTest              Chaotic In… dv    1      null …    10    -26.1      9 8.63e-10 7.77e-9 ****        
-3 Retention            Chaotic In… dv    1      null …    10    -13.7      9 2.44e- 7 7.15e-7 ****        
-4 PostTest             Chaotic No… dv    1      null …     8     -5.35     7 1.06e- 3 1.06e-3 **          
-5 PreTest              Chaotic No… dv    1      null …     8    -10.7      7 1.41e- 5 2.11e-5 ****        
-6 Retention            Chaotic No… dv    1      null …     8    -10.3      7 1.77e- 5 2.28e-5 ****        
-7 PostTest             Periodic F… dv    1      null …     8    -22.0      7 1.01e- 7 4.54e-7 ****        
-8 PreTest              Periodic F… dv    1      null …     8    -18.1      7 3.93e- 7 7.15e-7 ****        
-9 Retention            Periodic F… dv    1      null …     8    -18.0      7 3.97e- 7 7.15e-7 ****        
+  training_phase_label Training                .y.   group1 group2      n statistic    df        p   p.adj p.adj.signif
+  <chr>                <chr>                   <chr> <chr>  <chr>   <int>     <dbl> <dbl>    <dbl>   <dbl> <chr>       
+1 PostTest             Chaotic Interactive     dv    1      null m…    10     -7.34     9 4.38e- 5 4.93e-5 ****        
+2 PreTest              Chaotic Interactive     dv    1      null m…    10    -26.1      9 8.63e-10 7.77e-9 ****        
+3 Retention            Chaotic Interactive     dv    1      null m…    10    -13.7      9 2.44e- 7 7.15e-7 ****        
+4 PostTest             Chaotic Non-interactive dv    1      null m…     8     -5.35     7 1.06e- 3 1.06e-3 **          
+5 PreTest              Chaotic Non-interactive dv    1      null m…     8    -10.7      7 1.41e- 5 2.11e-5 ****        
+6 Retention            Chaotic Non-interactive dv    1      null m…     8    -10.3      7 1.77e- 5 2.28e-5 ****        
+7 PostTest             Periodic Fixed          dv    1      null m…     8    -22.0      7 1.01e- 7 4.54e-7 ****        
+8 PreTest              Periodic Fixed          dv    1      null m…     8    -18.1      7 3.93e- 7 7.15e-7 ****        
+9 Retention            Periodic Fixed          dv    1      null m…     8    -18.0      7 3.97e- 7 7.15e-7 ****        
 
 ########### t-tests ~ 0 
 
 DV: TE User-to-Stimulus Δ%
 Test: Chaotic
 # A tibble: 9 × 11
-  training_phase_label Training     .y.   group1 group2     n statistic    df       p   p.adj p.adj.signif
-  <chr>                <chr>        <chr> <chr>  <chr>  <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
-1 PostTest             Chaotic Int… dv    1      null …    10     -4.15     9 2.5 e-3 2.81e-3 **          
-2 PreTest              Chaotic Int… dv    1      null …    10     -7.81     9 2.67e-5 8.01e-5 ****        
-3 Retention            Chaotic Int… dv    1      null …    10     -7.88     9 2.49e-5 8.01e-5 ****        
-4 PostTest             Chaotic Non… dv    1      null …     8     -3.28     7 1.35e-2 1.35e-2 *           
-5 PreTest              Chaotic Non… dv    1      null …     8     -7.31     7 1.61e-4 2.79e-4 ***         
-6 Retention            Chaotic Non… dv    1      null …     8     -7.74     7 1.12e-4 2.52e-4 ***         
-7 PostTest             Periodic Fi… dv    1      null …     8     -7.14     7 1.86e-4 2.79e-4 ***         
-8 PreTest              Periodic Fi… dv    1      null …     8    -12.6      7 4.63e-6 4.17e-5 ****        
-9 Retention            Periodic Fi… dv    1      null …     8     -6.67     7 2.85e-4 3.66e-4 ***         
+  training_phase_label Training                .y.   group1 group2       n statistic    df       p   p.adj p.adj.signif
+  <chr>                <chr>                   <chr> <chr>  <chr>    <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
+1 PostTest             Chaotic Interactive     dv    1      null mo…    10     -4.15     9 2.5 e-3 2.81e-3 **          
+2 PreTest              Chaotic Interactive     dv    1      null mo…    10     -7.81     9 2.67e-5 8.01e-5 ****        
+3 Retention            Chaotic Interactive     dv    1      null mo…    10     -7.88     9 2.49e-5 8.01e-5 ****        
+4 PostTest             Chaotic Non-interactive dv    1      null mo…     8     -3.28     7 1.35e-2 1.35e-2 *           
+5 PreTest              Chaotic Non-interactive dv    1      null mo…     8     -7.31     7 1.61e-4 2.79e-4 ***         
+6 Retention            Chaotic Non-interactive dv    1      null mo…     8     -7.74     7 1.12e-4 2.52e-4 ***         
+7 PostTest             Periodic Fixed          dv    1      null mo…     8     -7.14     7 1.86e-4 2.79e-4 ***         
+8 PreTest              Periodic Fixed          dv    1      null mo…     8    -12.6      7 4.63e-6 4.17e-5 ****        
+9 Retention            Periodic Fixed          dv    1      null mo…     8     -6.67     7 2.85e-4 3.66e-4 ***         
 
 ########### t-tests ~ 0 
 
 DV: TE User-to-Stimulus Δ%
 Test: Chaotic Visual
 # A tibble: 9 × 11
-  training_phase_label Training     .y.   group1 group2     n statistic    df       p   p.adj p.adj.signif
-  <chr>                <chr>        <chr> <chr>  <chr>  <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
-1 PostTest             Chaotic Int… dv    1      null …    10     -2.00     9 7.68e-2 0.0768  ns          
-2 PreTest              Chaotic Int… dv    1      null …    10     -4.40     9 1.72e-3 0.00425 **          
-3 Retention            Chaotic Int… dv    1      null …    10     -2.27     9 4.91e-2 0.0552  ns          
-4 PostTest             Chaotic Non… dv    1      null …     8     -3.50     7 1   e-2 0.0129  *           
-5 PreTest              Chaotic Non… dv    1      null …     8     -4.78     7 2   e-3 0.00425 **          
-6 Retention            Chaotic Non… dv    1      null …     8     -4.64     7 2.36e-3 0.00425 **          
-7 PostTest             Periodic Fi… dv    1      null …     8     -5.17     7 1.3 e-3 0.00425 **          
-8 PreTest              Periodic Fi… dv    1      null …     8     -6.49     7 3.37e-4 0.00303 **          
-9 Retention            Periodic Fi… dv    1      null …     8     -4.13     7 4.42e-3 0.00663 **          
+  training_phase_label Training                .y.   group1 group2       n statistic    df       p   p.adj p.adj.signif
+  <chr>                <chr>                   <chr> <chr>  <chr>    <int>     <dbl> <dbl>   <dbl>   <dbl> <chr>       
+1 PostTest             Chaotic Interactive     dv    1      null mo…    10     -2.00     9 7.68e-2 0.0768  ns          
+2 PreTest              Chaotic Interactive     dv    1      null mo…    10     -4.40     9 1.72e-3 0.00425 **          
+3 Retention            Chaotic Interactive     dv    1      null mo…    10     -2.27     9 4.91e-2 0.0552  ns          
+4 PostTest             Chaotic Non-interactive dv    1      null mo…     8     -3.50     7 1   e-2 0.0129  *           
+5 PreTest              Chaotic Non-interactive dv    1      null mo…     8     -4.78     7 2   e-3 0.00425 **          
+6 Retention            Chaotic Non-interactive dv    1      null mo…     8     -4.64     7 2.36e-3 0.00425 **          
+7 PostTest             Periodic Fixed          dv    1      null mo…     8     -5.17     7 1.3 e-3 0.00425 **          
+8 PreTest              Periodic Fixed          dv    1      null mo…     8     -6.49     7 3.37e-4 0.00303 **          
+9 Retention            Periodic Fixed          dv    1      null mo…     8     -4.13     7 4.42e-3 0.00663 **          

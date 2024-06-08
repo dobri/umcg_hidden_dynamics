@@ -13,6 +13,8 @@ library(rstatix)
 #----------------------------------------------
 
 rm(list=ls())
+save_file = TRUE
+
 # setwd('~/logos/umcg_hidden_dynamics/analysis/te/stats')
 # setwd('C:\\Users\\ddotov\\Downloads')
 filename_scores_in <- 'Scores_TE_2024-05-26.csv_cleaned_.csv'
@@ -42,7 +44,7 @@ for (dv in c('te12rescaled','te21rescaled')) {
   g<-ggplot(data=xs, aes(x=trial, y=dv, colour=Training)) +
     facet_grid(~Training) +
     geom_jitter(size=1, alpha=.2, width=.1, height=0) +
-    geom_line(aes(x=trial, y=0), col='white', linewidth=1.2, alpha=.7) +
+    geom_line(aes(x=trial, y=2), col='white', linewidth=1.2, alpha=.7) +
     stat_summary(aes(x=trial, y=dv, colour=Training), geom="ribbon", fun.data=mean_cl_boot, alpha=.7) +
     stat_summary(aes(x=trial, y=dv, colour=Training), fun='mean', geom='line', linewidth=2.2, alpha=1) +
     theme_classic() +
@@ -51,10 +53,11 @@ for (dv in c('te12rescaled','te21rescaled')) {
     theme(legend.position="none") +
     labs(y = dv_lab) +
     labs(x = "Trial") + 
+    scale_y_continuous(breaks=c(-2,0,2,4)) +
     scale_colour_manual(values=colors)
   print(g)
   
-  if (FALSE){
+  if (save_file){
     filename = paste("te_training_trials_all",dv,Sys.Date(),'.png',sep='_')
     filename <- sub(" ", "_", filename)
     ggsave(filename, width=10, height=4, units='in', dpi=600)
@@ -78,7 +81,7 @@ for (dv in c('testimtouser_delta','teusertostim_delta')) {
     g<-ggplot(data=xs, aes(x=trial, y=dv, colour=Training)) +
       facet_grid(~training_phase_label, scales="free_x") +
       geom_jitter(size=1, alpha=.2, width=.1, height=0) +
-      geom_line(aes(x=trial, y=0), col='black', linewidth=1.2, alpha=.7) +
+      geom_line(aes(x=trial, y=2), col='black', linewidth=1.2, alpha=.7) +
       stat_summary(aes(x=trial, y=dv, colour=Training), fun='mean', geom='line', linewidth=2.2, alpha=1) +
       stat_summary(aes(x=trial, y=dv, colour=Training), geom="ribbon", fun.data=mean_cl_boot, alpha=.5) +
       theme_classic() +
@@ -91,7 +94,7 @@ for (dv in c('testimtouser_delta','teusertostim_delta')) {
       ggtitle(paste('Test task: ', task, sep=''))
     print(g)
 
-    if (FALSE){
+    if (save_file){
       filename = paste("te_test_trials_all",dv,task,Sys.Date(),'.png',sep='_')
       filename <- sub(" ", "_", filename)
       ggsave(filename, width=8, height=4, units='in', dpi=600)
@@ -120,7 +123,7 @@ for (dv in c('te12rescaled','te21rescaled')) {
     #m4=lmer(I(dv-2) ~ 1 + trial * Training + (1|pp),data=xs,REML=0)
     sink("te_training_stats.txt", append = T)
     cat("\n###########\n\n")
-    cat(paste(phase))
+    cat('Training')
     cat("\n")
     cat('DV: ',dv,sep='')
     cat("\n")
@@ -142,7 +145,6 @@ for (dv in c('te12rescaled','te21rescaled')) {
 #----------------------------------------------
 # Part B. Plot test data, averaged per task. Line plots
 #----------------------------------------------
-rm(list=ls())
 filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv__ave_.csv'
 x_test_ave <- read.csv(filename,sep=',')
 
@@ -157,7 +159,7 @@ for (dv in c('te12rescaled','te21rescaled')) {
   if (dv=='te21rescaled') {dv_lab = 'TE User-to-Stimulus'}
   g<-ggplot(data=x_test_ave, aes(x=training_phase_label, y=dv)) +
     facet_grid(task_label~Training, scales="free_y") +
-    geom_line(aes(x=training_phase_label, y=dv*0, group=pp), linetype = 'dashed', linewidth=.5, alpha=.5, colour = 'black') +
+    geom_line(aes(x=training_phase_label, y=dv*0+2, group=pp), linetype = 'dashed', linewidth=.5, alpha=.5, colour = 'black') +
     geom_violin(linewidth=1, alpha=.5, fill='grey') +
     geom_line(aes(x=training_phase_label, y=dv, group=pp), linewidth=.5, alpha=.4, colour = 'black') +
     geom_jitter(size=2, alpha=1, width=0, height=0, colour = 'black') +
@@ -168,7 +170,7 @@ for (dv in c('te12rescaled','te21rescaled')) {
     labs(y=dv_lab, x='') +
     scale_colour_manual(values='black')
   print(g)
-  if (FALSE){
+  if (save_file){
     filename = paste("te_lines_ave",dv,Sys.Date(),'.png',sep='_')
     filename <- sub(" ", "_", filename)
     ggsave(filename, width=7, height=7, units='in', dpi=600)
@@ -180,7 +182,6 @@ for (dv in c('te12rescaled','te21rescaled')) {
 # Part C. Plot test data, deltas averaged per task. Violins.
 #----------------------------------------------
 
-rm(list=ls())
 filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv__delta_ave_.csv'
 x_delta <- read.csv(filename,sep=',')
 x_delta$TrainingPhase <- factor(x_delta$TrainingPhase)
@@ -200,7 +201,7 @@ for (dv in c('te12_Delta','te21_Delta')) {
     facet_grid(task_label~TrainingPhase, scales="free_x") +
     geom_jitter(size=1, alpha=1, width=.1, height=0) +
     geom_violin(linewidth=1, alpha=.5, fill='grey') +
-    geom_hline(aes(yintercept=0),
+    geom_hline(aes(yintercept=2),
                color="blue", linetype="dashed", linewidth=1) +
     theme_classic() +
     theme(panel.background = element_rect(fill = "#ffffff",
@@ -211,7 +212,7 @@ for (dv in c('te12_Delta','te21_Delta')) {
     scale_x_discrete(guide = guide_axis(angle = 10)) +
     scale_colour_manual(values=colors)
   print(g)
-  if (FALSE){
+  if (save_file){
     filename = paste("te_ave",dv,Sys.Date(),'.png',sep='_')
     filename <- sub(" ", "_", filename)
     ggsave(filename, width=6, height=10, units='in', dpi=600)
@@ -237,10 +238,10 @@ for (dv in c('te12rescaled','te21rescaled')) {
     cat(paste('Test: ',task,sep=''))
     cat("\n")
     xs <- x_test_ave[x_test_ave$task_label==task,]
-    m1=lmer(dv ~ 1 + (1|pp),data=xs,REML=0)
-    m2=lmer(dv ~ 1 + training_phase_label + (1|pp),data=xs,REML=0)
-    m3=lmer(dv ~ 1 + training_phase_label + Training + (1|pp),data=xs,REML=0)
-    m4=lmer(dv ~ 1 + training_phase_label * Training + (1|pp),data=xs,REML=0)
+    m1=lmer(dv ~ I(dv-2) + (1|pp),data=xs,REML=0)
+    m2=lmer(dv ~ I(dv-2) + training_phase_label + (1|pp),data=xs,REML=0)
+    m3=lmer(dv ~ I(dv-2) + training_phase_label + Training + (1|pp),data=xs,REML=0)
+    m4=lmer(dv ~ I(dv-2) + training_phase_label * Training + (1|pp),data=xs,REML=0)
     print(anova(m1,m2,m3,m4))
     print(summary(m1))
     print(summary(m2))
@@ -252,7 +253,6 @@ for (dv in c('te12rescaled','te21rescaled')) {
 }
 
 
-rm(list=ls())
 filename = 'Scores_TE_2024-05-26.csv_cleaned_.csv__ave_.csv'
 x_test_ave <- read.csv(filename,sep=',')
 
