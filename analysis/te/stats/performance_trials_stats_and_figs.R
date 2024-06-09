@@ -34,17 +34,19 @@ colors[1]<-ghibli_palette("MarnieMedium2",7,type=("continuous"))[6]
 colors[2]<-ghibli_palette("MononokeMedium",7,type=("continuous"))[5]
 colors[3]<-ghibli_palette("YesterdayMedium",7,type=("continuous"))[6]
 
-for (dv in c('te12rescaled','te21rescaled')) {
+for (dv in c('te12rescaled','te21rescaled','score','c','pitch_error')) {
   xs <- x[(x$training_phase_label=='Training'),]
   xs$dv <- xs[,dv]
   
   if (dv=='te12rescaled') {dv_lab = 'TE Stimulus-to-User'}
   if (dv=='te21rescaled') {dv_lab = 'TE User-to-Stimulus'}
+  if (dv=='score') {dv_lab = 'Score'}
+  if (dv=='c') {dv_lab = 'Sync'}
+  if (dv=='pitch_error') {dv_lab = 'Pitch Error'}
   
   g<-ggplot(data=xs, aes(x=trial, y=dv, colour=Training)) +
     facet_grid(~Training) +
     geom_jitter(size=1, alpha=.2, width=.1, height=0) +
-    geom_line(aes(x=trial, y=2), col='white', linewidth=1.2, alpha=.7) +
     stat_summary(aes(x=trial, y=dv, colour=Training), geom="ribbon", fun.data=mean_cl_boot, alpha=.7) +
     stat_summary(aes(x=trial, y=dv, colour=Training), fun='mean', geom='line', linewidth=2.2, alpha=1) +
     theme_classic() +
@@ -53,8 +55,14 @@ for (dv in c('te12rescaled','te21rescaled')) {
     theme(legend.position="none") +
     labs(y = dv_lab) +
     labs(x = "Trial") + 
-    scale_y_continuous(breaks=c(-2,0,2,4)) +
     scale_colour_manual(values=colors)
+  if ((dv=='te12rescaled') || (dv=='te21rescaled')){
+    g<-g + scale_y_continuous(breaks=c(-2,0,2,4))
+    g<-g + geom_line(aes(x=trial, y=2), col='white', linewidth=1.2, alpha=.7)
+  }
+  if (dv=='pitch_error'){
+    g<-g + coord_cartesian(ylim=c(0,4))
+  }
   print(g)
   
   if (save_file){
@@ -104,7 +112,7 @@ for (dv in c('testimtouser_delta','teusertostim_delta')) {
 
 
 #----------------------------------------------
-# Step 2. Stats training TE ~ trial
+# Step 2. Stats training TE ~ trial and Performance ~ trial
 #----------------------------------------------
 sink("te_training_stats.txt")
 print(Sys.Date())
@@ -116,7 +124,7 @@ for (dv in c('te12rescaled','te21rescaled')) {
     
     if (dv=='te12rescaled') {dv_lab = 'TE Stimulus-to-User'}
     if (dv=='te21rescaled') {dv_lab = 'TE User-to-Stimulus'}
-    
+
     m1=lmer(I(dv-2) ~ 1 + (1|pp),data=xs,REML=0)
     m2=lmer(I(dv-2) ~ 1 + trial + (1|pp),data=xs,REML=0)
     #m3=lmer(I(dv-2) ~ 1 + trial + Training + (1|pp),data=xs,REML=0)
@@ -139,6 +147,36 @@ for (dv in c('te12rescaled','te21rescaled')) {
     print(screenreg(list(m1,m2)))
     sink()
   }
+}
+
+sink("performance_training_stats.txt")
+print(Sys.Date())
+sink()
+for (dv in c('score','c','pitch_error')) {
+  xs <- x[x$training_phase_label=='Training',]
+  xs$dv <- xs[,dv]
+  
+  if (dv=='score') {dv_lab = 'Score'}
+  if (dv=='c') {dv_lab = 'Sync'}
+  if (dv=='pitch_error') {dv_lab = 'Pitch Error'}
+  
+  m1=lmer(dv ~ 1 + (1|pp),data=xs,REML=0)
+  m2=lmer(dv ~ 1 + trial + (1|pp),data=xs,REML=0)
+  m3=lmer(dv ~ 1 + trial + Training + (1|pp),data=xs,REML=0)
+  m4=lmer(dv ~ 1 + trial * Training + (1|pp),data=xs,REML=0)
+  sink("performance_training_stats.txt", append = T)
+  cat("\n###########\n\n")
+  cat('Training')
+  cat("\n")
+  cat('DV: ',dv,sep='')
+  cat("\n")
+  print(anova(m1,m2,m3,m4))
+  print(summary(m1))
+  print(summary(m2))
+  print(summary(m3))
+  print(summary(m4))
+  print(screenreg(list(m1,m2,m3,m4)))
+  sink()
 }
 
 

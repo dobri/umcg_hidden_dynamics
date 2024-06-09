@@ -1,0 +1,490 @@
+[1] "2024-06-08"
+
+###########
+
+Training
+DV: score
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + Training + (1 | pp)
+m4: dv ~ 1 + trial * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -751.60 -736.78 378.80  -757.60                          
+m2    4 -785.81 -766.04 396.90  -793.81 36.2042  1  1.777e-09 ***
+m3    6 -795.52 -765.88 403.76  -807.52 13.7185  2    0.00105 ** 
+m4    8 -794.83 -755.31 405.42  -810.83  3.3098  2    0.19112    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -751.6   -736.8    378.8   -757.6     1031 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.0303 -0.5217 -0.0364  0.4144  8.1375 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.05373  0.2318  
+ Residual             0.02516  0.1586  
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)  0.56147    0.04573 25.99824   12.28 2.52e-12 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -785.8   -766.0    396.9   -793.8     1030 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.0969 -0.4910 -0.0709  0.4154  8.4067 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.05380  0.2319  
+ Residual             0.02427  0.1558  
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept) 5.092e-01  4.655e-02 2.787e+01  10.940 1.35e-11 ***
+trial       2.562e-03  4.220e-04 1.008e+03   6.071 1.79e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.185
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -795.5   -765.9    403.8   -807.5     1028 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.0930 -0.4986 -0.0632  0.4119  8.4107 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.03149  0.1775  
+ Residual             0.02427  0.1558  
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+                                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                      4.134e-01  5.731e-02  2.721e+01   7.214 8.87e-08 ***
+trial                            2.563e-03  4.220e-04  1.008e+03   6.073 1.78e-09 ***
+TrainingChaotic Non-interactive -8.377e-03  8.499e-02  2.600e+01  -0.099 0.922241    
+TrainingPeriodic Fixed           3.198e-01  8.499e-02  2.600e+01   3.763 0.000865 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) trial  TrnCN-
+trial       -0.150              
+TrnngChtNn- -0.659 -0.001       
+TrnngPrdcFx -0.659  0.000  0.444
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+  -794.8   -755.3    405.4   -810.8     1026 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.0965 -0.4954 -0.0673  0.4151  8.4752 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.03151  0.1775  
+ Residual             0.02419  0.1555  
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+                                        Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                            4.158e-01  5.834e-02  2.921e+01   7.127 7.35e-08 ***
+trial                                  2.446e-03  6.812e-04  1.008e+03   3.591 0.000345 ***
+TrainingChaotic Non-interactive        7.375e-03  8.750e-02  2.919e+01   0.084 0.933402    
+TrainingPeriodic Fixed                 2.960e-01  8.752e-02  2.921e+01   3.382 0.002062 ** 
+trial:TrainingChaotic Non-interactive -7.675e-04  1.016e-03  1.008e+03  -0.756 0.449959    
+trial:TrainingPeriodic Fixed           1.171e-03  1.023e-03  1.008e+03   1.145 0.252603    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) trial  TrnCN- TrnnPF t:TCN-
+trial       -0.238                            
+TrnngChtNn- -0.667  0.158                     
+TrnngPrdcFx -0.667  0.158  0.444              
+trl:TrnnCN-  0.159 -0.671 -0.237 -0.106       
+trl:TrnngPF  0.158 -0.666 -0.105 -0.238  0.447
+
+=========================================================================================
+                                       Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------
+(Intercept)                               0.56 ***     0.51 ***     0.41 ***     0.42 ***
+                                         (0.05)       (0.05)       (0.06)       (0.06)   
+trial                                                  0.00 ***     0.00 ***     0.00 ***
+                                                      (0.00)       (0.00)       (0.00)   
+TrainingChaotic Non-interactive                                    -0.01         0.01    
+                                                                   (0.08)       (0.09)   
+TrainingPeriodic Fixed                                              0.32 ***     0.30 ***
+                                                                   (0.08)       (0.09)   
+trial:TrainingChaotic Non-interactive                                           -0.00    
+                                                                                (0.00)   
+trial:TrainingPeriodic Fixed                                                     0.00    
+                                                                                (0.00)   
+-----------------------------------------------------------------------------------------
+AIC                                    -751.60      -785.81      -795.52      -794.83    
+BIC                                    -736.78      -766.04      -765.88      -755.31    
+Log Likelihood                          378.80       396.90       403.76       405.42    
+Num. obs.                              1034         1034         1034         1034       
+Num. groups: pp                          26           26           26           26       
+Var: pp (Intercept)                       0.05         0.05         0.03         0.03    
+Var: Residual                             0.03         0.02         0.02         0.02    
+=========================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+Training
+DV: c
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + Training + (1 | pp)
+m4: dv ~ 1 + trial * Training + (1 | pp)
+   npar     AIC     BIC logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 -2266.2 -2251.4 1136.1  -2272.2                          
+m2    4 -2305.6 -2285.8 1156.8  -2313.6 41.3504  1  1.272e-10 ***
+m3    6 -2354.8 -2325.1 1183.4  -2366.8 53.1836  2  2.827e-12 ***
+m4    8 -2358.1 -2318.5 1187.0  -2374.1  7.3097  2    0.02586 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+ -2266.2  -2251.4   1136.1  -2272.2     1031 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.6995 -0.4975  0.0927  0.5383  3.9853 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.02062  0.14360 
+ Residual             0.00574  0.07576 
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)  0.68688    0.02826 25.99886   24.31   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+ -2305.6  -2285.8   1156.8  -2313.6     1030 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.5549 -0.4902  0.0705  0.5155  3.9714 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.020626 0.14362 
+ Residual             0.005509 0.07422 
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+             Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept) 6.603e-01  2.856e-02 2.710e+01  23.121  < 2e-16 ***
+trial       1.306e-03  2.011e-04 1.008e+03   6.497 1.29e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.144
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+ -2354.7  -2325.1   1183.4  -2366.7     1028 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.5666 -0.4878  0.0717  0.5164  4.0145 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002547 0.05047 
+ Residual             0.005509 0.07422 
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+                                 Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)                     5.172e-01  1.689e-02 2.936e+01  30.619  < 2e-16 ***
+trial                           1.307e-03  2.011e-04 1.008e+03   6.501 1.25e-10 ***
+TrainingChaotic Non-interactive 1.397e-01  2.458e-02 2.600e+01   5.683 5.60e-06 ***
+TrainingPeriodic Fixed          3.252e-01  2.458e-02 2.602e+01  13.227 4.66e-13 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) trial  TrnCN-
+trial       -0.242              
+TrnngChtNn- -0.647 -0.001       
+TrnngPrdcFx -0.647  0.000  0.444
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+ -2358.1  -2318.5   1187.0  -2374.1     1026 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.3931 -0.5108  0.0628  0.5419  4.0529 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.002549 0.05049 
+ Residual             0.005469 0.07395 
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+                                        Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                            5.238e-01  1.767e-02  3.508e+01  29.647  < 2e-16 ***
+trial                                  9.847e-04  3.239e-04  1.008e+03   3.040  0.00243 ** 
+TrainingChaotic Non-interactive        1.414e-01  2.649e-02  3.503e+01   5.337 5.78e-06 ***
+TrainingPeriodic Fixed                 3.020e-01  2.650e-02  3.509e+01  11.394 2.41e-13 ***
+trial:TrainingChaotic Non-interactive -7.979e-05  4.829e-04  1.008e+03  -0.165  0.86879    
+trial:TrainingPeriodic Fixed           1.141e-03  4.865e-04  1.008e+03   2.345  0.01921 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) trial  TrnCN- TrnnPF t:TCN-
+trial       -0.373                            
+TrnngChtNn- -0.667  0.249                     
+TrnngPrdcFx -0.667  0.249  0.445              
+trl:TrnnCN-  0.250 -0.671 -0.372 -0.167       
+trl:TrnngPF  0.248 -0.666 -0.166 -0.373  0.447
+
+=============================================================================================
+                                       Model 1       Model 2       Model 3       Model 4     
+---------------------------------------------------------------------------------------------
+(Intercept)                                0.69 ***      0.66 ***      0.52 ***      0.52 ***
+                                          (0.03)        (0.03)        (0.02)        (0.02)   
+trial                                                    0.00 ***      0.00 ***      0.00 ** 
+                                                        (0.00)        (0.00)        (0.00)   
+TrainingChaotic Non-interactive                                        0.14 ***      0.14 ***
+                                                                      (0.02)        (0.03)   
+TrainingPeriodic Fixed                                                 0.33 ***      0.30 ***
+                                                                      (0.02)        (0.03)   
+trial:TrainingChaotic Non-interactive                                               -0.00    
+                                                                                    (0.00)   
+trial:TrainingPeriodic Fixed                                                         0.00 *  
+                                                                                    (0.00)   
+---------------------------------------------------------------------------------------------
+AIC                                    -2266.21      -2305.56      -2354.75      -2358.06    
+BIC                                    -2251.39      -2285.80      -2325.10      -2318.53    
+Log Likelihood                          1136.11       1156.78       1183.37       1187.03    
+Num. obs.                               1034          1034          1034          1034       
+Num. groups: pp                           26            26            26            26       
+Var: pp (Intercept)                        0.02          0.02          0.00          0.00    
+Var: Residual                              0.01          0.01          0.01          0.01    
+=============================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
+
+###########
+
+Training
+DV: pitch_error
+Data: xs
+Models:
+m1: dv ~ 1 + (1 | pp)
+m2: dv ~ 1 + trial + (1 | pp)
+m3: dv ~ 1 + trial + Training + (1 | pp)
+m4: dv ~ 1 + trial * Training + (1 | pp)
+   npar    AIC    BIC  logLik deviance   Chisq Df Pr(>Chisq)    
+m1    3 752.56 767.39 -373.28   746.56                          
+m2    4 727.72 747.48 -359.86   719.72 26.8461  1  2.203e-07 ***
+m3    6 730.15 759.80 -359.08   718.15  1.5622  2     0.4579    
+m4    8 731.98 771.51 -357.99   715.98  2.1740  2     0.3372    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   752.6    767.4   -373.3    746.6     1031 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-8.6293 -0.4944 -0.0863  0.3639  6.7070 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.5201   0.7212  
+ Residual             0.1055   0.3249  
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+            Estimate Std. Error      df t value Pr(>|t|)    
+(Intercept)   1.4517     0.1418 26.0012   10.24  1.3e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   727.7    747.5   -359.9    719.7     1030 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-9.0219 -0.4711 -0.0776  0.3522  6.5990 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.5204   0.7214  
+ Residual             0.1028   0.3206  
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+              Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)  1.544e+00  1.429e-01  2.682e+01  10.802 2.87e-11 ***
+trial       -4.530e-03  8.684e-04  1.008e+03  -5.216 2.22e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+      (Intr)
+trial -0.124
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial + Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   730.2    759.8   -359.1    718.2     1028 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-9.0207 -0.4700 -0.0773  0.3516  6.6027 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.4899   0.7000  
+ Residual             0.1028   0.3206  
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+                                  Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                      1.324e+00  2.226e-01  2.633e+01   5.949 2.67e-06 ***
+trial                           -4.530e-03  8.684e-04  1.008e+03  -5.216 2.22e-07 ***
+TrainingChaotic Non-interactive  3.804e-01  3.329e-01  2.600e+01   1.143    0.264    
+TrainingPeriodic Fixed           3.336e-01  3.329e-01  2.600e+01   1.002    0.325    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) trial  TrnCN-
+trial       -0.079              
+TrnngChtNn- -0.665  0.000       
+TrnngPrdcFx -0.665  0.000  0.444
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: dv ~ 1 + trial * Training + (1 | pp)
+   Data: xs
+
+     AIC      BIC   logLik deviance df.resid 
+   732.0    771.5   -358.0    716.0     1026 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-9.0489 -0.4708 -0.0930  0.3568  6.5557 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ pp       (Intercept) 0.4899   0.7000  
+ Residual             0.1025   0.3202  
+Number of obs: 1034, groups:  pp, 26
+
+Fixed effects:
+                                        Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)                            1.350e+00  2.238e-01  2.687e+01   6.031 1.99e-06 ***
+trial                                 -5.769e-03  1.403e-03  1.008e+03  -4.113 4.22e-05 ***
+TrainingChaotic Non-interactive        3.181e-01  3.356e-01  2.686e+01   0.948    0.352    
+TrainingPeriodic Fixed                 3.146e-01  3.356e-01  2.687e+01   0.937    0.357    
+trial:TrainingChaotic Non-interactive  3.047e-03  2.091e-03  1.008e+03   1.457    0.145    
+trial:TrainingPeriodic Fixed           9.373e-04  2.107e-03  1.008e+03   0.445    0.656    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) trial  TrnCN- TrnnPF t:TCN-
+trial       -0.128                            
+TrnngChtNn- -0.667  0.085                     
+TrnngPrdcFx -0.667  0.085  0.444              
+trl:TrnnCN-  0.086 -0.671 -0.127 -0.057       
+trl:TrnngPF  0.085 -0.666 -0.057 -0.128  0.447
+
+=========================================================================================
+                                       Model 1      Model 2      Model 3      Model 4    
+-----------------------------------------------------------------------------------------
+(Intercept)                               1.45 ***     1.54 ***     1.32 ***     1.35 ***
+                                         (0.14)       (0.14)       (0.22)       (0.22)   
+trial                                                 -0.00 ***    -0.00 ***    -0.01 ***
+                                                      (0.00)       (0.00)       (0.00)   
+TrainingChaotic Non-interactive                                     0.38         0.32    
+                                                                   (0.33)       (0.34)   
+TrainingPeriodic Fixed                                              0.33         0.31    
+                                                                   (0.33)       (0.34)   
+trial:TrainingChaotic Non-interactive                                            0.00    
+                                                                                (0.00)   
+trial:TrainingPeriodic Fixed                                                     0.00    
+                                                                                (0.00)   
+-----------------------------------------------------------------------------------------
+AIC                                     752.56       727.72       730.15       731.98    
+BIC                                     767.39       747.48       759.80       771.51    
+Log Likelihood                         -373.28      -359.86      -359.08      -357.99    
+Num. obs.                              1034         1034         1034         1034       
+Num. groups: pp                          26           26           26           26       
+Var: pp (Intercept)                       0.52         0.52         0.49         0.49    
+Var: Residual                             0.11         0.10         0.10         0.10    
+=========================================================================================
+*** p < 0.001; ** p < 0.01; * p < 0.05
